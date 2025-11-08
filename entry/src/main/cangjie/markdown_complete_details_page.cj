@@ -182,6 +182,8 @@ class MarkdownCompleteDetailsPage {
 
         // 6、标题
         markdownThemeBuilder.setHeadingBreakHeight(0.0) // 设置H1、H2标题下分割线高度
+        markdownThemeBuilder.setHeadingTopMargins(0.0) // 设置标题模块上间距
+        markdownThemeBuilder.setHeadingBottomMargins(0.0) // 设置标题模块下间距
         markdownThemeBuilder.setHeadingTextSizeMultipliers([15.0, 15.0, 15.0, 15.0, 15.0, 15.0]) // 设置标题文本大小数组
         markdownThemeBuilder.setHeadingTextColor(Color(0xFF222222)) // 设置标题字体颜色
         markdownThemeBuilder.setHeadingTextLineHeight1(25.0) // 设置一级标题文本行高
