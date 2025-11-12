@@ -101,6 +101,11 @@ class MarkdownParagraphComponent {
     var isListTo: Bool = false
 
     /**
+     * 是否定义列表中的段落
+     */
+    var isDescList: Bool = false
+
+    /**
      * 是否只有一条链接数据
      */
     @State
@@ -161,12 +166,14 @@ class MarkdownParagraphComponent {
                         // 文本
                         paragraphTextComponent(
                             item,
+                            isDescList,
                             markdownConfiguration
                         )
                     } else if (item.node is HeadLink) {
                         // TOC列表
                         paragraphTocComponent(
                             item,
+                            isDescList,
                             markdownConfiguration,
                             tocListOnClick
                         )
@@ -174,6 +181,7 @@ class MarkdownParagraphComponent {
                         // 脚注
                         paragraphFootnoteComponent(
                             item,
+                            isDescList,
                             markdownConfiguration,
                             fontCallback
                         )
@@ -189,6 +197,7 @@ class MarkdownParagraphComponent {
                         } else {
                             paragraphCodeComponent(
                                 item,
+                                isDescList,
                                 markdownConfiguration
                             )
                         }
@@ -198,6 +207,7 @@ class MarkdownParagraphComponent {
                             if(getLinkString(item).isSome()){
                                 paragraphLinkComponent(
                                     item,
+                                    isDescList,
                                     getLinkString(item)(),
                                     markdownConfiguration
                                 )
@@ -477,12 +487,14 @@ class MarkdownParagraphComponent {
                         // 文本
                         paragraphTextComponent(
                             item,
+                            isDescList,
                             markdownConfiguration
                         )
                     } else if (item.node is HeadLink) {
                         // TOC列表
                         paragraphTocComponent(
                             item,
+                            isDescList,
                             markdownConfiguration,
                             tocListOnClick
                         )
@@ -490,6 +502,7 @@ class MarkdownParagraphComponent {
                         // 脚注
                         paragraphFootnoteComponent(
                             item,
+                            isDescList,
                             markdownConfiguration,
                             fontCallback
                         )
@@ -505,6 +518,7 @@ class MarkdownParagraphComponent {
                         } else {
                             paragraphCodeComponent(
                                 item,
+                                isDescList,
                                 markdownConfiguration
                             )
                         }
@@ -514,6 +528,7 @@ class MarkdownParagraphComponent {
                             if(getLinkString(item).isSome()){
                                 paragraphLinkComponent(
                                     item,
+                                    isDescList,
                                     getLinkString(item)(),
                                     markdownConfiguration
                                 )

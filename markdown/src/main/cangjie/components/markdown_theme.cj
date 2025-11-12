@@ -859,6 +859,16 @@ public class MarkdownTheme {
      */
     protected var strikethroughColor: Color = COLOR_191919
 
+    /**
+     * 定义列表术语和定义行之间间距
+     */
+    protected var descListTermAndDefMargins: Float64 = 8.0
+
+    /**
+     * 定义列表定义行缩进
+     */
+    protected var descListDefIndentation: Float64 = 8.0
+
     protected init(builder: MarkdownThemeBuilder) {
         // 1、上下文
         this.stageContext = builder.stageContext
@@ -1072,6 +1082,10 @@ public class MarkdownTheme {
 
         // 17、删除线
         this.strikethroughColor = builder.strikethroughColor
+
+        // 18、定义列表
+        this.descListTermAndDefMargins = builder.descListTermAndDefMargins
+        this.descListDefIndentation = builder.descListDefIndentation
     }
 
     /**
@@ -2111,6 +2125,16 @@ public class MarkdownThemeBuilder {
      */
     protected var strikethroughColor: Color = COLOR_191919
 
+    /**
+     * 定义列表术语和定义行之间间距
+     */
+    protected var descListTermAndDefMargins: Float64 = 8.0
+    
+    /**
+     * 定义列表定义行缩进
+     */
+    protected var descListDefIndentation: Float64 = 8.0
+
     init() {
     }
 
@@ -2327,6 +2351,10 @@ public class MarkdownThemeBuilder {
 
         // 17、删除线
         this.strikethroughColor = theme.strikethroughColor
+
+        // 18、定义列表
+        this.descListTermAndDefMargins = theme.descListTermAndDefMargins
+        this.descListDefIndentation = theme.descListDefIndentation
     }
 
     /**
@@ -4301,6 +4329,28 @@ public class MarkdownThemeBuilder {
      */
     public func setStrikethroughColor(strikethroughColor: Color): MarkdownThemeBuilder {
         this.strikethroughColor = strikethroughColor
+        return this
+    }
+
+    /**
+     * 设置定义列表术语和定义行之间间距
+     *
+     * @param descListTermAndDefMargins 定义列表术语和定义行之间间距 默认8.0
+     * @return MarkdownConfigurationBuilder MarkdownConfigurationBuilder对象
+     */
+    public func setDescListTermAndDefMargins(descListTermAndDefMargins: Float64): MarkdownThemeBuilder {
+        this.descListTermAndDefMargins = descListTermAndDefMargins
+        return this
+    }
+
+    /**
+     * 设置定义列表定义行缩进
+     *
+     * @param descListDefIndentation 定义列表定义行缩进 默认8.0
+     * @return MarkdownConfigurationBuilder MarkdownConfigurationBuilder对象
+     */
+    public func setDescListDefIndentation(descListDefIndentation: Float64): MarkdownThemeBuilder {
+        this.descListDefIndentation = descListDefIndentation
         return this
     }
 
