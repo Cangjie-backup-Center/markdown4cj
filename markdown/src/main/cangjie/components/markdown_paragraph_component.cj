@@ -164,14 +164,14 @@ class MarkdownParagraphComponent {
                 itemGeneratorFunc: {
                     item: NodeView, idx: Int64 => if (item.node is CommonmarkText) {
                         // 文本
-                        paragraphTextComponent(
+                        paragraphTextComponent18(
                             item,
                             isDescList,
                             markdownConfiguration
                         )
                     } else if (item.node is HeadLink) {
                         // TOC列表
-                        paragraphTocComponent(
+                        paragraphTocComponent18(
                             item,
                             isDescList,
                             markdownConfiguration,
@@ -179,7 +179,7 @@ class MarkdownParagraphComponent {
                         )
                     } else if (item.node is Footnote) {
                         // 脚注
-                        paragraphFootnoteComponent(
+                        paragraphFootnoteComponent18(
                             item,
                             isDescList,
                             markdownConfiguration,
@@ -195,7 +195,7 @@ class MarkdownParagraphComponent {
                                 isFakeBoldText: item.strongEmphasis
                             )
                         } else {
-                            paragraphCodeComponent(
+                            paragraphCodeComponent18(
                                 item,
                                 isDescList,
                                 markdownConfiguration
@@ -205,7 +205,7 @@ class MarkdownParagraphComponent {
                         // 链接
                         if ((isListTo && !markdownConfiguration.markdownTheme.isListLinkStyle && isOneLink) || !markdownConfiguration.markdownTheme.isLinkStyle) {
                             if(getLinkString(item).isSome()){
-                                paragraphLinkComponent(
+                                paragraphLinkComponent18(
                                     item,
                                     isDescList,
                                     getLinkString(item)(),
@@ -485,14 +485,14 @@ class MarkdownParagraphComponent {
                 itemGeneratorFunc: {
                     item: NodeView, idx: Int64 => if (item.node is CommonmarkText) {
                         // 文本
-                        paragraphTextComponent(
+                        paragraphTextComponent19(
                             item,
                             isDescList,
                             markdownConfiguration
                         )
                     } else if (item.node is HeadLink) {
                         // TOC列表
-                        paragraphTocComponent(
+                        paragraphTocComponent19(
                             item,
                             isDescList,
                             markdownConfiguration,
@@ -500,7 +500,7 @@ class MarkdownParagraphComponent {
                         )
                     } else if (item.node is Footnote) {
                         // 脚注
-                        paragraphFootnoteComponent(
+                        paragraphFootnoteComponent19(
                             item,
                             isDescList,
                             markdownConfiguration,
@@ -516,7 +516,7 @@ class MarkdownParagraphComponent {
                                 isFakeBoldText: item.strongEmphasis
                             )
                         } else {
-                            paragraphCodeComponent(
+                            paragraphCodeComponent19(
                                 item,
                                 isDescList,
                                 markdownConfiguration
@@ -526,7 +526,7 @@ class MarkdownParagraphComponent {
                         // 链接
                         if ((isListTo && !markdownConfiguration.markdownTheme.isListLinkStyle && isOneLink) || !markdownConfiguration.markdownTheme.isLinkStyle) {
                             if(getLinkString(item).isSome()){
-                                paragraphLinkComponent(
+                                paragraphLinkComponent19(
                                     item,
                                     isDescList,
                                     getLinkString(item)(),

@@ -203,14 +203,14 @@ class MarkdownTableBlockCellComponent {
                 itemGeneratorFunc: {
                     item: NodeView, idx: Int64 => if (item.node is CommonmarkText) {
                         // 文本
-                        tableComponentText(
+                        tableComponentText18(
                             item,
                             isHeader || (idxItem == 0 && markdownConfiguration.markdownTheme.tableFirstColumnBold),
                             markdownConfiguration
                         )
                     } else if (item.node is Footnote) {
                         // 脚注
-                        tableComponentFootnote(
+                        tableComponentFootnote18(
                             item,
                             isHeader || (idxItem == 0 && markdownConfiguration.markdownTheme.tableFirstColumnBold),
                             markdownConfiguration,
@@ -227,7 +227,7 @@ class MarkdownTableBlockCellComponent {
                                 isFakeBoldText: isHeader || (idxItem == 0 && markdownConfiguration.markdownTheme.tableFirstColumnBold) || item.strongEmphasis
                             )
                         } else {
-                            tableComponentCode(
+                            tableComponentCode18(
                                 item,
                                 isHeader || (idxItem == 0 && markdownConfiguration.markdownTheme.tableFirstColumnBold),
                                 markdownConfiguration
@@ -243,7 +243,7 @@ class MarkdownTableBlockCellComponent {
                         // 链接
                         if (!markdownConfiguration.markdownTheme.isLinkStyle) {
                             if (getLinkString(item).isSome()) {
-                                tableLinkComponent(
+                                tableLinkComponent18(
                                     item,
                                     isHeader || (idxItem == 0 && markdownConfiguration.markdownTheme.tableFirstColumnBold),
                                     getLinkString(item)(),
@@ -510,14 +510,14 @@ class MarkdownTableBlockCellComponent {
                 itemGeneratorFunc: {
                     item: NodeView, idx: Int64 => if (item.node is CommonmarkText) {
                         // 文本
-                        tableComponentText(
+                        tableComponentText19(
                             item,
                             isHeader || (idxItem == 0 && markdownConfiguration.markdownTheme.tableFirstColumnBold),
                             markdownConfiguration
                         )
                     } else if (item.node is Footnote) {
                         // 脚注
-                        tableComponentFootnote(
+                        tableComponentFootnote19(
                             item,
                             isHeader || (idxItem == 0 && markdownConfiguration.markdownTheme.tableFirstColumnBold),
                             markdownConfiguration,
@@ -534,7 +534,7 @@ class MarkdownTableBlockCellComponent {
                                 isFakeBoldText: isHeader || (idxItem == 0 && markdownConfiguration.markdownTheme.tableFirstColumnBold) || item.strongEmphasis
                             )
                         } else {
-                            tableComponentCode(
+                            tableComponentCode19(
                                 item,
                                 isHeader || (idxItem == 0 && markdownConfiguration.markdownTheme.tableFirstColumnBold),
                                 markdownConfiguration
@@ -550,7 +550,7 @@ class MarkdownTableBlockCellComponent {
                         // 链接
                         if (!markdownConfiguration.markdownTheme.isLinkStyle) {
                             if (getLinkString(item).isSome()) {
-                                tableLinkComponent(
+                                tableLinkComponent19(
                                     item,
                                     isHeader || (idxItem == 0 && markdownConfiguration.markdownTheme.tableFirstColumnBold),
                                     getLinkString(item)(),
