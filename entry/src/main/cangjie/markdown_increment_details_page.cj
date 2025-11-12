@@ -295,6 +295,7 @@ class MarkdownIncrementDetailsPage {
         // 14、图片
 //        markdownThemeBuilder.setImageIsFixedAspectRatio(true)
 //        markdownThemeBuilder.setImagePadding(20) //  设置图片宽度边距
+        markdownThemeBuilder.setImageResource(@r(app.media.place_holder))
 
         // 15、表格
         markdownThemeBuilder.setTableHeaderRowBackgroundColor(Color(0xFFF5F7FA)) // 设置表格头背景色
