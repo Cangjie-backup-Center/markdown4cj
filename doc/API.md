@@ -1617,6 +1617,22 @@ public class MarkdownThemeBuilder {
     public func setStrikethroughColor(strikethroughColor: Color): MarkdownThemeBuilder
 
     /**
+     * 设置定义列表术语和定义行之间间距
+     *
+     * @param descListTermAndDefMargins 定义列表术语和定义行之间间距 默认8.0
+     * @return MarkdownConfigurationBuilder MarkdownConfigurationBuilder对象
+     */
+    public func setDescListTermAndDefMargins(descListTermAndDefMargins: Float64): MarkdownThemeBuilder
+
+    /**
+     * 设置定义列表定义行缩进
+     *
+     * @param descListDefIndentation 定义列表定义行缩进 默认8.0
+     * @return MarkdownConfigurationBuilder MarkdownConfigurationBuilder对象
+     */
+    public func setDescListDefIndentation(descListDefIndentation: Float64): MarkdownThemeBuilder
+
+    /**
      * 返回Theme对象
      *
      * @return MarkdownTheme MarkdownTheme对象
