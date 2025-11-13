@@ -21,55 +21,86 @@ public class BlockIdPlugin <: AbstractMarkdownPlugin {
     public func getClassType(): String {
         "BlockIdPlugin"
     }
-}
 
-func calcNodeIdWithLoop(rootNode: NodeView): Unit {
-    let stack = ArrayList<HashCalcular>()
-    stack.add(HashCalcular(rootNode, None))
+    let stack = ArrayList<NodeHashCalculator>()
 
-    while (stack.size > 0) {
-        let parent = stack[stack.size - 1]
-        if (parent.childIndex < parent.node.children.size) {
-            let child = parent.node.children[parent.childIndex]
-            let childHasher = HashCalcular(child, parent)
-            if (child.children.size > 0) {
-                // 保存当前状态，然后处理子节点
-                stack.add(childHasher)
+    func calcNodeIdWithLoop(rootNode: NodeView): Unit {
+        stack.add(NodeHashCalculator(rootNode, None, 0))
+
+        while (stack.size > 0) {
+            let parent = stack[stack.size - 1]
+            let childIndex = parent.childIndex
+            if (childIndex < parent.node.children.size) {
+                let child = parent.node.children[childIndex]
+                let childHasher = NodeHashCalculator(child, parent, childIndex)
+                if (child.children.size > 0) {
+                    // 保存当前状态，然后处理子节点
+                    stack.add(childHasher)
+                } else {
+                    // 没有子节点
+                    childHasher.finish()
+                }
             } else {
-                // 没有子节点
-                childHasher.finish()
+                // 所有子节点处理完毕，处理父节点
+                parent.finish()
+                stack.remove(at: stack.size - 1)
             }
-        } else {
-            // 所有子节点处理完毕，处理父节点
-            parent.finish()
-            stack.remove(at: stack.size - 1)
         }
     }
 }
 
-func calcNodeId(instance: NodeView): Int {
-    let str = match (instance.node) {
-        case v: NodeHash => v.nodeHash()
-        case _ => instance.toString()
-    }
-    str.hashCode()
-}
+/**
+ * 用于计算node的nodeHash/contentHash
+ * init时
+ *     - 计算nodeHash
+ * finish时
+ *     - 写入nodeHash/contentHash
+ *     - 更新parent.contentHash
+ *     - 更新parent的childIndex
+ */
+class NodeHashCalculator {
+    var childIndex = 0 // 当前遍历到node的第几个子节点
+    var nodeHasher = DefaultHasher() // 用于计算node的nodeHash
+    var posionHasher = DefaultHasher() // 用于计算node的posistion的nodeHash
+    var contentHasher = DefaultHasher() // 用于计算node的contentHash
+    NodeHashCalculator(
+        let node: NodeView, /* 当前节点 */
+        let parent: ?NodeHashCalculator, /* 父节点 */
+        let index: Int /* node属于parent的第几个子节点 */
+    ) {
+        // 根据parent.position/index 计算position
+        posionHasher.write(parent?.posionHasher.finish() ?? 0)
+        posionHasher.write(index)
 
-class HashCalcular {
-    var hashTotal = 17
-    var childIndex = 0
-    HashCalcular(let node: NodeView, let parent: ?HashCalcular) {
-        accumulate(calcNodeId(node))
+        // 根据node.porpString 计算基础contentHash
+        contentHasher.write(match (node.node) {
+            case v: NodeHash => v.propString()
+            case _ => node.toString()
+        })
+
+        // 根据position/porp 计算nodeHash
+        nodeHasher.write(posionHasher.finish())
+        nodeHasher.write(contentHasher.finish())
     }
 
+    /**
+     * 累加contentHash
+     */
     @OverflowWrapping
     func accumulate(hash: Int): Unit {
-        this.hashTotal = this.hashTotal * 31 + hash
+        this.contentHasher.write(hash)
     }
+
+    /**
+     * 写入nodeHash/contentHash
+     * 将node.contentHash累加到parent.contentHash
+     * 更新parent.childIndex
+     */
     func finish(): Unit {
-        node.addProp("nodeid", hashTotal)
+        node.nodeHash = nodeHasher.finish()
+        node.contentHash = contentHasher.finish()
         if (let Some(p) <- parent) {
-            p.accumulate(hashTotal)
+            p.accumulate(contentHasher.finish())
             p.childIndex += 1
         }
     }
