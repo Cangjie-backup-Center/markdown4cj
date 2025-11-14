@@ -8,9 +8,9 @@ package markdown.plugin
  * blockid存于NodeView
  * 要求所有节点关系/内容不再更改 因此必须在最后加载此插件
  */
-public class BlockIdPlugin <: AbstractMarkdownPlugin {
-    public static func create(): BlockIdPlugin {
-        return BlockIdPlugin()
+public class NodeIdPlugin <: AbstractMarkdownPlugin {
+    public static func create(): NodeIdPlugin {
+        return NodeIdPlugin()
     }
 
     public override func afterRender(doc: Node, _: MarkdownVisitor): Unit {
@@ -19,7 +19,7 @@ public class BlockIdPlugin <: AbstractMarkdownPlugin {
     }
 
     public func getClassType(): String {
-        "BlockIdPlugin"
+        "NodeIdPlugin"
     }
 
     let stack = ArrayList<NodeHashCalculator>()
@@ -75,7 +75,7 @@ class NodeHashCalculator {
         // 根据node.porpString 计算基础contentHash
         contentHasher.write(match (node.node) {
             case v: NodeHash => v.propString()
-            case _ => node.toString()
+            case v => v.toString()
         })
 
         // 根据position/porp 计算nodeHash
