@@ -75,12 +75,12 @@ class NodeHashCalculator {
         // 根据node.porpString 计算基础contentHash
         contentHasher.write(match (node.node) {
             case v: NodeHash => v.propString()
-            case v => v.toString()
+            case _ => node.toString()
         })
 
-        // 根据position/porp 计算nodeHash
+        // 根据position/NodeType 计算nodeHash
         nodeHasher.write(posionHasher.finish())
-        nodeHasher.write(contentHasher.finish())
+        nodeHasher.write(node.node.getNodeType())
     }
 
     /**
