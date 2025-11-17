@@ -274,7 +274,7 @@ class MarkdownCompleteDetailsPage {
             // 图片列表插件
             .usePlugin(ImageCollectPlugin.create())
             // 唯一ID标识插件
-            .usePlugin(BlockIdPlugin.create())
+            .usePlugin(NodeIdPlugin.create())
             .build()
         return markdownPlugin
     }

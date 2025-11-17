@@ -147,7 +147,7 @@ class CodeIncrementDetailsPage {
         // 单独代码块
         markdownThemeBuilder.setIsSeparateCodeBlock(true) // 设置是否单独代码块
         markdownThemeBuilder.setCodeCopyIcon(@r(app.media.app_icon)) // 设置代码复制按钮默认图标
-
+        markdownThemeBuilder.setSeparateCodeIsBottom(true)
         return markdownThemeBuilder.build()
     }
 
