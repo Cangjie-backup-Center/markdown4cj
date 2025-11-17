@@ -74,6 +74,7 @@ class BigCompleteDetailsPage {
             .padding(bottom: 100)
             // 设置滚动方法
             .scrollable(ScrollDirection.Vertical)
+            .scrollBar(BarState.Off)
         }
     }
 

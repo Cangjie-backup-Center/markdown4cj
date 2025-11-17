@@ -122,7 +122,7 @@ class MarkdownTableBlockCellComponent {
         // 设置组件的背景色
         .backgroundColor(renderTableCellColor(isHeader, markdownConfiguration.markdownTheme, idRow))
         // 设置边框的宽度
-        .borderWidth(markdownConfiguration.markdownTheme.tableBorderWidth / 2.0)
+        .borderWidth(EdgeWidths(left: leftWidths().vp, right: rightWidths().vp, top: topWidths().vp, bottom: bottomWidths().vp))
         // 设置元素的边框样式
         .borderStyle(BorderStyle.Solid)
         // 设置边框的颜色
@@ -802,6 +802,30 @@ class MarkdownTableBlockCellComponent {
                 markdownConfiguration.textCopyCallback()(str)
             }
         })
+    }
+
+    func leftWidths(): Float64 {
+        return 0.0
+    }
+
+    func rightWidths(): Float64 {
+        return if (idxItem == dataCellSize - 1) {
+            0.0
+        } else {
+            markdownConfiguration.markdownTheme.tableBorderWidth
+        }
+    }
+
+    func topWidths(): Float64 {
+        return 0.0
+    }
+
+    func bottomWidths(): Float64 {
+        return if (idRow == dataRowSize - 1) {
+            0.0
+        } else {
+            markdownConfiguration.markdownTheme.tableBorderWidth
+        }
     }
 
     /**
