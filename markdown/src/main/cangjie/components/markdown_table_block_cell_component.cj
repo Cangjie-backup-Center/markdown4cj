@@ -824,15 +824,15 @@ class MarkdownTableBlockCellComponent {
     }
 
     func topWidths(): Float64 {
-        return 0.0
-    }
-
-    func bottomWidths(): Float64 {
-        return if (idRow == dataRowSize - 1) {
+        return if (idRow == 0) {
             0.0
         } else {
             markdownConfiguration.markdownTheme.tableBorderWidth
         }
+    }
+
+    func bottomWidths(): Float64 {
+        return 0.0
     }
 
     /**
