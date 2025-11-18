@@ -104,7 +104,14 @@ class MarkdownTableBlockCellComponent {
 
     protected override func aboutToDisappear(): Unit {
         // 清除当前控件
-        tableCellComponents.remove(this.nodeView.nodeHash)
+        let value = tableCellComponents.get(this.nodeView.nodeHash)
+        if (let Some(v) <- value) {
+            if (refEq(v, this)) {
+                tableCellComponents.remove(this.nodeView.nodeHash)
+            }
+        } else {
+            tableCellComponents.remove(this.nodeView.nodeHash)
+        }
     }
 
     func build() {

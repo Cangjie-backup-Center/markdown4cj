@@ -46,6 +46,18 @@ class MarkdownCompleteDetailsPage {
 
     var nodeViewStringBuilder: ?NodeViewStringBuilder = None
 
+    /**
+     * 图片宽度 - 单位px
+     */
+    @State
+    var width: Float64 = 0.0
+
+    /**
+     * 图片高度 - 单位px
+     */
+    @State
+    var height: Float64 = 0.0
+
     protected override func aboutToAppear(): Unit {
         params = (Router.getParams().getOrThrow() as String).getOrThrow()
         mdStr = getFileContextStr(params)
@@ -59,6 +71,17 @@ class MarkdownCompleteDetailsPage {
             )
             Scroll(scroller) {
                 Column {
+                    Image("https://img0.baidu.com/it/u=3837275583,2732547821&fm=253&fmt=auto&app=138&f=PNG?w=698&h=500")
+                        // 设置组件自身的宽度
+                        .width(width.px)
+                        // 设置组件自身的高度
+                        .height(height.px)
+                        // 图片成功加载时触发该回调，返回成功加载的图片尺寸
+                        .onComplete {
+                            imageLoadResult =>
+                                width =  imageLoadResult.width
+                                height = imageLoadResult.height
+                        }
                     MarkdownComponent(
                         output: mdStr,
                         markdownConfiguration: setConfig(),
@@ -221,6 +244,7 @@ class MarkdownCompleteDetailsPage {
 //        markdownThemeBuilder.setImageIsFixedAspectRatio(true)
         markdownThemeBuilder.setImageMarginTop(10.0)
         markdownThemeBuilder.setImageMarginBottom(10.0)
+        markdownThemeBuilder.setImageMarginBottom(10.0)
         markdownThemeBuilder.setImageResource(@r(app.media.place_holder))
 
 
@@ -273,6 +297,8 @@ class MarkdownCompleteDetailsPage {
             .usePlugin(FootnotePlugin.create())
             // 图片列表插件
             .usePlugin(ImageCollectPlugin.create())
+            // 不进行图文混排插件
+            .usePlugin(ImageTextMixPlugin.create())
             // 唯一ID标识插件
             .usePlugin(NodeIdPlugin.create())
             .build()

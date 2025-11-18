@@ -7,6 +7,7 @@ import ohos.base.*
 import ohos.component.*
 import ohos.state_manage.*
 import ohos.state_macro_manage.*
+import ohos.hilog.*
 
 /**
  * Markdown无序列表(任务列表)、有序列表(TOC列表)自定义控件
@@ -78,7 +79,14 @@ class MarkdownListItemComponent {
 
     protected override func aboutToDisappear(): Unit {
         // 清除当前控件
-        markdownCacheConfiguration.listItemComponents.remove(this.nodeView.nodeHash)
+        let value = markdownCacheConfiguration.listItemComponents.get(this.nodeView.nodeHash)
+        if (let Some(v) <- value) {
+            if (refEq(v, this)) {
+                markdownCacheConfiguration.listItemComponents.remove(this.nodeView.nodeHash)
+            }
+        } else {
+            markdownCacheConfiguration.listItemComponents.remove(this.nodeView.nodeHash)
+        }
     }
 
     func build() {
@@ -375,6 +383,8 @@ class MarkdownListItemComponent {
                 let oldBlockHash = nodeViewDataSource.getData(i).nodeHash
                 let newContentHash = refreshNodeViews[i].contentHash
                 let oldContentHash = nodeViewDataSource.getData(i).contentHash
+
+                Hilog.error(1, "1", "------------------------${newBlockHash},${oldBlockHash},${newContentHash},${oldContentHash},${refreshNodeViews[i].node.getNodeType()}")
                 // 唯一ID是否相同
                 if (newBlockHash != oldBlockHash && newContentHash != oldContentHash) {
                     nodeViewDataSource.replaceData(i, refreshNodeViews[i])
