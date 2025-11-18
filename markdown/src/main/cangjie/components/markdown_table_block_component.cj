@@ -80,7 +80,6 @@ class MarkdownTableBlockComponent {
         refreshData(nodeView)
         // 缓存当前控件
         tableComponents.add(this.nodeView.nodeHash, this)
-        cellSizeFunc()
     }
 
     func cellSizeFunc(){
