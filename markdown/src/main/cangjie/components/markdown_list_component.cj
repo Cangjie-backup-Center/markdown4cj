@@ -7,7 +7,6 @@ import ohos.base.*
 import ohos.component.*
 import ohos.state_manage.*
 import ohos.state_macro_manage.*
-import ohos.hilog.*
 
 /**
  * Markdown无序列表(任务列表)、有序列表(TOC列表)自定义控件
@@ -194,7 +193,6 @@ public class MarkdownListComponent {
                 let oldBlockHash = nodeViewDataSource.getData(i).nodeHash
                 let newContentHash = refreshNodeViews[i].contentHash
                 let oldContentHash = nodeViewDataSource.getData(i).contentHash
-                Hilog.error(1, "1", "------------------------${newBlockHash},${oldBlockHash},${newContentHash},${oldContentHash},${refreshNodeViews[i].node.getNodeType()}")
                 // 唯一ID是否相同
                 if (newBlockHash != oldBlockHash && newContentHash != oldContentHash) {
                     nodeViewDataSource.replaceData(i, refreshNodeViews[i])
@@ -202,9 +200,7 @@ public class MarkdownListComponent {
                     nodeViewDataSource.replaceData(i, refreshNodeViews[i])
                 } else if (newBlockHash == oldBlockHash && newContentHash != oldContentHash) {
                     let cache = markdownCacheConfiguration.listItemComponents.get(newBlockHash)
-                        Hilog.error(1, "1", "------------------------刷新0")
                     if (let Some(v) <- cache) {
-                        Hilog.error(1, "1", "------------------------刷新1")
                         v.refreshData(refreshNodeViews[i])
                     }
                 } else if (newBlockHash == oldBlockHash && newContentHash == oldContentHash) {
