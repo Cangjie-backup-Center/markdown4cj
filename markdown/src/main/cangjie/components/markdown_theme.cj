@@ -870,6 +870,11 @@ public class MarkdownTheme {
      */
     protected var descListDefIndentation: Float64 = 8.0
 
+    /**
+     * 定义列表定义行间距
+     */
+    protected var descListDefMargins: Float64 = 8.0
+
     protected init(builder: MarkdownThemeBuilder) {
         // 1、上下文
         this.stageContext = builder.stageContext
@@ -1087,6 +1092,7 @@ public class MarkdownTheme {
         // 18、定义列表
         this.descListTermAndDefMargins = builder.descListTermAndDefMargins
         this.descListDefIndentation = builder.descListDefIndentation
+        this.descListDefMargins = builder.descListDefMargins
     }
 
     /**
@@ -2136,6 +2142,11 @@ public class MarkdownThemeBuilder {
      */
     protected var descListDefIndentation: Float64 = 8.0
 
+    /**
+     * 定义列表定义行间距
+     */
+    protected var descListDefMargins: Float64 = 8.0
+
     init() {
     }
 
@@ -2356,6 +2367,7 @@ public class MarkdownThemeBuilder {
         // 18、定义列表
         this.descListTermAndDefMargins = theme.descListTermAndDefMargins
         this.descListDefIndentation = theme.descListDefIndentation
+        this.descListDefMargins = theme.descListDefMargins
     }
 
     /**
@@ -4352,6 +4364,17 @@ public class MarkdownThemeBuilder {
      */
     public func setDescListDefIndentation(descListDefIndentation: Float64): MarkdownThemeBuilder {
         this.descListDefIndentation = descListDefIndentation
+        return this
+    }
+
+    /**
+     * 设置定义列表定义行间距
+     *
+     * @param descListDefMargins 定义列表定义行间距 默认8.0
+     * @return MarkdownConfigurationBuilder MarkdownConfigurationBuilder对象
+     */
+    public func setDescListDefMargins(descListDefMargins: Float64): MarkdownThemeBuilder {
+        this.descListDefMargins = descListDefMargins
         return this
     }
 
