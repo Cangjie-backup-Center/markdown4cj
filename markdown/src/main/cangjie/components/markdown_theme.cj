@@ -776,6 +776,11 @@ public class MarkdownTheme {
     protected var imageBorderRadius: Float64 = 0.0
 
     /**
+     * 图片缩放类型
+     */
+    protected var imageFitType: ImageFit = ImageFit.Contain
+
+    /**
      * 图片默认占位图
      */
     protected var imageResource: ?AppResource = None
@@ -1065,6 +1070,7 @@ public class MarkdownTheme {
         this.imageMaximumWidth = builder.imageMaximumWidth
         this.imageFixedRatioWidth = builder.imageFixedRatioWidth
         this.imageBorderRadius = builder.imageBorderRadius
+        this.imageFitType = builder.imageFitType
         this.imageResource = builder.imageResource
         this.isAutoResize = builder.isAutoResize
         this.imageMarginTop = builder.imageMarginTop
@@ -2048,6 +2054,11 @@ public class MarkdownThemeBuilder {
     protected var imageBorderRadius: Float64 = 0.0
 
     /**
+     * 图片缩放类型
+     */
+    protected var imageFitType: ImageFit = ImageFit.Contain
+
+    /**
      * 图片默认占位图
      */
     protected var imageResource: ?AppResource = None
@@ -2340,6 +2351,7 @@ public class MarkdownThemeBuilder {
         this.imageMaximumWidth = theme.imageMaximumWidth
         this.imageFixedRatioWidth = theme.imageFixedRatioWidth
         this.imageBorderRadius = theme.imageBorderRadius
+        this.imageFitType = theme.imageFitType
         this.imageResource = theme.imageResource
         this.isAutoResize = theme.isAutoResize
         this.imageMarginTop = theme.imageMarginTop
@@ -4155,6 +4167,17 @@ public class MarkdownThemeBuilder {
      */
     public func setImageBorderRadius(imageBorderRadius: Float64): MarkdownThemeBuilder {
         this.imageBorderRadius = imageBorderRadius
+        return this
+    }
+
+    /**
+     * 设置图片缩放类型
+     *
+     * @param imageFitType 图片缩放类型 - 默认ImageFit.Contain
+     * @return MarkdownThemeBuilder MarkdownThemeBuilder对象
+     */
+    public func setImageFitType(imageFitType: ImageFit): MarkdownThemeBuilder {
+        this.imageFitType = imageFitType
         return this
     }
 
