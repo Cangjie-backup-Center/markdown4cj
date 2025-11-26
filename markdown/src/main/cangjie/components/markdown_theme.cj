@@ -541,6 +541,16 @@ public class MarkdownTheme {
     protected var headingTextLineHeight6: Float64 = 22.0
 
     /**
+     * 段落模块上间距
+     */
+    protected var paragraphTopMargins: Float64 = 8.0
+
+    /**
+     * 段落模块下间距
+     */
+    protected var paragraphBottomMargins: Float64 = 8.0
+
+    /**
      * 段落文本大小
      */
     protected var paragraphTextSize: Float64 = 14.0
@@ -1009,6 +1019,8 @@ public class MarkdownTheme {
         this.headingTextLineHeight6 = builder.headingTextLineHeight6
 
         // 7、段落
+        this.paragraphTopMargins = builder.paragraphTopMargins
+        this.paragraphBottomMargins = builder.paragraphBottomMargins
         this.paragraphTextSize = builder.paragraphTextSize
         this.paragraphTextColor = builder.paragraphTextColor
         this.paragraphTextWordSpace = builder.paragraphTextWordSpace
@@ -1819,6 +1831,16 @@ public class MarkdownThemeBuilder {
     protected var headingTextLineHeight6: Float64 = 22.0
 
     /**
+     * 段落模块上间距
+     */
+    protected var paragraphTopMargins: Float64 = 8.0
+
+    /**
+     * 段落模块下间距
+     */
+    protected var paragraphBottomMargins: Float64 = 8.0
+
+    /**
      * 段落文本大小
      */
     protected var paragraphTextSize: Float64 = 14.0
@@ -2290,6 +2312,8 @@ public class MarkdownThemeBuilder {
         this.headingTextLineHeight6 = theme.headingTextLineHeight6
 
         // 7、段落
+        this.paragraphTopMargins = theme.paragraphTopMargins
+        this.paragraphBottomMargins = theme.paragraphBottomMargins
         this.paragraphTextSize = theme.paragraphTextSize
         this.paragraphTextColor = theme.paragraphTextColor
         this.paragraphTextWordSpace = theme.paragraphTextWordSpace
@@ -3650,6 +3674,28 @@ public class MarkdownThemeBuilder {
      */
     public func setHeadingTextLineHeight6(headingTextLineHeight6: Float64): MarkdownThemeBuilder {
         this.headingTextLineHeight6 = headingTextLineHeight6
+        return this
+    }
+
+    /**
+     * 设置段落模块上间距
+     *
+     * @param paragraphTopMargins 段落模块上间距 - 默认8.0
+     * @return MarkdownThemeBuilder MarkdownThemeBuilder对象
+     */
+    public func setParagraphTopMargins(paragraphTopMargins: Float64): MarkdownThemeBuilder {
+        this.paragraphTopMargins = paragraphTopMargins
+        return this
+    }
+
+    /**
+     * 设置段落模块下间距
+     *
+     * @param paragraphBottomMargins 段落模块下间距 - 默认8.0
+     * @return MarkdownThemeBuilder MarkdownThemeBuilder对象
+     */
+    public func setParagraphBottomMargins(paragraphBottomMargins: Float64): MarkdownThemeBuilder {
+        this.paragraphBottomMargins = paragraphBottomMargins
         return this
     }
 

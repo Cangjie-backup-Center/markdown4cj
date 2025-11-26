@@ -233,7 +233,6 @@ class MarkdownCompleteDetailsPage {
 //        markdownThemeBuilder.setImageIsFixedAspectRatio(true)
         markdownThemeBuilder.setImageMarginTop(10.0)
         markdownThemeBuilder.setImageMarginBottom(10.0)
-        markdownThemeBuilder.setImageMarginBottom(10.0)
         markdownThemeBuilder.setImageResource(@r(app.media.place_holder))
         markdownThemeBuilder.setImageFixedRatioWidth(1.0)
 
