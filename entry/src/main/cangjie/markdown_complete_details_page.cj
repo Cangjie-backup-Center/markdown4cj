@@ -219,6 +219,7 @@ class MarkdownCompleteDetailsPage {
         // 10、数学公式
         markdownThemeBuilder.setLatexMathBackGroupColor(Color(0xFFFBFBFB)) // 设置数学公式背景色
         markdownThemeBuilder.setLatexMathTextColor(Color.GREEN) // 设置数学公式字体颜色
+        markdownThemeBuilder.setLatexDefaultText(false) //
 
         // 11、音频
         markdownThemeBuilder.setAudioIcon(@r(app.media.app_icon)) // 设置音频icon
