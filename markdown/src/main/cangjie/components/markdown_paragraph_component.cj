@@ -810,22 +810,6 @@ class MarkdownParagraphComponent {
         }
     }
 
-//    func isMarginTop(): Float64 {
-//        if (nodeViewList.size == 1 && nodeViewList[0].node is CommonmarkImage) {
-//            return 0.0
-//        } else {
-//            return marginTop
-//        }
-//    }
-//
-//    func isMarginBottom(): Float64 {
-//        if (nodeViewList.size == 1 && nodeViewList[0].node is CommonmarkImage) {
-//            return 0.0
-//        } else {
-//            return marginBottom
-//        }
-//    }
-
     /**
      * 数据刷新
      */
