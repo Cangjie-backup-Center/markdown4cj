@@ -2152,8 +2152,8 @@ public class BlockAudioPlugin <: AbstractMarkdownPlugin {
 ### Markdown节点唯一ID插件 - 流式输入显示前置条件
 
 ```cangjie
-public class BlockIdPlugin <: AbstractMarkdownPlugin {
-    public static func create(): BlockIdPlugin
+public class NodeIdPlugin <: AbstractMarkdownPlugin {
+    public static func create(): NodeIdPlugin
 }
 ```
 
