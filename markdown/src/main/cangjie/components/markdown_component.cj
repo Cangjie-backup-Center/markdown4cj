@@ -228,6 +228,9 @@ public class MarkdownComponent {
                                 MarkdownListComponent(
                                     markdownConfiguration: markdownConfiguration,
                                     nodeView: item,
+                                    adBuilder: adBuilder,
+                                    videoBuilder: videoBuilder,
+                                    audioBuilder: audioBuilder,
                                     isOrdered: false,
                                     fontCallback: fontCallback,
                                     tocListOnClick: tocListOnClick,
@@ -254,6 +257,9 @@ public class MarkdownComponent {
                                 MarkdownListComponent(
                                     markdownConfiguration: markdownConfiguration,
                                     nodeView: item,
+                                    adBuilder: adBuilder,
+                                    videoBuilder: videoBuilder,
+                                    audioBuilder: audioBuilder,
                                     isOrdered: true,
                                     fontCallback: fontCallback,
                                     tocListOnClick: tocListOnClick,
@@ -280,6 +286,9 @@ public class MarkdownComponent {
                                 MarkdownQuoteComponent(
                                     markdownConfiguration: markdownConfiguration,
                                     nodeView: item,
+                                    adBuilder: adBuilder,
+                                    videoBuilder: videoBuilder,
+                                    audioBuilder: audioBuilder,
                                     fontCallback: fontCallback,
                                     tocListOnClick: tocListOnClick,
                                     imageCallback: imageCallback,

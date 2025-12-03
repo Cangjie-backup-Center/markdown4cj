@@ -19,6 +19,24 @@ class MarkdownListItemComponent {
     var markdownConfiguration: MarkdownConfiguration
 
     /**
+     * 广告布局
+     */
+    @BuilderParam
+    var adBuilder: (NodeView) -> Unit
+
+    /**
+     * 视频布局
+     */
+    @BuilderParam
+    var videoBuilder: (NodeView, MarkdownConfiguration, (String) -> Unit) -> Unit
+
+    /**
+     * 音频布局
+     */
+    @BuilderParam
+    var audioBuilder: (NodeView, MarkdownConfiguration) -> Unit
+
+    /**
      * 列表节点
      */
     var nodeView: NodeView
@@ -178,6 +196,9 @@ class MarkdownListItemComponent {
                             MarkdownListComponent(
                                 markdownConfiguration: markdownConfiguration,
                                 nodeView: item,
+                                adBuilder: adBuilder,
+                                videoBuilder: videoBuilder,
+                                audioBuilder: audioBuilder,
                                 isOrdered: false,
                                 fontCallback: fontCallback,
                                 imageCallback: imageCallback,
@@ -204,6 +225,9 @@ class MarkdownListItemComponent {
                             MarkdownListComponent(
                                 markdownConfiguration: markdownConfiguration,
                                 nodeView: item,
+                                adBuilder: adBuilder,
+                                videoBuilder: videoBuilder,
+                                audioBuilder: audioBuilder,
                                 isOrdered: true,
                                 fontCallback: fontCallback,
                                 imageCallback: imageCallback,
@@ -230,6 +254,9 @@ class MarkdownListItemComponent {
                             MarkdownQuoteComponent(
                                 markdownConfiguration: markdownConfiguration,
                                 nodeView: item,
+                                adBuilder: adBuilder,
+                                videoBuilder: videoBuilder,
+                                audioBuilder: audioBuilder,
                                 fontCallback: fontCallback,
                                 imageCallback: imageCallback,
                                 tocListOnClick: tocListOnClick,
@@ -303,10 +330,7 @@ class MarkdownListItemComponent {
                     } else if (item.node is BlockAudio) {
                         // 音频
                         ListItem() {
-                            MarkdownImageAudioComponent(
-                                markdownConfiguration: markdownConfiguration,
-                                nodeView: item
-                            )
+                            audioBuilder(item, markdownConfiguration)
                         }
                         // 设置外边距属性
                         .margin(top: if (item.children.size == 1 && item.children[0].node is CommonmarkImage) {
@@ -322,11 +346,7 @@ class MarkdownListItemComponent {
                     } else if (item.node is BlockVideo) {
                         // 视频
                         ListItem() {
-                            MarkdownImageVideoComponent(
-                                markdownConfiguration: markdownConfiguration,
-                                nodeView: item,
-                                videoCallback: videoCallback
-                            )
+                            videoBuilder(item, markdownConfiguration, videoCallback)
                         }
                         // 设置外边距属性
                         .margin(top: if (item.children.size == 1 && item.children[0].node is CommonmarkImage) {

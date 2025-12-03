@@ -143,6 +143,8 @@ class MarkdownCompleteDetailsPage {
 
         // 2、模块间距
         markdownThemeBuilder.setBlockTopAndBottomMargins(10.0) // 设置每个模块之间上下间距
+        markdownThemeBuilder.setBlockFirstTopMargin(0.0) // 设置markdown第一个模块上边距
+        markdownThemeBuilder.setBlockLastBottomMargin(0.0) // 设置markdown最后一个模块下边距
 
         // 3、链接
         markdownThemeBuilder.setIsLinkStyle(true) // 设置链接是否是图片显示

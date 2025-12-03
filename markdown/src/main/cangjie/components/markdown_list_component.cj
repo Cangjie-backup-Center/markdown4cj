@@ -19,6 +19,24 @@ public class MarkdownListComponent {
     var markdownConfiguration: MarkdownConfiguration
 
     /**
+     * 广告布局
+     */
+    @BuilderParam
+    var adBuilder: (NodeView) -> Unit
+
+    /**
+     * 视频布局
+     */
+    @BuilderParam
+    var videoBuilder: (NodeView, MarkdownConfiguration, (String) -> Unit) -> Unit
+
+    /**
+     * 音频布局
+     */
+    @BuilderParam
+    var audioBuilder: (NodeView, MarkdownConfiguration) -> Unit
+
+    /**
      * 列表节点
      */
     var nodeView: NodeView
@@ -107,6 +125,9 @@ public class MarkdownListComponent {
                             MarkdownListItemComponent(
                                 markdownConfiguration: markdownConfiguration,
                                 nodeView: item,
+                                adBuilder: adBuilder,
+                                videoBuilder: videoBuilder,
+                                audioBuilder: audioBuilder,
                                 fontCallback: fontCallback,
                                 tocListOnClick: tocListOnClick,
                                 imageCallback: imageCallback,

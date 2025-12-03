@@ -19,6 +19,24 @@ public class MarkdownQuoteComponent {
     var markdownConfiguration: MarkdownConfiguration
 
     /**
+     * 广告布局
+     */
+    @BuilderParam
+    var adBuilder: (NodeView) -> Unit
+
+    /**
+     * 视频布局
+     */
+    @BuilderParam
+    var videoBuilder: (NodeView, MarkdownConfiguration, (String) -> Unit) -> Unit
+
+    /**
+     * 音频布局
+     */
+    @BuilderParam
+    var audioBuilder: (NodeView, MarkdownConfiguration) -> Unit
+
+    /**
      * 列表节点
      */
     var nodeView: NodeView
@@ -246,6 +264,9 @@ public class MarkdownQuoteComponent {
                                 MarkdownListComponent(
                                     markdownConfiguration: markdownConfiguration,
                                     nodeView: item,
+                                    adBuilder: adBuilder,
+                                    videoBuilder: videoBuilder,
+                                    audioBuilder: audioBuilder,
                                     isOrdered: false,
                                     fontCallback: fontCallback,
                                     tocListOnClick: tocListOnClick,
@@ -288,6 +309,9 @@ public class MarkdownQuoteComponent {
                                 MarkdownListComponent(
                                     markdownConfiguration: markdownConfiguration,
                                     nodeView: item,
+                                    adBuilder: adBuilder,
+                                    videoBuilder: videoBuilder,
+                                    audioBuilder: audioBuilder,
                                     isOrdered: true,
                                     fontCallback: fontCallback,
                                     tocListOnClick: tocListOnClick,
@@ -330,6 +354,9 @@ public class MarkdownQuoteComponent {
                                 MarkdownQuoteComponent(
                                     markdownConfiguration: markdownConfiguration,
                                     nodeView: item,
+                                    adBuilder: adBuilder,
+                                    videoBuilder: videoBuilder,
+                                    audioBuilder: audioBuilder,
                                     fontCallback: fontCallback,
                                     tocListOnClick: tocListOnClick,
                                     imageCallback: imageCallback,
@@ -451,10 +478,7 @@ public class MarkdownQuoteComponent {
                         // 音频
                         ListItem() {
                             Column() {
-                                MarkdownImageAudioComponent(
-                                    markdownConfiguration: markdownConfiguration,
-                                    nodeView: item
-                                )
+                                audioBuilder(item, markdownConfiguration)
                             }
                             // 设置子组件在水平方向上的对齐格式。
                             .alignItems(HorizontalAlign.Start)
@@ -486,11 +510,7 @@ public class MarkdownQuoteComponent {
                         // 视频
                         ListItem() {
                             Column() {
-                                MarkdownImageVideoComponent(
-                                    markdownConfiguration: markdownConfiguration,
-                                    nodeView: item,
-                                    videoCallback: videoCallback
-                                )
+                                videoBuilder(item, markdownConfiguration, videoCallback)
                             }
                             // 设置子组件在水平方向上的对齐格式。
                             .alignItems(HorizontalAlign.Start)
