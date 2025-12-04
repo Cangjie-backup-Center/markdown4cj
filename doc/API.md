@@ -2149,7 +2149,7 @@ public class BlockAudioPlugin <: AbstractMarkdownPlugin {
 }
 ```
 
-### Markdown节点唯一ID插件 - 流式输入显示前置条件
+### Markdown节点唯一ID插件 - 流式输入显示前置条件 - 插件需要放在最后加载
 
 ```cangjie
 public class NodeIdPlugin <: AbstractMarkdownPlugin {
