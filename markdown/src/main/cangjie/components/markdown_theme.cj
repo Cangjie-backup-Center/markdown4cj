@@ -888,7 +888,7 @@ public class MarkdownTheme {
     /**
      * 删除线颜色
      */
-    protected var strikethroughColor: Color = COLOR_191919
+    protected var strikethroughColor: Color = COLOR_FF191919
 
     /**
      * 定义列表术语和定义行之间间距
@@ -1330,7 +1330,7 @@ public class MarkdownTheme {
         markdownThemeBuilder.setTableHeaderRowBackgroundColor(COLOR_FFFFFFFF) // 表格头背景色
 
         // 16、代码高亮
-        markdownThemeBuilder.setPrismTheme(PrismThemeDarkula.create()) // markdown代码高亮样式
+        markdownThemeBuilder.setPrismTheme(PrismThemeDefault.create()) // markdown代码高亮样式
 
         return markdownThemeBuilder
     }
@@ -2193,7 +2193,7 @@ public class MarkdownThemeBuilder {
     /**
      * 删除线颜色
      */
-    protected var strikethroughColor: Color = COLOR_191919
+    protected var strikethroughColor: Color = COLOR_FF191919
 
     /**
      * 定义列表术语和定义行之间间距
@@ -2616,7 +2616,7 @@ public class MarkdownThemeBuilder {
         setTableHeaderRowBackgroundColor(COLOR_FFFFFFFF) // 表格头背景色
 
         // 16、代码高亮
-        setPrismTheme(PrismThemeDarkula.create()) // markdown代码高亮样式
+        setPrismTheme(PrismThemeDefault.create()) // markdown代码高亮样式
 
         return this
     }
@@ -4472,7 +4472,7 @@ public class MarkdownThemeBuilder {
     /**
      * 设置删除线颜色
      *
-     * @param strikethroughColor 删除线颜色 默认COLOR_191919
+     * @param strikethroughColor 删除线颜色 默认COLOR_FF191919
      * @return MarkdownConfigurationBuilder MarkdownConfigurationBuilder对象
      */
     public func setStrikethroughColor(strikethroughColor: Color): MarkdownThemeBuilder {

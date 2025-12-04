@@ -1644,7 +1644,7 @@ public class MarkdownThemeBuilder {
     /**
      * 设置删除线颜色
      *
-     * @param strikethroughColor 删除线颜色 默认COLOR_191919
+     * @param strikethroughColor 删除线颜色 默认0XFF191919
      * @return MarkdownConfigurationBuilder MarkdownConfigurationBuilder对象
      */
     public func setStrikethroughColor(strikethroughColor: Color): MarkdownThemeBuilder
