@@ -404,7 +404,7 @@ public class MarkdownThemeBuilder {
     /**
      * 设置圆形图片格式链接主题背景颜色
      *
-     * @param linkCircleImageBackGroupColor 圆形图片格式链接主题背景颜色 - 默认0XFFFFFFFF
+     * @param linkCircleImageBackGroupColor 圆形图片格式链接主题背景颜色 - 默认Color.TRANSPARENT
      * @return MarkdownThemeBuilder MarkdownThemeBuilder对象
      */
     public func setLinkCircleImageBackGroupColor(linkCircleImageBackGroupColor: Color): MarkdownThemeBuilder
@@ -452,7 +452,7 @@ public class MarkdownThemeBuilder {
     /**
      * 设置圆角矩形图片格式链接主题背景颜色
      *
-     * @param linkRectImageBackGroupColor 圆角矩形图片格式链接主题背景颜色 - 默认0XFFFFFFFF
+     * @param linkRectImageBackGroupColor 圆角矩形图片格式链接主题背景颜色 - 默认Color.TRANSPARENT
      * @return MarkdownThemeBuilder MarkdownThemeBuilder对象
      */
     public func setLinkRectImageBackGroupColor(linkRectImageBackGroupColor: Color): MarkdownThemeBuilder
@@ -516,7 +516,7 @@ public class MarkdownThemeBuilder {
     /**
      * 设置空心圆角矩形图片格式链接主题背景颜色
      *
-     * @param linkRectToolImageBackGroupColor 空心圆角矩形图片格式链接主题背景颜色 - 默认OXFFFFFFFF
+     * @param linkRectToolImageBackGroupColor 空心圆角矩形图片格式链接主题背景颜色 - 默认Color.TRANSPARENT
      * @return MarkdownThemeBuilder MarkdownThemeBuilder对象
      */
     public func setLinkRectToolImageBackGroupColor(linkRectToolImageBackGroupColor: Color): MarkdownThemeBuilder
@@ -756,7 +756,7 @@ public class MarkdownThemeBuilder {
     /**
      * 设置文本、图片格式内联代码背景颜色
      *
-     * @param codeBackgroundColor 文本、图片格式内联代码背景颜色 - 默认OXFFEAEAEA
+     * @param codeBackgroundColor 文本、图片格式内联代码背景颜色 - 默认OXFF191919
      * @return MarkdownThemeBuilder MarkdownThemeBuilder对象
      */
     public func setCodeBackgroundColor(codeBackgroundColor: Color): MarkdownThemeBuilder
@@ -1004,7 +1004,7 @@ public class MarkdownThemeBuilder {
     /**
      * 设置H1、H2标题下分割线颜色
      *
-     * @param headingBreakColor H1、H2标题下分割线颜色 - 默认0XFF191919
+     * @param headingBreakColor H1、H2标题下分割线颜色 - 默认0XFF000000
      * @return MarkdownThemeBuilder MarkdownThemeBuilder对象
      */
     public func setHeadingBreakColor(headingBreakColor: Color): MarkdownThemeBuilder
@@ -1044,7 +1044,7 @@ public class MarkdownThemeBuilder {
     /**
      * 设置标题文本颜色
      *
-     * @param headingTextColor 标题文本颜色 - 默认0XFF191919
+     * @param headingTextColor 标题文本颜色 - 默认0XFF000000
      * @return MarkdownThemeBuilder MarkdownThemeBuilder对象
      */
     public func setHeadingTextColor(headingTextColor: Color): MarkdownThemeBuilder
@@ -1132,7 +1132,7 @@ public class MarkdownThemeBuilder {
     /**
      * 设置段落文本颜色
      *
-     * @param paragraphTextColor 段落文本颜色 - 默认0XFF191919
+     * @param paragraphTextColor 段落文本颜色 - 默认0XFF000000
      * @return MarkdownThemeBuilder MarkdownThemeBuilder对象
      */
     public func setParagraphTextColor(paragraphTextColor: Color): MarkdownThemeBuilder
@@ -1220,7 +1220,7 @@ public class MarkdownThemeBuilder {
     /**
      * 设置数学公式背景色
      *
-     * @param latexMathBackGroupColor 数学公式背景色 - 默认0xFFFFFFFF
+     * @param latexMathBackGroupColor 数学公式背景色 - 默认Color.TRANSPARENT
      * @return MarkdownThemeBuilder MarkdownThemeBuilder对象
      */
     public func setLatexMathBackGroupColor(latexMathBackGroupColor: Color): MarkdownThemeBuilder
