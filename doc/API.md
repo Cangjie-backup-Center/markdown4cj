@@ -628,7 +628,7 @@ public class MarkdownThemeBuilder {
     /**
      * 设置块引用背景颜色
      *
-     * @param blockQuoteBackGroupColor 块引用背景颜色 - 默认0XFFFFFFFF
+     * @param blockQuoteBackGroupColor 块引用背景颜色 - 默认0XFFEAEAEA
      * @return MarkdownThemeBuilder MarkdownThemeBuilder对象
      */
     public func setBlockQuoteBackGroupColor(blockQuoteBackGroupColor: Color): MarkdownThemeBuilder
@@ -756,7 +756,7 @@ public class MarkdownThemeBuilder {
     /**
      * 设置文本、图片格式内联代码背景颜色
      *
-     * @param codeBackgroundColor 文本、图片格式内联代码背景颜色 - 默认OXFF191919
+     * @param codeBackgroundColor 文本、图片格式内联代码背景颜色 - 默认OXFFEAEAEA
      * @return MarkdownThemeBuilder MarkdownThemeBuilder对象
      */
     public func setCodeBackgroundColor(codeBackgroundColor: Color): MarkdownThemeBuilder

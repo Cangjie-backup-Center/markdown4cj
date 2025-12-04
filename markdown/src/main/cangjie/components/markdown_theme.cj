@@ -253,7 +253,7 @@ public class MarkdownTheme {
     /**
      * 块引用背景颜色
      */
-    protected var blockQuoteBackGroupColor: Color = COLOR_FFFFFFFF
+    protected var blockQuoteBackGroupColor: Color = COLOR_FFEAEAEA
 
     /**
      * 块引用子模块上下间距
@@ -333,7 +333,7 @@ public class MarkdownTheme {
     /**
      * 文本/图片格式内联代码背景颜色
      */
-    protected var codeBackgroundColor: Color = COLOR_FF191919
+    protected var codeBackgroundColor: Color = COLOR_FFEAEAEA
 
     /**
      * 文本/图片格式内联代码文本大小
@@ -1181,7 +1181,7 @@ public class MarkdownTheme {
         // 4、列表
         // 4.1、块引用
         markdownThemeBuilder.setBlockQuoteColor(COLOR_FF191919) // 块引用左边线条颜色
-        markdownThemeBuilder.setBlockQuoteBackGroupColor(COLOR_FFFFFFFF) // 块引用背景颜色
+        markdownThemeBuilder.setBlockQuoteBackGroupColor(COLOR_FFEAEAEA) // 块引用背景颜色
         // 4.2、有序列表
         markdownThemeBuilder.setOrderedListItemColor(COLOR_FF191919) // 有序列表列表项的颜色
         // 4.1、无序列表
@@ -1190,7 +1190,7 @@ public class MarkdownTheme {
         // 5、代码
         // 5.1、内联代码
         markdownThemeBuilder.setCodeTextColor(COLOR_FF000000) // 文本、图片格式内联代码文本颜色
-        markdownThemeBuilder.setCodeBackgroundColor(COLOR_FF191919) // 文本、图片格式内联代码背景颜色
+        markdownThemeBuilder.setCodeBackgroundColor(COLOR_FFEAEAEA) // 文本、图片格式内联代码背景颜色
         // 5.2、代码块
         // 5.3、组合代码
         markdownThemeBuilder.setCodeListTitleSelectTextColor(Color.RED) // 组合代码选中标题文本颜色
@@ -1274,7 +1274,7 @@ public class MarkdownTheme {
         // 4、列表
         // 4.1、块引用
         markdownThemeBuilder.setBlockQuoteColor(COLOR_FF191919) // 块引用左边线条颜色
-        markdownThemeBuilder.setBlockQuoteBackGroupColor(COLOR_FFFFFFFF) // 块引用背景颜色
+        markdownThemeBuilder.setBlockQuoteBackGroupColor(COLOR_FFEAEAEA) // 块引用背景颜色
         // 4.2、有序列表
         markdownThemeBuilder.setOrderedListItemColor(COLOR_FF191919) // 有序列表列表项的颜色
         // 4.1、无序列表
@@ -1283,7 +1283,7 @@ public class MarkdownTheme {
         // 5、代码
         // 5.1、内联代码
         markdownThemeBuilder.setCodeTextColor(COLOR_FF000000) // 文本、图片格式内联代码文本颜色
-        markdownThemeBuilder.setCodeBackgroundColor(COLOR_FF191919) // 文本、图片格式内联代码背景颜色
+        markdownThemeBuilder.setCodeBackgroundColor(COLOR_FFEAEAEA) // 文本、图片格式内联代码背景颜色
         // 5.2、代码块
         // 5.3、组合代码
         markdownThemeBuilder.setCodeListTitleSelectTextColor(Color.RED) // 组合代码选中标题文本颜色
@@ -1558,7 +1558,7 @@ public class MarkdownThemeBuilder {
     /**
      * 块引用背景颜色
      */
-    protected var blockQuoteBackGroupColor: Color = COLOR_FFFFFFFF
+    protected var blockQuoteBackGroupColor: Color = COLOR_FFEAEAEA
 
     /**
      * 块引用子模块上下间距
@@ -1638,7 +1638,7 @@ public class MarkdownThemeBuilder {
     /**
      * 文本/图片格式内联代码背景颜色
      */
-    protected var codeBackgroundColor: Color = COLOR_FF191919
+    protected var codeBackgroundColor: Color = COLOR_FFEAEAEA
 
     /**
      * 文本/图片格式内联代码文本大小
@@ -2469,7 +2469,7 @@ public class MarkdownThemeBuilder {
         // 4、列表
         // 4.1、块引用
         setBlockQuoteColor(COLOR_FF191919) // 块引用左边线条颜色
-        setBlockQuoteBackGroupColor(COLOR_FFFFFFFF) // 块引用背景颜色
+        setBlockQuoteBackGroupColor(COLOR_FFEAEAEA) // 块引用背景颜色
         // 4.2、有序列表
         setOrderedListItemColor(COLOR_FF191919) // 有序列表列表项的颜色
         // 4.1、无序列表
@@ -2478,7 +2478,7 @@ public class MarkdownThemeBuilder {
         // 5、代码
         // 5.1、内联代码
         setCodeTextColor(COLOR_FF000000) // 文本、图片格式内联代码文本颜色
-        setCodeBackgroundColor(COLOR_FF191919) // 文本、图片格式内联代码背景颜色
+        setCodeBackgroundColor(COLOR_FFEAEAEA) // 文本、图片格式内联代码背景颜色
         // 5.2、代码块
         // 5.3、组合代码
         setCodeListTitleSelectTextColor(Color.RED) // 组合代码选中标题文本颜色
@@ -2560,7 +2560,7 @@ public class MarkdownThemeBuilder {
         // 4、列表
         // 4.1、块引用
         setBlockQuoteColor(COLOR_FF191919) // 块引用左边线条颜色
-        setBlockQuoteBackGroupColor(COLOR_FFFFFFFF) // 块引用背景颜色
+        setBlockQuoteBackGroupColor(COLOR_FFEAEAEA) // 块引用背景颜色
         // 4.2、有序列表
         setOrderedListItemColor(COLOR_FF191919) // 有序列表列表项的颜色
         // 4.1、无序列表
@@ -2569,7 +2569,7 @@ public class MarkdownThemeBuilder {
         // 5、代码
         // 5.1、内联代码
         setCodeTextColor(COLOR_FF000000) // 文本、图片格式内联代码文本颜色
-        setCodeBackgroundColor(COLOR_FF191919) // 文本、图片格式内联代码背景颜色
+        setCodeBackgroundColor(COLOR_FFEAEAEA) // 文本、图片格式内联代码背景颜色
         // 5.2、代码块
         // 5.3、组合代码
         setCodeListTitleSelectTextColor(Color.RED) // 组合代码选中标题文本颜色
@@ -3075,7 +3075,7 @@ public class MarkdownThemeBuilder {
     /**
      * 设置块引用背景颜色
      *
-     * @param blockQuoteBackGroupColor 块引用背景颜色 - 默认0XFFFFFFFF
+     * @param blockQuoteBackGroupColor 块引用背景颜色 - 默认0XFFEAEAEA
      * @return MarkdownThemeBuilder MarkdownThemeBuilder对象
      */
     public func setBlockQuoteBackGroupColor(blockQuoteBackGroupColor: Color): MarkdownThemeBuilder {
@@ -3251,7 +3251,7 @@ public class MarkdownThemeBuilder {
     /**
      * 设置文本、图片格式内联代码背景颜色
      *
-     * @param codeBackgroundColor 文本、图片格式内联代码背景颜色 - 默认OXFF191919
+     * @param codeBackgroundColor 文本、图片格式内联代码背景颜色 - 默认OXFFEAEAEA
      * @return MarkdownThemeBuilder MarkdownThemeBuilder对象
      */
     public func setCodeBackgroundColor(codeBackgroundColor: Color): MarkdownThemeBuilder {
