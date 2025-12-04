@@ -488,7 +488,7 @@ public class MarkdownTheme {
     /**
      * H1/H2标题下分割线颜色
      */
-    protected var headingBreakColor: Color = COLOR_FF000000
+    protected var headingBreakColor: Color = COLOR_FF191919
 
     /**
      * 标题文本字体
@@ -513,7 +513,7 @@ public class MarkdownTheme {
     /**
      * 标题文本颜色
      */
-    protected var headingTextColor: Color = COLOR_FF000000
+    protected var headingTextColor: Color = COLOR_FF191919
 
     /**
      * 标题文本字间距
@@ -568,7 +568,7 @@ public class MarkdownTheme {
     /**
      * 段落文本颜色
      */
-    protected var paragraphTextColor: Color = COLOR_FF000000
+    protected var paragraphTextColor: Color = COLOR_FF191919
 
     /**
      * 段落文本字间距
@@ -1200,11 +1200,11 @@ public class MarkdownTheme {
         // 5.4、单独代码块
 
         // 6、标题
-        markdownThemeBuilder.setHeadingBreakColor(COLOR_FF000000) // H1、H2标题下分割线颜色
-        markdownThemeBuilder.setHeadingTextColor(COLOR_FF000000) // 标题文本颜色
+        markdownThemeBuilder.setHeadingBreakColor(COLOR_FF191919) // H1、H2标题下分割线颜色
+        markdownThemeBuilder.setHeadingTextColor(COLOR_FF191919) // 标题文本颜色
 
         // 7、段落
-        markdownThemeBuilder.setParagraphTextColor(COLOR_FF000000) // 段落文本颜色
+        markdownThemeBuilder.setParagraphTextColor(COLOR_FF191919) // 段落文本颜色
 
         // 8、分割线
         markdownThemeBuilder.setThematicBreakColor(COLOR_FF191919) // 分割线颜色
@@ -1293,11 +1293,11 @@ public class MarkdownTheme {
         // 5.4、单独代码块
 
         // 6、标题
-        markdownThemeBuilder.setHeadingBreakColor(COLOR_FF000000) // H1、H2标题下分割线颜色
-        markdownThemeBuilder.setHeadingTextColor(COLOR_FF000000) // 标题文本颜色
+        markdownThemeBuilder.setHeadingBreakColor(COLOR_FF191919) // H1、H2标题下分割线颜色
+        markdownThemeBuilder.setHeadingTextColor(COLOR_FF191919) // 标题文本颜色
 
         // 7、段落
-        markdownThemeBuilder.setParagraphTextColor(COLOR_FF000000) // 段落文本颜色
+        markdownThemeBuilder.setParagraphTextColor(COLOR_FF191919) // 段落文本颜色
 
         // 8、分割线
         markdownThemeBuilder.setThematicBreakColor(COLOR_FF191919) // 分割线颜色
@@ -1793,7 +1793,7 @@ public class MarkdownThemeBuilder {
     /**
      * H1/H2标题下分割线颜色
      */
-    protected var headingBreakColor: Color = COLOR_FF000000
+    protected var headingBreakColor: Color = COLOR_FF191919
 
     /**
      * 标题文本字体
@@ -1818,7 +1818,7 @@ public class MarkdownThemeBuilder {
     /**
      * 标题文本颜色
      */
-    protected var headingTextColor: Color = COLOR_FF000000
+    protected var headingTextColor: Color = COLOR_FF191919
 
     /**
      * 标题文本字间距
@@ -1873,7 +1873,7 @@ public class MarkdownThemeBuilder {
     /**
      * 段落文本颜色
      */
-    protected var paragraphTextColor: Color = COLOR_FF000000
+    protected var paragraphTextColor: Color = COLOR_FF191919
 
     /**
      * 段落文本字间距
@@ -2488,11 +2488,11 @@ public class MarkdownThemeBuilder {
         // 5.4、单独代码块
 
         // 6、标题
-        setHeadingBreakColor(COLOR_FF000000) // H1、H2标题下分割线颜色
-        setHeadingTextColor(COLOR_FF000000) // 标题文本颜色
+        setHeadingBreakColor(COLOR_FF191919) // H1、H2标题下分割线颜色
+        setHeadingTextColor(COLOR_FF191919) // 标题文本颜色
 
         // 7、段落
-        setParagraphTextColor(COLOR_FF000000) // 段落文本颜色
+        setParagraphTextColor(COLOR_FF191919) // 段落文本颜色
 
         // 8、分割线
         setThematicBreakColor(COLOR_FF191919) // 分割线颜色
@@ -2579,11 +2579,11 @@ public class MarkdownThemeBuilder {
         // 5.4、单独代码块
 
         // 6、标题
-        setHeadingBreakColor(COLOR_FF000000) // H1、H2标题下分割线颜色
-        setHeadingTextColor(COLOR_FF000000) // 标题文本颜色
+        setHeadingBreakColor(COLOR_FF191919) // H1、H2标题下分割线颜色
+        setHeadingTextColor(COLOR_FF191919) // 标题文本颜色
 
         // 7、段落
-        setParagraphTextColor(COLOR_FF000000) // 段落文本颜色
+        setParagraphTextColor(COLOR_FF191919) // 段落文本颜色
 
         // 8、分割线
         setThematicBreakColor(COLOR_FF191919) // 分割线颜色
@@ -3592,7 +3592,7 @@ public class MarkdownThemeBuilder {
     /**
      * 设置H1、H2标题下分割线颜色
      *
-     * @param headingBreakColor H1、H2标题下分割线颜色 - 默认0XFF000000
+     * @param headingBreakColor H1、H2标题下分割线颜色 - 默认0XFF191919
      * @return MarkdownThemeBuilder MarkdownThemeBuilder对象
      */
     public func setHeadingBreakColor(headingBreakColor: Color): MarkdownThemeBuilder {
@@ -3647,7 +3647,7 @@ public class MarkdownThemeBuilder {
     /**
      * 设置标题文本颜色
      *
-     * @param headingTextColor 标题文本颜色 - 默认0XFF000000
+     * @param headingTextColor 标题文本颜色 - 默认0XFF191919
      * @return MarkdownThemeBuilder MarkdownThemeBuilder对象
      */
     public func setHeadingTextColor(headingTextColor: Color): MarkdownThemeBuilder {
@@ -3768,7 +3768,7 @@ public class MarkdownThemeBuilder {
     /**
      * 设置段落文本颜色
      *
-     * @param paragraphTextColor 段落文本颜色 - 默认0XFF000000
+     * @param paragraphTextColor 段落文本颜色 - 默认0XFF191919
      * @return MarkdownThemeBuilder MarkdownThemeBuilder对象
      */
     public func setParagraphTextColor(paragraphTextColor: Color): MarkdownThemeBuilder {

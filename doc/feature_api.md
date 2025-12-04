@@ -1004,7 +1004,7 @@ public class MarkdownThemeBuilder {
     /**
      * 设置H1、H2标题下分割线颜色
      *
-     * @param headingBreakColor H1、H2标题下分割线颜色 - 默认0XFF000000
+     * @param headingBreakColor H1、H2标题下分割线颜色 - 默认0XFF191919
      * @return MarkdownThemeBuilder MarkdownThemeBuilder对象
      */
     public func setHeadingBreakColor(headingBreakColor: Color): MarkdownThemeBuilder
@@ -1044,7 +1044,7 @@ public class MarkdownThemeBuilder {
     /**
      * 设置标题文本颜色
      *
-     * @param headingTextColor 标题文本颜色 - 默认0XFF000000
+     * @param headingTextColor 标题文本颜色 - 默认0XFF191919
      * @return MarkdownThemeBuilder MarkdownThemeBuilder对象
      */
     public func setHeadingTextColor(headingTextColor: Color): MarkdownThemeBuilder
@@ -1132,7 +1132,7 @@ public class MarkdownThemeBuilder {
     /**
      * 设置段落文本颜色
      *
-     * @param paragraphTextColor 段落文本颜色 - 默认0XFF000000
+     * @param paragraphTextColor 段落文本颜色 - 默认0XFF191919
      * @return MarkdownThemeBuilder MarkdownThemeBuilder对象
      */
     public func setParagraphTextColor(paragraphTextColor: Color): MarkdownThemeBuilder
