@@ -201,6 +201,5 @@ public class MarkdownQuoteComponent {
             return
         }
         refreshNodeViewDataSource(nodeView, refreshNodeViews, refreshNodeViewSize, dataSourceSize, nodeViewDataSource, "quote", markdownCacheConfiguration, Option<HashMap<Int64, MarkdownTableBlockRowComponent>>.None)
-        lastViewIndex = nodeViewDataSource.totalCount() - 1 // 页面缓存的数据长度
     }
 }
