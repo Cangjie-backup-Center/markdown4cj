@@ -163,8 +163,6 @@ public class MarkdownQuoteComponent {
                     }
                     // 对子组件进行重新布局
                     .layoutWeight(1)
-                    // 背景色设置
-                    .backgroundColor(markdownConfiguration.markdownTheme.blockQuoteBackGroupColor)
                     // 内边距
                     .padding(left: markdownConfiguration.markdownTheme.blockQuoteRightMargin)
                     // 设置外边距属性
@@ -175,6 +173,8 @@ public class MarkdownQuoteComponent {
                 }
             )
         }
+        // 背景色设置
+        .backgroundColor(markdownConfiguration.markdownTheme.blockQuoteBackGroupColor)
         // 设置元素的边框颜色。
         .borderColor(markdownConfiguration.markdownTheme.blockQuoteColor)
         // 设置元素的边框宽度(单位为vp)。
@@ -201,5 +201,6 @@ public class MarkdownQuoteComponent {
             return
         }
         refreshNodeViewDataSource(nodeView, refreshNodeViews, refreshNodeViewSize, dataSourceSize, nodeViewDataSource, "quote", markdownCacheConfiguration, Option<HashMap<Int64, MarkdownTableBlockRowComponent>>.None)
+        lastViewIndex = nodeViewDataSource.totalCount() - 1 // 页面缓存的数据长度
     }
 }
