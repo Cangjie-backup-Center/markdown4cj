@@ -226,6 +226,8 @@ class CustomizationCompleteDetailsPage {
             //设置内联代码文本大小
             .setCodeTextSize(16.0)
 
+        
+            .setIsCodeFormat(true)
             //设置代码块系列（缩进代码、围栏代码、组合代码）文本大小
             .setCodeBlockTextSize(14.0)
             //设置代码块系列（缩进代码、围栏代码、组合代码）文本颜色
@@ -281,6 +283,7 @@ class CustomizationCompleteDetailsPage {
 //            .setLinkRectToolImageDividingLineWidth(1.0)
 //            .setLinkRectToolImageTextSize(11.0)
 //            .setLinkRectToolImageMargin(2.0)
+            .setPrismTheme(PrismThemeDarkula.create()) // 设置markdown代码高亮样式
             .build()
         return markdownTheme
     }

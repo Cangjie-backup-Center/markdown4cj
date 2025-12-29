@@ -210,6 +210,7 @@ class CustomizationIncrementDetailsPage {
         // 任务列表
 
         // 5、代码
+        markdownThemeBuilder.setIsCodeFormat(true)
         // 内联代码
         markdownThemeBuilder.setCodeTextColor(Color(0xFFFF5722)) // 设置内联代码文本颜色
         // 代码块
