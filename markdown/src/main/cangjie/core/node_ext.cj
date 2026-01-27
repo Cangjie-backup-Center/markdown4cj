@@ -22,12 +22,13 @@ class NodeIterator <: Iterator<Node> {
 
 public interface NodeExt {
     /**
-     * 当前节点的子节点列表
+     * 当前节点的子节点迭代器
      */
-    func getListChildren(): ArrayList<Node>
-
     func iterateChildren(): Iterator<Node>
 
+    /**
+     * 当前节点的子节点列表
+     */
     func listChildren(): ArrayList<Node>
 
     func hasOnlyChild(): Bool
@@ -71,26 +72,27 @@ public interface NodeExt {
     func isLeafNode(): Bool
 
     func replaceWith(node: Node): Unit
-
+    /**
+     * 添加自定义属性
+     */
     func addProp(key: String, value: Any): Any
+    /**
+     * 获取自定义属性
+     */
     func getProp<T>(key: String): ?T
+    /**
+     * 当前子节点数量
+     */
     prop childrenSize: Int
+    /**
+     * 获取指定child
+     */
     operator func [](index: Int): Node
 }
 /**
  * Node扩展
  */
 extend Node <: NodeExt {
-    public func getListChildren(): ArrayList<Node> {
-        let list: ArrayList<Node> = ArrayList<Node>()
-        var node: ?Node = getFirstChild()
-        while (!node.isNone()) {
-            list.add(node.getOrThrow())
-            node = node.getOrThrow().getNext()
-        }
-        return list
-    }
-
     public func iterateChildren(): Iterator<Node> {
         return NodeIterator(getFirstChild(), false)
     }
