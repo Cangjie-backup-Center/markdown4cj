@@ -14,8 +14,7 @@ public class NodeIdPlugin <: AbstractMarkdownPlugin {
     }
 
     public override func afterRender(doc: Node, _: MarkdownVisitor): Unit {
-        let view = doc.getView()
-        calcNodeIdWithLoop(view)
+        calcNodeIdWithLoop(doc)
     }
 
     public func getClassType(): String {
@@ -24,16 +23,16 @@ public class NodeIdPlugin <: AbstractMarkdownPlugin {
 
     let stack = ArrayList<NodeHashCalculator>()
 
-    func calcNodeIdWithLoop(rootNode: NodeView): Unit {
+    func calcNodeIdWithLoop(rootNode: Node): Unit {
         stack.add(NodeHashCalculator(rootNode, None, 0))
 
         while (stack.size > 0) {
             let parent = stack[stack.size - 1]
             let childIndex = parent.childIndex
-            if (childIndex < parent.node.children.size) {
-                let child = parent.node.children[childIndex]
+            if (childIndex < parent.node.childrenSize) {
+                let child = parent.node[childIndex]
                 let childHasher = NodeHashCalculator(child, parent, childIndex)
-                if (child.children.size > 0) {
+                if (child.childrenSize > 0) {
                     // 保存当前状态，然后处理子节点
                     stack.add(childHasher)
                 } else {
@@ -64,7 +63,7 @@ class NodeHashCalculator {
     var posionHasher = DefaultHasher() // 用于计算node的posistion的nodeHash
     var contentHasher = DefaultHasher() // 用于计算node的contentHash
     NodeHashCalculator(
-        let node: NodeView, /* 当前节点 */
+        let node: Node, /* 当前节点 */
         let parent: ?NodeHashCalculator, /* 父节点 */
         let index: Int /* node属于parent的第几个子节点 */
     ) {
@@ -73,14 +72,14 @@ class NodeHashCalculator {
         posionHasher.write(index)
 
         // 根据node.porpString 计算基础contentHash
-        contentHasher.write(match (node.node) {
+        contentHasher.write(match (node) {
             case v: NodeHash => v.propString()
             case _ => node.toString()
         })
 
         // 根据position/NodeType 计算nodeHash
         nodeHasher.write(posionHasher.finish())
-        nodeHasher.write(node.node.getNodeType())
+        nodeHasher.write(node.getNodeType())
     }
 
     /**
@@ -97,8 +96,8 @@ class NodeHashCalculator {
      * 更新parent.childIndex
      */
     func finish(): Unit {
-        node.nodeHash = nodeHasher.finish()
-        node.contentHash = contentHasher.finish()
+        node.addProp("nodeHash", nodeHasher.finish())
+        node.addProp("contentHash", contentHasher.finish())
         if (let Some(p) <- parent) {
             p.accumulate(contentHasher.finish())
             p.childIndex += 1

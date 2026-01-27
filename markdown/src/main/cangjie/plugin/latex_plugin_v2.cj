@@ -16,34 +16,6 @@ public class LatexMathPluginV2 <: AbstractMarkdownPlugin {
         builder.customInlineContentParserFactory(LatexInlineParserFactory()) // 行内解析
     }
 
-    private func addInlineVisitor(builder: MarkdownVisitorBuilder): Unit {
-        builder.on(
-            "LatexMathNode",
-            {
-                visitor, node => buildView(node, true)
-            }
-        )
-    }
-
-    public func configureVisitor(builder: MarkdownVisitorBuilder): Unit {
-        addBlockVisitor(builder)
-        addInlineVisitor(builder)
-    }
-
-    // @VisibleForTesting
-    static func prepareLatexTextPlaceholder(latex: String): String {
-        return latex.replace("\n", " ").trimAscii()
-    }
-
-    private func addBlockVisitor(builder: MarkdownVisitorBuilder): Unit {
-        builder.on(
-            "LatexMathBlock",
-            {
-                visitor, node => buildView(node, true)
-            }
-        )
-    }
-
     public func getClassType(): String {
         "LatexMathPluginV2"
     }

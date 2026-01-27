@@ -78,8 +78,6 @@ public class SubPlugin <: AbstractMarkdownPlugin {
             "SubNode",
             {
                 visitor, node =>
-                    let view = buildView(node, false, needProps: true)
-                    view.props?.add("SubNode", true)
                     visitor.visitChildren(node)
             }
         )
@@ -131,8 +129,6 @@ public class SupPlugin <: AbstractMarkdownPlugin {
             "SupNode",
             {
                 visitor, node =>
-                    let view = buildView(node, false, needProps: true)
-                    view.props?.add("SupNode", true)
                     visitor.visitChildren(node)
             }
         )

@@ -14,12 +14,6 @@ public class FootnotePlugin <: AbstractMarkdownPlugin {
     }
 
     public func configureVisitor(builder: MarkdownVisitorBuilder): Unit {
-        builder.on(
-            "Footnote",
-            {
-                visitor, node => let view = buildView(node, true)
-            }
-        )
     }
 
     public func getClassType(): String {
@@ -62,7 +56,6 @@ class FootnoteBlockParser <: AbstractBlockParser {
     }
 
     public func tryContinue(parserState: ParserState): ?BlockContinue {
-        let line = parserState.getLine()
         None
     }
 
@@ -80,7 +73,7 @@ class FootnoteBlockParserFactory <: AbstractBlockParserFactory {
     static let FOOTNOTE_BLOCK = Regex(#"^\[\^.+?\]:"#)
     public func tryStart(state: ParserState, _: MatchedBlockParser): ?BlockStart {
         let line: String = state.getLine()[state.getIndex()..]
-        if (let Some(pos) <- FOOTNOTE_BLOCK.matcher(line).find()?.matchPosition()) {
+        if (let Some(pos) <- FOOTNOTE_BLOCK.find(line)?.matchPosition()) {
             return BlockStart
                 .of4Cj(FootnoteBlockParser(line[2..pos.end - 2], line[pos.end..]))
                 .atIndex(state.getIndex() + pos.end)
@@ -126,20 +119,18 @@ class FootnoteVisitor <: AbstractVisitor {
     public func visit(n: Text): Unit {
         let line = n.getLiteral()
         var i = 0
-        if (let Some(ds) <- FOOTNOTE.matcher(line).findAll()) {
-            for (data in ds) {
-                let pos = data.matchPosition()
-                if (i < pos.start) {
-                    let text = Text(line[i..pos.start])
-                    n.insertBefore(text)
-                }
-                let footnote = Footnote(line[pos.start + 2..pos.end - 1])
-                n.insertBefore(footnote)
-                notes.add(footnote)
-                i = pos.end
+        for (data in FOOTNOTE.findAll(line)) {
+            let pos = data.matchPosition()
+            if (i < pos.start) {
+                let text = Text(line[i..pos.start])
+                n.insertBefore(text)
             }
-            n.setLiteral(line[i..])
+            let footnote = Footnote(line[pos.start + 2..pos.end - 1])
+            n.insertBefore(footnote)
+            notes.add(footnote)
+            i = pos.end
         }
+        n.setLiteral(line[i..])
         if (n.getLiteral().isEmpty()) {
             n.unlink()
         }

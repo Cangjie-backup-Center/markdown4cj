@@ -21,7 +21,6 @@ public class ImageSlidePlugin <: AbstractMarkdownPlugin {
                 "SlideBlock",
                 {
                     visitor, slide =>
-                    buildView(slide, true)
                     visitor.visitChildren(slide)
                 }
             )

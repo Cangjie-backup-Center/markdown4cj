@@ -3,8 +3,6 @@
  */
 package markdown.plugin
 
-import std.reflect.*
-
 public class DescListPlugin <: AbstractMarkdownPlugin {
     public static func create(): DescListPlugin {
         return DescListPlugin()
@@ -23,12 +21,11 @@ public class DescListPlugin <: AbstractMarkdownPlugin {
 
 class DescListParserFactory <: BlockParserFactory {
     public func tryStart(state: ParserState, matchedBlockParser: MatchedBlockParser): Option<BlockStart> {
-        var indent: Int64 = state.getIndent()
         if (state.getIndent() >= Parsing.CODE_BLOCK_INDENT) {
             return BlockStart.none()
         }
         let paragraphLines = matchedBlockParser.getParagraphContent() ?? return None
-        let line = state.getLine().trimLeft()
+        let line = state.getLine().trimStart()
         if (line.startsWith(": ")) {
             return BlockStart.of4Cj(DescListParser(paragraphLines)).replaceActiveBlockParser()
         }
@@ -44,7 +41,7 @@ class DescListParser <: AbstractBlockParser {
         return block
     }
     public func addLine(line: String): Unit {
-        let lineTrim = line.trimLeft()
+        let lineTrim = line.trimStart()
         if (lineTrim.size > 2 && lineTrim.startsWith(": ")) {
             ddstr.add(lineTrim[2..])
         } else if (!line.isBlank()) {

@@ -63,7 +63,7 @@ public abstract class Markdown {
      * as these methods will additionally call specific {@link MarkdownPlugin} methods to <em>prepare</em>
      * proper display.
      */
-    public func render(node: Node): NodeView
+    public func render(node: Node): Node
 
     /**
      * This method will {@link #parse(String)} and {@link #render(Node)} supplied markdown. Returned
@@ -73,7 +73,7 @@ public abstract class Markdown {
      * @see #parse(String)
      * @see #render(Node)
      */
-    public func toMarkdown(input: String): NodeView
+    public func toMarkdown(input: String): Node
 
     /**
      * Requests information if certain plugin has been registered. Please note that this
@@ -128,7 +128,7 @@ class MarkdownImpl <: Markdown {
         return parser.parse(input)
     }
 
-    public override func render(node: Node): NodeView {
+    public override func render(node: Node): Node {
         for (plugin in plugins) {
             plugin.beforeRender(node)
         }
@@ -148,11 +148,11 @@ class MarkdownImpl <: Markdown {
         // clear render props and builder after rendering
         // as we no longer reuse visitor - there is no need to clean it
         // we might still do it if we introduce a thread-local storage though visitor.clear()
-        return node.getView()
+        return node
     }
 
-    public override func toMarkdown(input: String): NodeView {
-        let spanned: NodeView = try {
+    public override func toMarkdown(input: String): Node {
+        let spanned: Node = try {
             let tree = parse(input)
             render(tree)
         } catch (e: Exception) {

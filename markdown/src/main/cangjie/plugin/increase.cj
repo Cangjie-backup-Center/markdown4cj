@@ -8,7 +8,6 @@ public class IncreaseParser {
 
     public var input: String = ""
     public var doc: Node = Document() // 最新的Document
-    public var docView: NodeView = NodeView(doc) // 最新的Document NodeView
 
     /* 是否延迟解析 */
     public var lazy: Bool = true
@@ -61,21 +60,18 @@ public class IncreaseParser {
     /* 解析当前所有数据 */
     public func parse(): Unit {
         doc = md.parse(input)
-        docView = md.render(doc)
+        md.render(doc)
         dealLast()
     }
     func dealLast(): Unit {
-        var last = docView
-        while (last.children.size > 0) {
-            last = last.children[last.children.size - 1]
+        var last = doc
+        while (let Some(v)<-last.getLastChild()) {
+            last = v
         }
-        match (last.node) {
+        match (last) {
             case v: FencedCodeBlock =>
                 let closed = v.getLiteral().size > 0 && input.trimAsciiEnd().endsWith("```")
-                if(last.props.isNone()) {
-                    last.props = HashMap()
-                }
-                last.props?.add("closed", closed)
+                last.addProp("closed", closed)
             case _ => ()
         }
     }
