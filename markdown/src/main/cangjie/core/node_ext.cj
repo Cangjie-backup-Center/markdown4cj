@@ -50,7 +50,13 @@ public interface NodeExt {
     func hasStrongEmphasis(): Bool
 
     /**
-     * 属于第几层ListItem 适用于BulletList中深度判断
+     * 属于第几层BlockQuote 适用于BlockQuote中深度判断
+     * @return 0:不属于BlockQuote 大于0:BlockQuote深度
+     */
+    func blockQuoteDepth(): Int
+
+    /**
+     * 属于第几层ListItem 适用于BulletList/OrderedList中深度判断
      * @return 0:不属于ListItem 大于0:ListItem深度
      */
     func listItemDepth(): Int
@@ -143,6 +149,18 @@ extend Node <: NodeExt {
         return false
     }
 
+    public func blockQuoteDepth(): Int {
+        var n: ?Node = this
+        var depth: Int = 0
+        while (let Some(v) <- n) {
+            if (v is BlockQuote) {
+                depth++
+            }
+            n = v.getParent()
+        }
+        return depth
+    }
+
     public func listItemDepth(): Int {
         var n: ?Node = this
         var depth: Int = 0
@@ -212,7 +230,7 @@ extend Node <: NodeExt {
         get() {
             this.custom as HashMap<String, Any> ?? {
                 =>
-                    let m = HashMap<String, Any>()
+                    let m = HashMap<String, Any>(2)
                     this.custom = m
                     m
             }()
