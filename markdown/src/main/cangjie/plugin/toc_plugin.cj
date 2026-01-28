@@ -167,11 +167,11 @@ class TocBlockParserFactory <: BlockParserFactory {
         if (state.getIndent() >= Parsing.CODE_BLOCK_INDENT) {
             return BlockStart.none()
         }
-        var line = state.getLine()
+        var line = state.getLine().getContent()
         let index = state.getIndex()
         line = line[index..]
         if (line.replace(' ', '').toAsciiUpper() == "[TOC]") {
-            return BlockStart.of4Cj(TocBlockParser(needReplace))
+            return BlockStart.of(TocBlockParser(needReplace))
         }
         return BlockStart.none()
     }

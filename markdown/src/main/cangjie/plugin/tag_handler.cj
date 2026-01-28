@@ -272,7 +272,7 @@ public class StrikeHandler <: TagHandler {
     }
 
     public override func handle(visitor: ?MarkdownVisitor, renderer: MarkdownHtmlRenderer, tag: HtmlTag): Node {
-        let strikethrough: Strikethrough = Strikethrough()
+        let strikethrough: Strikethrough = Strikethrough("~~")
         visitChildren(visitor, renderer, tag, strikethrough)
         return strikethrough
     }

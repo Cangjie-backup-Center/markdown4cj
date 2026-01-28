@@ -13,12 +13,10 @@ class LatexBlockParser <: AbstractBlockParser {
     }
 
     public func tryContinue(parserState: ParserState): ?BlockContinue {
-        let line = parserState.getLine()[parserState.getIndex()..]
+        let line = parserState.getLine().getContent()[parserState.getIndex()..]
         if (isSingleLineLatex) {
             block.isClosed = true
             return BlockContinue.none()
-        }
-        if (isLatexLine(line)) {
         }
         if (isLatexEnd(line)) {
             block.isClosed = true
@@ -52,9 +50,9 @@ class LatexBlockParser <: AbstractBlockParser {
 
 class LatexBlockParserFactory <: AbstractBlockParserFactory {
     public func tryStart(state: ParserState, _: MatchedBlockParser): ?BlockStart {
-        var line: String = state.getLine()[state.getIndex()..]
+        var line: String = state.getLine().getContent()[state.getIndex()..]
         if (line == "$$" || line == "\\[") {
-            return BlockStart.of4Cj(LatexBlockParser()).atIndex(state.getIndex() + 2)
+            return BlockStart.of(LatexBlockParser()).atIndex(state.getIndex() + 2)
         }
         line = line.trim()
         if (line.startsWith(#"\["#) && line.endsWith(#"\]"#) ||
@@ -63,7 +61,7 @@ class LatexBlockParserFactory <: AbstractBlockParserFactory {
             parser.builder.append(line[2..line.size - 2])
             parser.isSingleLineLatex = true
             parser.block.isClosed = true
-            return BlockStart.of4Cj(parser).atIndex(state.getIndex() + 2)
+            return BlockStart.of(parser).atIndex(state.getIndex() + 2)
         }
         return BlockStart.none()
     }

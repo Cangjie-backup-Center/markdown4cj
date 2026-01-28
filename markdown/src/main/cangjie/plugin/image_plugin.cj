@@ -27,7 +27,9 @@ class StyleDelimiterProcessor <: DelimiterProcessor {
         return 1
     }
     let reg = Regex("^:(style|align|width|height|border-radius)=")
-    public func process(opener: Text, closer: Text, _: Int): Unit {
+    public override func process(openingRun: DelimiterRun, closingRun: DelimiterRun): Int {
+        let opener = openingRun.getOpener()
+        let closer = closingRun.getCloser()
         if (!process(opener, closer)) {
             if (let Some(n: Text) <- opener.getNext()) {
                 n.setLiteral("{" + n.getLiteral())
@@ -36,6 +38,7 @@ class StyleDelimiterProcessor <: DelimiterProcessor {
                 p.setLiteral(p.getLiteral() + "}")
             }
         }
+        1
     }
 
     /*

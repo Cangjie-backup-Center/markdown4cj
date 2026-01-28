@@ -23,15 +23,15 @@ public class LatexMathPluginV2 <: AbstractMarkdownPlugin {
 
 public class LatexInlineParser <: InlineContentParser {
     public func tryParse(inlineParserState: InlineParserState): ParsedInline {
-        let scanner: Scanner = inlineParserState.scanner()
+        let scanner: Scanner = inlineParserState.getScanner()
         let p0: SourcePosition = scanner.position()
 
-        let open = scanner.matchMultiple(r'$')
+        let open = scanner.matchMultiple(b'$')
         if (open > 0) {
             let p1 = scanner.position()
-            if (scanner.find(r'$') > 0) {
+            if (scanner.find(b'$') > 0) {
                 let p2 = scanner.position()
-                let close = scanner.matchMultiple(r'$')
+                let close = scanner.matchMultiple(b'$')
                 if (close > 0) {
                     let content = scanner.getSource(p1, p2).getContent()
                     return ParsedInline.of(LatexMathNode(content), scanner.position())
