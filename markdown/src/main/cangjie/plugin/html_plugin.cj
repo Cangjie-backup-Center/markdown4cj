@@ -268,8 +268,9 @@ public class HtmlPlugin <: AbstractMarkdownPlugin {
                 continue
             }
             let p = Paragraph()
+            n.insertBefore(p)
+            n.unlink()
             p.appendChild(n)
-            n.replaceWith(p)
         }
     }
 

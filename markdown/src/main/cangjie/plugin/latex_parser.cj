@@ -28,7 +28,7 @@ class LatexBlockParser <: AbstractBlockParser {
         }
     }
 
-    public func addLine(line: String): Unit {
+    public func addLine(line: SourceLine): Unit {
         if (isSingleLineLatex) {
             return
         }
@@ -36,10 +36,10 @@ class LatexBlockParser <: AbstractBlockParser {
             builder.append('\n')
         }
         if (block.isClosed) {
-            let str = line.trimAsciiEnd()
+            let str = line.getContent().trimAsciiEnd()
             builder.append(str[..str.size - 2])
         } else {
-            builder.append(line)
+            builder.append(line.getContent())
         }
     }
 
@@ -50,13 +50,17 @@ class LatexBlockParser <: AbstractBlockParser {
 
 class LatexBlockParserFactory <: AbstractBlockParserFactory {
     public func tryStart(state: ParserState, _: MatchedBlockParser): ?BlockStart {
-        var line: String = state.getLine().getContent()[state.getIndex()..]
-        if (line == "$$" || line == "\\[") {
-            return BlockStart.of(LatexBlockParser()).atIndex(state.getIndex() + 2)
+        var indent: Int64 = state.getIndent()
+        if (indent >= Parsing.CODE_BLOCK_INDENT) {
+            return BlockStart.none()
         }
-        line = line.trim()
-        if (line.startsWith(#"\["#) && line.endsWith(#"\]"#) ||
-            (line.startsWith(#"$$"#) && line.size > 3 && line.endsWith(#"$$"#))) {
+        var nextNonSpace: Int64 = state.getNextNonSpaceIndex()
+        var line: String = state.getLine().getContent()[nextNonSpace..].trimAscii()
+        if (line == "$$" || line == "\\[") {
+            return BlockStart.of(LatexBlockParser()).atIndex(nextNonSpace + 2)
+        }
+        if (line.startsWith(#"\["#) && line.endsWith(#"\]"#) || (line.startsWith(#"$$"#) && line.size > 3 &&
+            line.endsWith(#"$$"#))) {
             let parser = LatexBlockParser()
             parser.builder.append(line[2..line.size - 2])
             parser.isSingleLineLatex = true

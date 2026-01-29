@@ -40,8 +40,7 @@ public class TaskListPlugin <: AbstractMarkdownPlugin {
         builder.on(
             TaskListItem.typeInfo,
             {
-                visitor, taskListItem =>
-                visitor.visitChildren(taskListItem)
+                visitor, taskListItem => visitor.visitChildren(taskListItem)
             }
         )
     }
@@ -60,7 +59,7 @@ class TaskListVisitor <: AbstractVisitor {
         if (let Some(child: Paragraph) <- listItem.getFirstChild()) {
             if (let Some(textNode: Text) <- child.getFirstChild()) {
                 let text: String = textNode.getLiteral()
-                if (let Some(data) <- REGEX_TASK_LIST_ITEM.find(text)) {
+                if (let Some(data) <- REGEX_TASK_LIST_ITEM.find(text, group: true)) {
                     let checked: Byte = text[1]
                     let isChecked: Bool = (checked == b'x') || (checked == b'X')
 

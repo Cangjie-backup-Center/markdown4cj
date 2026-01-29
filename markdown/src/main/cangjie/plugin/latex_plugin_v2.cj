@@ -12,8 +12,16 @@ public class LatexMathPluginV2 <: AbstractMarkdownPlugin {
     }
 
     public func configureParser(builder: ParserBuilder): Unit {
-        builder.customBlockParserFactory(LatexBlockParserFactory()) // 块解析
-        builder.customInlineContentParserFactory(LatexInlineParserFactory()) // 行内解析
+        builder.customBlockParserFactory(LatexBlockParserFactory()) // 块解析: $$ \[\]
+        builder.customInlineContentParserFactory(LatexInlineParserFactory()) // 行内解析: $...$ \(...\) \[...\]
+    }
+
+    public func configureVisitor(builder: MarkdownVisitorBuilder): Unit {
+    }
+
+    // @VisibleForTesting
+    static func prepareLatexTextPlaceholder(latex: String): String {
+        return latex.replace("\n", " ").trimAscii()
     }
 
     public func getClassType(): String {
@@ -29,7 +37,14 @@ public class LatexInlineParser <: InlineContentParser {
         let open = scanner.matchMultiple(b'$')
         if (open > 0) {
             let p1 = scanner.position()
-            if (scanner.find(b'$') > 0) {
+            while (true) {
+                if (scanner.find(b'$') < 0) {
+                    break
+                }
+                if (scanner.peekPrev() == b'\\') {
+                    scanner.next()
+                    continue
+                }
                 let p2 = scanner.position()
                 let close = scanner.matchMultiple(b'$')
                 if (close > 0) {
@@ -40,7 +55,7 @@ public class LatexInlineParser <: InlineContentParser {
         } else if (scanner.next('\\(') || scanner.next('\\[')) {
             let p1 = scanner.position()
             var p2 = scanner.position()
-            while (scanner.hasNext()) {
+            while (scanner.hasNext() && scanner.peek() != b'\n') {
                 if (scanner.next('\\)') || scanner.next('\\]')) {
                     let content = scanner.getSource(p1, p2).getContent()
                     return ParsedInline.of(LatexMathNode(content), scanner.position())
@@ -57,13 +72,11 @@ public class LatexInlineParser <: InlineContentParser {
 }
 
 public class LatexInlineParserFactory <: InlineContentParserFactory {
-    // @Override
-    public func getTriggerCharacters(): HashSet<Rune> {
+    public override func getTriggerCharacters(): HashSet<Rune> {
         return HashSet([r'$', r'\\'])
     }
 
-    // @Override
-    public func create(): InlineContentParser {
+    public override func create(): InlineContentParser {
         return LatexInlineParser()
     }
 }
