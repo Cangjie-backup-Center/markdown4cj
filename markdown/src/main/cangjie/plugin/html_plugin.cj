@@ -175,9 +175,19 @@ public class HtmlPlugin <: AbstractMarkdownPlugin {
     }
 
     func tagCategory(rootTag: BlockImpl): BlockImpl {
+        let childrenTags = rootTag.getChildren()
+        if (childrenTags.size == 1) {
+            match (childrenTags[0]) {
+                case v: BlockImpl => return v
+                case v =>
+                    let p = BlockImpl.create("p", 0, HashMap<String, String>(), None, None)
+                    p.appendChild(v)
+                    return p
+            }
+        }
         let newRoot = BlockImpl.root()
         var p: ?BlockImpl = None
-        for (tag in rootTag.getChildren()) {
+        for (tag in childrenTags) {
             if (tag.isBlock()) {
                 newRoot.appendChild(tag)
                 p = None
