@@ -12,7 +12,7 @@ import ohos.state_macro_manage.*
  * Markdown围栏代码块自定义控件
  */
 @Component
-class MarkdownFencedCodeBlockComponent {
+class MarkdownCodeFencedBlockComponent {
     /**
      * markdown配置
      */
@@ -37,7 +37,7 @@ class MarkdownFencedCodeBlockComponent {
     var nodeHash: Int64 = 0
 
     /**
-     * hash
+     *
      */
     @State
     var isCodeNone: Bool = false
@@ -51,7 +51,7 @@ class MarkdownFencedCodeBlockComponent {
     /**
      * 缓存的围栏代码块控件列表
      */
-    var fencedCodeComponents: HashMap<Int64, MarkdownFencedCodeBlockComponent>
+    var fencedCodeComponents: HashMap<Int64, MarkdownCodeFencedBlockComponent>
 
     /**
      * 代码行数显示数据列表

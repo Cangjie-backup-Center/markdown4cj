@@ -11,21 +11,21 @@ import ohos.state_macro_manage.*
 /**
  * 通过异步的方式将代码转换成带有颜色的列表 - 组合代码
  *
- * @param codeBlockListNodeView 传入围栏代码列表的NodeView
+ * @param nodeView 传入围栏代码列表的Node
  * @param markdownConfiguration 传入MarkdownConfiguration
  * @param callback PrismNodesParseResState列表的列表回调接口
  * @param strText 代码列表数据
  * @return 返回PrismNodesParseResState列表的列表，返回代码类型的类型，返回代码内容列表，返回第一条数据内容
  */
-func stringToResLists(codeBlockListNodeView: NodeView, markdownConfiguration: MarkdownConfiguration, strText: ArrayList<String>, callback: (ArrayList<ArrayList<PrismNodesParseResUI>>) -> Unit): Future<Unit> {
+func stringToResLists(nodeView: NodeView, markdownConfiguration: MarkdownConfiguration, strText: ArrayList<String>, callback: (ArrayList<ArrayList<PrismNodesParseResUI>>) -> Unit): Future<Unit> {
     let fut: Future<Unit> = spawn {
+        if (Thread.currentThread.hasPendingCancellation) {
+            return
+        }
         var prismNodesParseResLists: ArrayList<ArrayList<PrismNodesParseResUI>> = ArrayList<ArrayList<PrismNodesParseResUI>>()
         try {
-            for (nodeView in codeBlockListNodeView.children) {
-                if (nodeView.node is FencedCodeBlock) {
-                    if (Thread.currentThread.hasPendingCancellation) {
-                        return
-                    }
+            for(node in nodeView.children){
+                if (node.nodeType == "FencedCodeBlock") {
                     if (Thread.currentThread.hasPendingCancellation) {
                         return
                     }
@@ -33,7 +33,7 @@ func stringToResLists(codeBlockListNodeView: NodeView, markdownConfiguration: Ma
                     if (Thread.currentThread.hasPendingCancellation) {
                         return
                     }
-                    let res: ArrayList<PrismNodesParseResUI> = psh.highlight((nodeView.node as FencedCodeBlock)().getInfo(), (nodeView.node as FencedCodeBlock)().getLiteral().trimEnd("\n"))
+                    let res: ArrayList<PrismNodesParseResUI> = psh.highlight((node as FencedCodeBlock)().getInfo(), (node as FencedCodeBlock)().getLiteral().trimEnd("\n"))
                     prismNodesParseResLists.add(res)
                 }
             }

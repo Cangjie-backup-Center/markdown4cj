@@ -37,6 +37,21 @@ extend<T> Option<T> where T <: Equatable<T> {
 }
 
 /**
+ * 获取prop数据
+ *
+ * @param commonmarkNode Node
+ * @param key key
+ * @param default 默认值
+ * @return T
+ */
+func getProp<T>(commonmarkNode: CommonmarkNode, key: String, default: T): T {
+    match (commonmarkNode.getProp<T>(key)) {
+        case Some(v) => v
+        case _ => default
+    }
+}
+
+/**
  * 图片Style使用的实体类
  */
 public class PicStyleObj {
@@ -53,7 +68,7 @@ public class PicStyleObj {
     /**
      * 对齐方式
      */
-    var align: FlexAlign = FlexAlign.Center
+    var align: HorizontalAlign = HorizontalAlign.Center
 
     /**
      * 图片圆角
@@ -87,3 +102,15 @@ public enum LatexMathColorFormat <: Equatable<LatexMathColorFormat> {
         return !(this == that)
     }
 }
+
+/**
+ * 文本对象
+ */
+public class StringClass {
+    var str: String = ""
+
+    func addString(s: String): Unit {
+        str = str + s
+    }
+}
+

@@ -12,7 +12,7 @@ import ohos.state_macro_manage.*
  * RawFile入参的图片
  */
 @Component
-public class MarkdownImageRawFileComponent {
+public class MarkdownSpanImageRawFileComponent {
     /**
      * markdown配置
      */
@@ -122,12 +122,6 @@ public class MarkdownImageRawFileComponent {
      */
     var rawFileFut: ?Future<Unit> = Option<Future<Unit>>.None
 
-    /**
-     * 图片对齐
-     */
-    @State
-    var urlHorizontalAlign: HorizontalAlign = HorizontalAlign.Start
-
     protected override func aboutToAppear(): Unit {
         rawFileComponentImageWidth = vp2px(rawFileComponentWidth.vp)().value
         rawFileRadius = imageSpanBorderRadius(rawFileImageRadius, rawFileMarkdownTheme.imageBorderRadius)
@@ -141,11 +135,6 @@ public class MarkdownImageRawFileComponent {
         } else {
             rawFileComponentImageWidth * 9.0 / 16.0 * rawFileMarkdownTheme.imageMaximumWidth
         }
-        urlHorizontalAlign = if(rawFileImageAlign.isSome()){
-            rawFileImageAlign()
-        } else {
-            HorizontalAlign.Start
-        }
         imageRawFilePixelMap()
     }
 
@@ -157,15 +146,16 @@ public class MarkdownImageRawFileComponent {
     }
 
     func build() {
-        Column(){
+        if (true) {
             if (rawFileImageType == 1) {
                 // 加载图片
-                Image(rawFileImagePixelMap())
+                ImageSpan(rawFileImagePixelMap())
                     .margin(top: rawFileMarkdownTheme.imageMarginTop, bottom: rawFileMarkdownTheme.imageMarginBottom)
-                    .borderRadius(rawFileRadius)
+                    .interopBorderRadius(rawFileRadius)
                     .width(rawFileWidth.px)
                     .height(rawFileHeight.px)
                     .objectFit(rawFileMarkdownTheme.imageFitType)
+                    .verticalAlign(ImageSpanAlignment.CENTER)
                     .constraintSize(maxWidth: 100.percent)
                     .onClick {
                         evt => imageSpanOnClick(rawFileLink, rawFileImageCallback, rawFileLinkCallback, rawFileLinkUrl, rawFileDestination)
@@ -173,7 +163,7 @@ public class MarkdownImageRawFileComponent {
             }
             if (rawFileMarkdownTheme.imageResource.isSome() && rawFileImageType != 1) {
                 // 图片占位图
-                imagePlaceholderComponent(
+                imageSpanPlaceholderComponent(
                     rawFileMarkdownTheme.imageResource(),
                     rawFileMarkdownTheme.imageMarginTop,
                     rawFileMarkdownTheme.imageMarginBottom,
@@ -183,7 +173,6 @@ public class MarkdownImageRawFileComponent {
                 )
             }
         }
-        .alignItems(urlHorizontalAlign)
     }
 
     /**

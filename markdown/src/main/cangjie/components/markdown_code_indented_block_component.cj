@@ -12,16 +12,16 @@ import ohos.state_macro_manage.*
  * Markdown缩进代码块自定义控件
  */
 @Component
-class MarkdownIndentedCodeBlockComponent {
+class MarkdownCodeIndentedBlockComponent {
     /**
      * markdown配置
      */
     var markdownConfiguration: MarkdownConfiguration
 
-    /**
-     * 列表节点
-     */
-    var nodeView: NodeView
+//    /**
+//     * 列表节点
+//     */
+//    var nodeView: NodeView
 
     /**
      * 代码内容
@@ -36,9 +36,15 @@ class MarkdownIndentedCodeBlockComponent {
     var info: Option<String> = Option<String>.None
 
     /**
+     * hash
+     */
+    @State
+    var nodeHash: Int64 = 0
+
+    /**
      * 缓存的缩进代码块控件列表
      */
-    var indentedCodeComponents: HashMap<Int64, MarkdownIndentedCodeBlockComponent>
+    var indentedCodeComponents: HashMap<Int64, MarkdownCodeIndentedBlockComponent>
 
     /**
      * 代码行数
@@ -55,20 +61,20 @@ class MarkdownIndentedCodeBlockComponent {
 
     protected override func aboutToAppear(): Unit {
         // 初始化刷新数据
-        refreshData(nodeView)
+        refreshData(codeText,info,nodeHash)
         // 缓存当前控件
-        indentedCodeComponents.add(this.nodeView.nodeHash, this)
+        indentedCodeComponents.add(nodeHash, this)
     }
 
     protected override func aboutToDisappear(): Unit {
         // 清除当前控件
-        let value = indentedCodeComponents.get(this.nodeView.nodeHash)
+        let value = indentedCodeComponents.get(nodeHash)
         if (let Some(v) <- value) {
             if (refEq(v, this)) {
-                indentedCodeComponents.remove(this.nodeView.nodeHash)
+                indentedCodeComponents.remove(nodeHash)
             }
         } else {
-            indentedCodeComponents.remove(this.nodeView.nodeHash)
+            indentedCodeComponents.remove(nodeHash)
         }
     }
 
@@ -271,11 +277,10 @@ class MarkdownIndentedCodeBlockComponent {
     /**
      * 数据刷新
      */
-    public func refreshData(nodeView: NodeView): Unit {
-        this.nodeView = nodeView
-        let data = getCodeInfo(nodeView)
-        this.info = data[1]
-        this.codeText = data[0].trimEnd("\n")
+    public func refreshData(codeText: String, info: Option<String>, nodeHash: Int64): Unit {
+        this.info = info
+        this.codeText = codeText.trimEnd("\n")
+        this.nodeHash = nodeHash
         lines = codeText.lines().count()
         lineArray.set(Array<Int64>(lines, repeat: 0))
     }
