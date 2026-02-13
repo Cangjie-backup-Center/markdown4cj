@@ -145,11 +145,8 @@ class MarkdownTableBlockComponent {
     func refreshTableBlockData(tableBlockNodeView: NodeView): Unit {
         this.tableBlockNodeView = tableBlockNodeView
         let refreshNodeViewChildren = tableBlockNodeView.children // 子节点数据
-
-//        let refreshNodeViewChildren = tableList(tableBlockNodeView.children) // 子节点数据
         let refreshNodeViewSize: Int64 = refreshNodeViewChildren.size // 刷新进来的数据长度
         let dataSourceSize: Int64 = tableBlockNodeViewDataSource.totalCount() // 页面缓存的数据长度
-        Hilog.error(1,"1","----------refreshNodeViewSize:${refreshNodeViewSize}")
         if (refreshNodeViewSize == 0) {
             return
         }
@@ -158,14 +155,10 @@ class MarkdownTableBlockComponent {
         if (refreshNodeViewSize > 0) {
             cellSize = refreshNodeViewChildren[0].children.size
         }
-        Hilog.error(1,"1","----------cellSize:${cellSize},tableBlockCellSize:${tableBlockCellSize}")
         if (cellSize != tableBlockCellSize) {
             cellWidthArrayIndexed.clear()
-//            tableBlockNodeViewDataSource.clear()
-//            tableBlockNodeViewDataSource.addDatas(refreshNodeViewChildren.get())
             tableBlockCellSize = cellSize
             createListCellWidth()
-//            return
         }
         if (refreshNodeViewSize > dataSourceSize) {
             // 新数据大于页面数据
@@ -217,6 +210,7 @@ class MarkdownTableBlockComponent {
                     }
                 } else {
                     // 其他
+                    tableBlockNodeViewDataSource.replaceData(i, refreshNodeView)
                 }
             }
         }

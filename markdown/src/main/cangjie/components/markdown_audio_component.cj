@@ -48,12 +48,7 @@ public class MarkdownAudioComponent {
 
     protected override func aboutToAppear(): Unit {
         // 获取音频图片URL
-        let children = nodeView.children
-        for (i in 0..children.size) {
-            if (children[i].nodeType == "Image") {
-                imageAudioUrl = children[i].imageUrl()
-            }
-        }
+        imageAudioUrl = nodeView.imageUrl()
         // 通过分割音频url获取音频类型和标题
         let titleList = imageAudioUrl.split("/")
         let audioName = titleList[titleList.size - 1]

@@ -175,7 +175,7 @@ public class MarkdownImageCallbackRawFileComponent {
         } else {
             rawFileCallbackComponentImageWidth * 9.0 / 16.0 * rawFileCallbackMarkdownTheme.imageMaximumWidth
         }
-        urlHorizontalAlign = if(rawFileCallbackImageAlign.isSome()){
+        urlHorizontalAlign = if (rawFileCallbackImageAlign.isSome()) {
             rawFileCallbackImageAlign()
         } else {
             HorizontalAlign.Start

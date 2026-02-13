@@ -156,14 +156,16 @@ class MarkdownTableBlockCellComponent {
     @Builder
     func tableBlockCellComponent18() {
         Text() {
-            markdownSpanListComponent(
-                tableBlockCellNodeViewList,
-                tableBlockCellMarkdownConfiguration,
-                tableBlockCellComponentWidth,
-                Option<(Int64) -> Unit>.None,
-                tableBlockCellImageCallback,
-                tableBlockCellFootnoteCallback
-            )
+            if (isRefresh) {
+                markdownSpanListComponent(
+                    tableBlockCellNodeViewList,
+                    tableBlockCellMarkdownConfiguration,
+                    tableBlockCellComponentWidth,
+                    Option<(Int64) -> Unit>.None,
+                    tableBlockCellImageCallback,
+                    tableBlockCellFootnoteCallback
+                )
+            }
         }
         .interopHalfLeading(true)
         .interopCopyOption(if (tableBlockCellMarkdownConfiguration.markdownTheme.isOnCopy) {
@@ -184,14 +186,16 @@ class MarkdownTableBlockCellComponent {
     @Builder
     func tableBlockCellComponent19() {
         Text() {
-            markdownSpanListComponent(
-                tableBlockCellNodeViewList,
-                tableBlockCellMarkdownConfiguration,
-                tableBlockCellComponentWidth,
-                Option<(Int64) -> Unit>.None,
-                tableBlockCellImageCallback,
-                tableBlockCellFootnoteCallback
-            )
+            if (isRefresh) {
+                markdownSpanListComponent(
+                    tableBlockCellNodeViewList,
+                    tableBlockCellMarkdownConfiguration,
+                    tableBlockCellComponentWidth,
+                    Option<(Int64) -> Unit>.None,
+                    tableBlockCellImageCallback,
+                    tableBlockCellFootnoteCallback
+                )
+            }
         }
         .halfLeading(true)
         .copyOption(if (tableBlockCellMarkdownConfiguration.markdownTheme.isOnCopy) {
@@ -228,8 +232,7 @@ class MarkdownTableBlockCellComponent {
         ForEach(
             spanListNodeViewList,
             itemGeneratorFunc: {
-                spanListNodeView: NodeView, index: Int64 => if (spanListNodeView.nodeType == "Text" ||
-                    spanListNodeView.nodeType == "Code" || spanListNodeView.nodeType == "Footnote") {
+                spanListNodeView: NodeView, index: Int64 => if (spanListNodeView.nodeType == "Text" || spanListNodeView.nodeType == "Code" || spanListNodeView.nodeType == "Footnote") {
                     // Text：普通文本，Code：内联代码，Footnote：脚注节点
                     markdownSpanComponent(
                         spanListMarkdownConfiguration,
@@ -251,22 +254,20 @@ class MarkdownTableBlockCellComponent {
                     )
                 } else if (spanListNodeView.nodeType == "SoftLineBreak") {
                     // 软换行
-                    Span(spanSoftLineBreak(spanListMarkdownConfiguration
-                        .markdownTheme
-                        .isLineBreak))
+                    Span(spanSoftLineBreak(spanListMarkdownConfiguration.markdownTheme.isLineBreak))
                 } else if (spanListNodeView.nodeType == "HardLineBreak") {
                     // 硬换行
                     Span("\n")
                 } else if (spanListNodeView.nodeType == "Link" || spanListNodeView.nodeType == "HeadLink") {
                     // 链接, TOC列表链接
                     if (spanListNodeView.linkUrl().startsWith("http://") || spanListNodeView.linkUrl().startsWith("https://")) {
-                        if(spanListNodeView.nodeText.trimAscii().toRuneArray().size > 1){
+                        if (spanListNodeView.nodeText.trimAscii().toRuneArray().size > 1) {
                             MarkdownLinkRectImageComponent(
                                 markdownConfiguration: spanListMarkdownConfiguration,
                                 strText: spanListNodeView.nodeText.trimAscii(),
                                 strUrl: spanListNodeView.linkUrl()
                             )
-                        }else if(spanListNodeView.nodeText.trimAscii().toRuneArray().size == 1){
+                        } else if (spanListNodeView.nodeText.trimAscii().toRuneArray().size == 1) {
                             MarkdownLinkCircleImageComponent(
                                 markdownConfiguration: spanListMarkdownConfiguration,
                                 strText: spanListNodeView.nodeText.trimAscii(),
@@ -274,7 +275,7 @@ class MarkdownTableBlockCellComponent {
                             )
                         }
                     } else {
-                        if(spanListNodeView.nodeText.trimAscii().toRuneArray().size >= 1){
+                        if (spanListNodeView.nodeText.trimAscii().toRuneArray().size >= 1) {
                             MarkdownLinkRectToolImageComponent(
                                 markdownConfiguration: spanListMarkdownConfiguration,
                                 strText: spanListNodeView.nodeText.trimAscii(),
@@ -285,13 +286,9 @@ class MarkdownTableBlockCellComponent {
                     }
                 } else if (spanListNodeView.nodeType == "Image" || spanListNodeView.nodeType == "StyleImage" || spanListNodeView.nodeType == "ImageHtmlNode") {
                     // Image：图片节点， StyleImage：图片Style节点，ImageHtmlNode：HTML图片
-                    if (spanListMarkdownConfiguration
-                        .imageCallbackCallback
-                        .isNone()) {
+                    if (spanListMarkdownConfiguration.imageCallbackCallback.isNone()) {
                         // 没有图片替换回调接口
-                        if (spanListNodeView
-                            .imageUrl()
-                            .startsWith("./")) {
+                        if (spanListNodeView.imageUrl().startsWith("./")) {
                             // 本地图片
                             MarkdownSpanImageRawFileComponent(
                                 rawFileMarkdownTheme: spanListMarkdownConfiguration.markdownTheme,
@@ -341,9 +338,7 @@ class MarkdownTableBlockCellComponent {
                         }
                     } else {
                         // 有图片替换回调接口
-                        if (spanListNodeView
-                            .imageUrl()
-                            .startsWith("./")) {
+                        if (spanListNodeView.imageUrl().startsWith("./")) {
                             // 本地图片
                             MarkdownSpanImageCallbackRawFileComponent(
                                 rawFileCallbackMarkdownTheme: spanListMarkdownConfiguration.markdownTheme,
@@ -366,8 +361,7 @@ class MarkdownTableBlockCellComponent {
                                     url15CallbackMarkdownTheme: spanListMarkdownConfiguration.markdownTheme,
                                     url15CallbackDestination: spanListNodeView.imageUrl(),
                                     url15CallbackComponentWidth: spanListComponentWidth,
-                                    url15CallbackImageCallbackCallback: spanListMarkdownConfiguration
-                                        .imageCallbackCallback(),
+                                    url15CallbackImageCallbackCallback: spanListMarkdownConfiguration.imageCallbackCallback(),
                                     url15CallbackImageCallback: spanListImageCallback,
                                     url15CallbackLinkCallback: spanListMarkdownConfiguration.linkCallback,
                                     url15CallbackLink: spanListNodeView.isLink,
@@ -383,8 +377,7 @@ class MarkdownTableBlockCellComponent {
                                     url14CallbackMarkdownTheme: spanListMarkdownConfiguration.markdownTheme,
                                     url14CallbackDestination: spanListNodeView.imageUrl(),
                                     url14CallbackComponentWidth: spanListComponentWidth,
-                                    url14CallbackImageCallbackCallback: spanListMarkdownConfiguration
-                                        .imageCallbackCallback(),
+                                    url14CallbackImageCallbackCallback: spanListMarkdownConfiguration.imageCallbackCallback(),
                                     url14CallbackImageCallback: spanListImageCallback,
                                     url14CallbackLinkCallback: spanListMarkdownConfiguration.linkCallback,
                                     url14CallbackLink: spanListNodeView.isLink,
@@ -478,6 +471,9 @@ class MarkdownTableBlockCellComponent {
         if (refreshNodeViewSize == 0) {
             return
         }
+        if (refreshNodeViewSize > 0) {
+            isRefresh = true
+        }
         if (refreshNodeViewSize > tableBlockCellNodeViewListSize) {
             // 新数据大于页面数据
             // 循环判断历史数据有没有做过修改
@@ -524,12 +520,4 @@ class MarkdownTableBlockCellComponent {
             }
         }
     }
-}
-
-@Observed
-class CellWidthArrayIndexedClass {
-    @Publish
-    var minWidth: Float64 = 0.0
-    @Publish
-    var index: Int64 = -1
 }

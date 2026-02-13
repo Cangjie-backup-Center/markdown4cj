@@ -198,8 +198,8 @@ public func nodeToNodeView(
                         // 无需处理
                         parentNewNodeView.children.add(childrenNodeView)
                     } else if (nodeType == "LinkReferenceDefinition") {
-                    // TODO 引用链接
-                    // 无需处理
+                        // TODO 引用链接
+                        // 无需处理
                     } else if (nodeType == "Link") {
                         // 链接, TOC链接/标题ID链接
                         childrenNodeView.isLink = true
@@ -475,8 +475,7 @@ public func nodeToNodeView(
                         let image = (commonmarkChildrenNode as CommonmarkImage)()
                         childrenNodeView.imageUrl = image.getDestination()
                         childrenNodeView.imageTitle = image.getTitle()
-                        parentNewNodeView
-                        .children.add(childrenNodeView)
+                        parentNewNodeView.children.add(childrenNodeView)
                     } else if (nodeType == "StyleImage") {
                         // Style图片
                         let imageStyle = (commonmarkChildrenNode as StyleImage)()
@@ -495,7 +494,7 @@ public func nodeToNodeView(
                         // 视频
                         commonmarkChildrenNode.iterateChildren().forEach({
                                 commonmarkNode: CommonmarkNode => if (commonmarkNode is CommonmarkImage) {
-                                    childrenNodeView.nodeText = (commonmarkNode as CommonmarkImage)().getDestination()
+                                    childrenNodeView.imageUrl = (commonmarkNode as CommonmarkImage)().getDestination()
                                 }
                             })
                         parentNewNodeView.children.add(childrenNodeView)
@@ -503,7 +502,7 @@ public func nodeToNodeView(
                         // 音频
                         commonmarkChildrenNode.iterateChildren().forEach({
                                 commonmarkNode: CommonmarkNode => if (commonmarkNode is CommonmarkImage) {
-                                    childrenNodeView.nodeText = (commonmarkNode as CommonmarkImage)().getDestination()
+                                    childrenNodeView.imageUrl = (commonmarkNode as CommonmarkImage)().getDestination()
                                 }
                             })
                         parentNewNodeView.children.add(childrenNodeView)

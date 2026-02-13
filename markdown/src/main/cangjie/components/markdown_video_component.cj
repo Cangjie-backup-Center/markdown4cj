@@ -68,13 +68,7 @@ public class MarkdownVideoComponent {
     var time: String = ""
 
     protected override func aboutToAppear(): Unit {
-        // 获取视频图片URL
-        let children = nodeView.children
-        for (i in 0..children.size) {
-            if (children[i].nodeType == "Image") {
-                imageVideoUrl = children[i].imageUrl()
-            }
-        }
+        imageVideoUrl = nodeView.imageUrl()
         // 视频的图片替换回调
         videoImageCallback(
             imageVideoUrl,
@@ -94,15 +88,14 @@ public class MarkdownVideoComponent {
                     imgVideoComponent()
                 }
                 .width(100.percent)
-
                 Text(time)
                     .fontColor(markdownTheme.videoTimeTextColor)
                     .fontSize(markdownTheme.videoTimeTextSize)
                     .margin(right: markdownTheme.videoTimeTextMarginRight, bottom: markdownTheme.videoTimeTextMarginBottom)
             }
             .width(100.percent)
-            .onClick {evt =>
-                videoCallback(imageVideoUrl)
+            .onClick {
+                evt => videoCallback(imageVideoUrl)
             }
             if (markdownTheme.isVideoBottomLayout) {
                 imgVideoButtonComponent()

@@ -186,14 +186,16 @@ class MarkdownHeadingComponent {
     @Builder
     func headingTitleComponent18() {
         Text() {
-            markdownSpanListComponent(
-                headingNodeViewList,
-                headingMarkdownConfiguration,
-                headingComponentWidth,
-                Option<(Int64) -> Unit>.None,
-                headingImageCallback,
-                headingFootnoteCallback
-            )
+            if (isRefresh) {
+                markdownSpanListComponent(
+                    headingNodeViewList,
+                    headingMarkdownConfiguration,
+                    headingComponentWidth,
+                    Option<(Int64) -> Unit>.None,
+                    headingImageCallback,
+                    headingFootnoteCallback
+                )
+            }
         }
         .textAlign(TextAlign.Start)
         .interopHalfLeading(true)
@@ -215,14 +217,16 @@ class MarkdownHeadingComponent {
     @Builder
     func headingTitleComponent19() {
         Text() {
-            markdownSpanListComponent(
-                headingNodeViewList,
-                headingMarkdownConfiguration,
-                headingComponentWidth,
-                Option<(Int64) -> Unit>.None,
-                headingImageCallback,
-                headingFootnoteCallback
-            )
+            if (isRefresh) {
+                markdownSpanListComponent(
+                    headingNodeViewList,
+                    headingMarkdownConfiguration,
+                    headingComponentWidth,
+                    Option<(Int64) -> Unit>.None,
+                    headingImageCallback,
+                    headingFootnoteCallback
+                )
+            }
         }
         .textAlign(TextAlign.Start)
         .halfLeading(true)
@@ -463,6 +467,9 @@ class MarkdownHeadingComponent {
         let headingNodeViewListSize: Int64 = headingNodeViewList.size // 页面缓存的数据长度
         if (refreshNodeViewSize == 0) {
             return
+        }
+        if (refreshNodeViewSize > 0) {
+            isRefresh = true
         }
         if (refreshNodeViewSize > headingNodeViewListSize) {
             // 新数据大于页面数据

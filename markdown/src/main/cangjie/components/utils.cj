@@ -107,6 +107,9 @@ public enum LatexMathColorFormat <: Equatable<LatexMathColorFormat> {
  * 文本对象
  */
 public class StringClass {
+    /**
+     * 文本内容
+     */
     var str: String = ""
 
     func addString(s: String): Unit {
@@ -114,3 +117,19 @@ public class StringClass {
     }
 }
 
+/**
+ * 表格宽度
+ */
+@Observed
+public class CellWidthArrayIndexedClass {
+    /**
+     * 表格最小宽度最大值
+     */
+    @Publish
+    var minWidth: Float64 = 0.0
+    /**
+     * 第几列
+     */
+    @Publish
+    var index: Int64 = -1
+}
