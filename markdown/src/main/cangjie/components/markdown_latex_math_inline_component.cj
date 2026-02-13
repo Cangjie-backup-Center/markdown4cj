@@ -24,7 +24,7 @@ public class MarkdownLatexMathInLineComponent {
     var latexMathInLineStr: String
 
     /**
-     * 控件宽度 - 单位px
+     * 控件宽度 - 单位vp
      */
     @Prop
     var latexMathInLineComponentWidth: Float64
@@ -66,13 +66,13 @@ public class MarkdownLatexMathInLineComponent {
     var latexMathInLinePixelMap: ?PixelMap = Option<PixelMap>.None
 
     /**
-     * 数学公式高度
+     * 数学公式高度 - 单位px
      */
     @State
     var latexMathInLineHeight: ?Float64 = Option<Float64>.None
 
     /**
-     * 数学公式宽度
+     * 数学公式宽度 - 单位px
      */
     @State
     var latexMathInLineWidth: ?Float64 = Option<Float64>.None

@@ -120,10 +120,8 @@ public class MarkdownQuoteComponent {
     var quoteNodeViewDataSource: NodeViewDataSource = NodeViewDataSource(ArrayList<NodeView>())
 
     protected override func aboutToAppear(): Unit {
-        // 初始化刷新数据
-        refreshQuoteData(quoteNodeView)
-        // 缓存当前控件
-        quoteMarkdownCacheConfiguration.quoteComponents.add(quoteNodeView.nodeHash, this)
+        refreshQuoteData(quoteNodeView) // 初始化刷新数据
+        quoteMarkdownCacheConfiguration.quoteComponents.add(quoteNodeView.nodeHash, this) // 缓存当前控件
     }
 
     protected override func aboutToDisappear(): Unit {

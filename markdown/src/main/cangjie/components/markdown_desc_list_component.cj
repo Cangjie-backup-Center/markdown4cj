@@ -24,7 +24,7 @@ public class MarkdownDescListComponent {
     var descListNodeView: NodeView
 
     /**
-     * 控件宽度 - 单位px
+     * 控件宽度 - 单位vp
      */
     @Prop
     var descListComponentWidth: Float64

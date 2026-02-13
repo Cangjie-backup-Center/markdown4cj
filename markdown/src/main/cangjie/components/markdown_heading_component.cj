@@ -25,7 +25,7 @@ class MarkdownHeadingComponent {
     var headingNodeView: NodeView
 
     /**
-     * 控件宽度 - 单位px
+     * 控件宽度 - 单位vp
      */
     @Prop
     var headingComponentWidth: Float64
@@ -88,9 +88,9 @@ class MarkdownHeadingComponent {
 
     func build() {
         Column() {
-            if (headingNodeViewList.size == 1  && !headingMarkdownConfiguration.markdownTheme.isImageMixedLayout && (headingNodeViewList[0].nodeType == "Image" || headingNodeViewList[0].nodeType == "StyleImage" || headingNodeViewList[0].nodeType == "ImageHtmlNode")) {
+            if (headingNodeViewList.size == 1 && !headingMarkdownConfiguration.markdownTheme.isImageMixedLayout && (headingNodeViewList[0].nodeType == "Image" || headingNodeViewList[0].nodeType == "StyleImage" || headingNodeViewList[0].nodeType == "ImageHtmlNode")) {
                 if (headingMarkdownConfiguration.imageCallbackCallback.isNone()) {
-                    if (headingNodeViewList[0].imageUrl().startsWith("./")){
+                    if (headingNodeViewList[0].imageUrl().startsWith("./")) {
                         MarkdownImageRawFileComponent(
                             rawFileMarkdownTheme: headingMarkdownConfiguration.markdownTheme,
                             rawFileDestination: headingNodeViewList[0].imageUrl(),
@@ -120,7 +120,7 @@ class MarkdownHeadingComponent {
                         )
                     }
                 } else {
-                    if (headingNodeViewList[0].imageUrl().startsWith("./")){
+                    if (headingNodeViewList[0].imageUrl().startsWith("./")) {
                         MarkdownImageCallbackRawFileComponent(
                             rawFileCallbackMarkdownTheme: headingMarkdownConfiguration.markdownTheme,
                             rawFileCallbackDestination: headingNodeViewList[0].imageUrl(),
@@ -140,8 +140,7 @@ class MarkdownHeadingComponent {
                             urlCallbackMarkdownTheme: headingMarkdownConfiguration.markdownTheme,
                             urlCallbackDestination: headingNodeViewList[0].imageUrl(),
                             urlCallbackComponentWidth: headingComponentWidth,
-                            urlCallbackImageCallbackCallback: headingMarkdownConfiguration
-                                .imageCallbackCallback(),
+                            urlCallbackImageCallbackCallback: headingMarkdownConfiguration.imageCallbackCallback(),
                             urlCallbackImageCallback: headingImageCallback,
                             urlCallbackLinkCallback: headingMarkdownConfiguration.linkCallback,
                             urlCallbackLink: headingNodeViewList[0].isLink,
@@ -242,7 +241,6 @@ class MarkdownHeadingComponent {
         })
     }
 
-
     /**
      * Span循环列表
      *
@@ -265,8 +263,7 @@ class MarkdownHeadingComponent {
         ForEach(
             spanListNodeViewList,
             itemGeneratorFunc: {
-                spanListNodeView: NodeView, index: Int64 => if (spanListNodeView.nodeType == "Text" ||
-                    spanListNodeView.nodeType == "Code" || spanListNodeView.nodeType == "Footnote") {
+                spanListNodeView: NodeView, index: Int64 => if (spanListNodeView.nodeType == "Text" ||spanListNodeView.nodeType == "Code" || spanListNodeView.nodeType == "Footnote") {
                     // Text：普通文本，Code：内联代码，Footnote：脚注节点
                     markdownSpanComponent(
                         spanListMarkdownConfiguration,
@@ -288,31 +285,28 @@ class MarkdownHeadingComponent {
                     )
                 } else if (spanListNodeView.nodeType == "SoftLineBreak") {
                     // 软换行
-                    Span(spanSoftLineBreak(spanListMarkdownConfiguration
-                        .markdownTheme
-                        .isLineBreak))
+                    Span(spanSoftLineBreak(spanListMarkdownConfiguration.markdownTheme.isLineBreak))
                 } else if (spanListNodeView.nodeType == "HardLineBreak") {
                     // 硬换行
                     Span("\n")
                 } else if (spanListNodeView.nodeType == "Link" || spanListNodeView.nodeType == "HeadLink") {
                     // 链接, TOC列表链接
-                    if((spanListNodeView.isBulletList||spanListNodeView.isOrderedList||spanListNodeView.isQuote||spanListNodeView.isDescList) &&
-                        isOneLink && spanListMarkdownConfiguration.markdownTheme.isListLinkStyle){
+                    if ((spanListNodeView.isBulletList || spanListNodeView.isOrderedList || spanListNodeView.isQuote || spanListNodeView.isDescList) && isOneLink && spanListMarkdownConfiguration.markdownTheme.isListLinkStyle) {
                         markdownSpanComponent(
                             spanListMarkdownConfiguration,
                             spanListNodeView,
                             spanListTocListOnClick,
                             spanListFootnoteCallback
                         )
-                    }else {
+                    } else {
                         if (spanListNodeView.linkUrl().startsWith("http://") || spanListNodeView.linkUrl().startsWith("https://")) {
-                            if(spanListNodeView.nodeText.trimAscii().toRuneArray().size > 1){
+                            if (spanListNodeView.nodeText.trimAscii().toRuneArray().size > 1) {
                                 MarkdownLinkRectImageComponent(
                                     markdownConfiguration: spanListMarkdownConfiguration,
                                     strText: spanListNodeView.nodeText.trimAscii(),
                                     strUrl: spanListNodeView.linkUrl()
                                 )
-                            }else if(spanListNodeView.nodeText.trimAscii().toRuneArray().size == 1){
+                            } else if (spanListNodeView.nodeText.trimAscii().toRuneArray().size == 1) {
                                 MarkdownLinkCircleImageComponent(
                                     markdownConfiguration: spanListMarkdownConfiguration,
                                     strText: spanListNodeView.nodeText.trimAscii(),
@@ -320,7 +314,7 @@ class MarkdownHeadingComponent {
                                 )
                             }
                         } else {
-                            if(spanListNodeView.nodeText.trimAscii().toRuneArray().size >= 1){
+                            if (spanListNodeView.nodeText.trimAscii().toRuneArray().size >= 1) {
                                 MarkdownLinkRectToolImageComponent(
                                     markdownConfiguration: spanListMarkdownConfiguration,
                                     strText: spanListNodeView.nodeText.trimAscii(),
@@ -332,13 +326,9 @@ class MarkdownHeadingComponent {
                     }
                 } else if (spanListNodeView.nodeType == "Image" || spanListNodeView.nodeType == "StyleImage" || spanListNodeView.nodeType == "ImageHtmlNode") {
                     // Image：图片节点， StyleImage：图片Style节点，ImageHtmlNode：HTML图片
-                    if (spanListMarkdownConfiguration
-                        .imageCallbackCallback
-                        .isNone()) {
+                    if (spanListMarkdownConfiguration.imageCallbackCallback.isNone()) {
                         // 没有图片替换回调接口
-                        if (spanListNodeView
-                            .imageUrl()
-                            .startsWith("./")) {
+                        if (spanListNodeView.imageUrl().startsWith("./")) {
                             // 本地图片
                             MarkdownSpanImageRawFileComponent(
                                 rawFileMarkdownTheme: spanListMarkdownConfiguration.markdownTheme,
@@ -388,9 +378,7 @@ class MarkdownHeadingComponent {
                         }
                     } else {
                         // 有图片替换回调接口
-                        if (spanListNodeView
-                            .imageUrl()
-                            .startsWith("./")) {
+                        if (spanListNodeView.imageUrl().startsWith("./")) {
                             // 本地图片
                             MarkdownSpanImageCallbackRawFileComponent(
                                 rawFileCallbackMarkdownTheme: spanListMarkdownConfiguration.markdownTheme,
@@ -413,8 +401,7 @@ class MarkdownHeadingComponent {
                                     url15CallbackMarkdownTheme: spanListMarkdownConfiguration.markdownTheme,
                                     url15CallbackDestination: spanListNodeView.imageUrl(),
                                     url15CallbackComponentWidth: spanListComponentWidth,
-                                    url15CallbackImageCallbackCallback: spanListMarkdownConfiguration
-                                        .imageCallbackCallback(),
+                                    url15CallbackImageCallbackCallback: spanListMarkdownConfiguration.imageCallbackCallback(),
                                     url15CallbackImageCallback: spanListImageCallback,
                                     url15CallbackLinkCallback: spanListMarkdownConfiguration.linkCallback,
                                     url15CallbackLink: spanListNodeView.isLink,
@@ -430,8 +417,7 @@ class MarkdownHeadingComponent {
                                     url14CallbackMarkdownTheme: spanListMarkdownConfiguration.markdownTheme,
                                     url14CallbackDestination: spanListNodeView.imageUrl(),
                                     url14CallbackComponentWidth: spanListComponentWidth,
-                                    url14CallbackImageCallbackCallback: spanListMarkdownConfiguration
-                                        .imageCallbackCallback(),
+                                    url14CallbackImageCallbackCallback: spanListMarkdownConfiguration.imageCallbackCallback(),
                                     url14CallbackImageCallback: spanListImageCallback,
                                     url14CallbackLinkCallback: spanListMarkdownConfiguration.linkCallback,
                                     url14CallbackLink: spanListNodeView.isLink,

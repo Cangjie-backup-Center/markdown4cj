@@ -25,7 +25,7 @@ public class MarkdownFootnoteComponent {
     var footnoteNodeView: NodeView
 
     /**
-     * 控件宽度 - 单位px
+     * 控件宽度 - 单位vp
      */
     @Prop
     var footnoteComponentWidth: Float64

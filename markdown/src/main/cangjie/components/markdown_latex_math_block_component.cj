@@ -51,13 +51,13 @@ class MarkdownLatexMathBlockComponent {
     var latexMathBlockHeight: ?Float64 = Option<Float64>.None
 
     /**
-     * 数学公式宽度
+     * 数学公式宽度 - 单位px
      */
     @State
     var latexMathBlockWidth: ?Float64 = Option<Float64>.None
 
     /**
-     * 解析是否结束
+     * 解析是否结束 - 单位px
      */
     @State
     var isLatexMathBlockParserEnd: Bool = false
@@ -87,8 +87,7 @@ class MarkdownLatexMathBlockComponent {
                         .width(latexMathBlockWidth().px)
                         .objectFit(ImageFit.Contain)
                         .onClick {
-                            evt => latexImageOnClick(latexMathBlockData(), latexMathBlockHeight().px,
-                                latexMathBlockWidth().px, latexImageCallback)
+                            evt => latexImageOnClick(latexMathBlockData(), latexMathBlockHeight().px, latexMathBlockWidth().px, latexImageCallback)
                         }
                 }
                 .scrollable(ScrollDirection.Horizontal)

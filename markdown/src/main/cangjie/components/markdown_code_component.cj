@@ -37,6 +37,16 @@ class MarkdownCodeComponent {
     var nodeHash: Int64 = 0
 
     /**
+     * 缓存的单独代码块控件
+     */
+    var codeComponents: HashMap<Int64, MarkdownCodeComponent>
+
+    /**
+     * 缓存的单独代码块控件
+     */
+    var codeTextComponents: HashMap<Int64, MarkdownCodeTextComponent>
+
+    /**
      * 代码列表
      */
     @State
@@ -57,16 +67,6 @@ class MarkdownCodeComponent {
      * list控制器
      */
     let scroller2: Scroller = Scroller()
-
-    /**
-     * 缓存的单独代码块控件
-     */
-    var codeComponents: HashMap<Int64, MarkdownCodeComponent>
-
-    /**
-     * 缓存的单独代码块控件
-     */
-    var codeTextComponents: HashMap<Int64, MarkdownCodeTextComponent>
 
     @State
     var reachBottom: Bool = true

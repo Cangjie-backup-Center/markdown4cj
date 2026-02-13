@@ -69,10 +69,8 @@ class MarkdownParagraphComponent {
     var paragraphNodeViewList: ObservedArrayList<NodeView> = ObservedArrayList<NodeView>()
 
     protected override func aboutToAppear(): Unit {
-        // 初始化刷新数据
-        refreshParagraphData(paragraphNodeView)
-        // 缓存当前控件
-        paragraphComponents.add(paragraphNodeView.nodeHash, this)
+        refreshParagraphData(paragraphNodeView) // 初始化刷新数据
+        paragraphComponents.add(paragraphNodeView.nodeHash, this) // 缓存当前控件
     }
 
     protected override func aboutToDisappear(): Unit {
@@ -89,9 +87,9 @@ class MarkdownParagraphComponent {
 
     func build() {
         Column() {
-            if (paragraphNodeViewList.size == 1  && !paragraphMarkdownConfiguration.markdownTheme.isImageMixedLayout && (paragraphNodeViewList[0].nodeType == "Image" || paragraphNodeViewList[0].nodeType == "StyleImage" || paragraphNodeViewList[0].nodeType == "ImageHtmlNode")) {
+            if (paragraphNodeViewList.size == 1 && !paragraphMarkdownConfiguration.markdownTheme.isImageMixedLayout && (paragraphNodeViewList[0].nodeType == "Image" || paragraphNodeViewList[0].nodeType == "StyleImage" || paragraphNodeViewList[0].nodeType == "ImageHtmlNode")) {
                 if (paragraphMarkdownConfiguration.imageCallbackCallback.isNone()) {
-                    if (paragraphNodeViewList[0].imageUrl().startsWith("./")){
+                    if (paragraphNodeViewList[0].imageUrl().startsWith("./")) {
                         MarkdownImageRawFileComponent(
                             rawFileMarkdownTheme: paragraphMarkdownConfiguration.markdownTheme,
                             rawFileDestination: paragraphNodeViewList[0].imageUrl(),
@@ -121,7 +119,7 @@ class MarkdownParagraphComponent {
                         )
                     }
                 } else {
-                    if (paragraphNodeViewList[0].imageUrl().startsWith("./")){
+                    if (paragraphNodeViewList[0].imageUrl().startsWith("./")) {
                         MarkdownImageCallbackRawFileComponent(
                             rawFileCallbackMarkdownTheme: paragraphMarkdownConfiguration.markdownTheme,
                             rawFileCallbackDestination: paragraphNodeViewList[0].imageUrl(),
@@ -141,8 +139,7 @@ class MarkdownParagraphComponent {
                             urlCallbackMarkdownTheme: paragraphMarkdownConfiguration.markdownTheme,
                             urlCallbackDestination: paragraphNodeViewList[0].imageUrl(),
                             urlCallbackComponentWidth: paragraphComponentWidth,
-                            urlCallbackImageCallbackCallback: paragraphMarkdownConfiguration
-                                .imageCallbackCallback(),
+                            urlCallbackImageCallbackCallback: paragraphMarkdownConfiguration.imageCallbackCallback(),
                             urlCallbackImageCallback: paragraphImageCallback,
                             urlCallbackLinkCallback: paragraphMarkdownConfiguration.linkCallback,
                             urlCallbackLink: paragraphNodeViewList[0].isLink,
@@ -175,7 +172,7 @@ class MarkdownParagraphComponent {
         }
     }
 
-     /**
+    /**
      * 段落文字内容
      */
     @Builder
@@ -267,8 +264,7 @@ class MarkdownParagraphComponent {
         ForEach(
             spanListNodeViewList,
             itemGeneratorFunc: {
-                spanListNodeView: NodeView, index: Int64 => if (spanListNodeView.nodeType == "Text" ||
-                    spanListNodeView.nodeType == "Code" || spanListNodeView.nodeType == "Footnote") {
+                spanListNodeView: NodeView, index: Int64 => if (spanListNodeView.nodeType == "Text" || spanListNodeView.nodeType == "Code" || spanListNodeView.nodeType == "Footnote") {
                     // Text：普通文本，Code：内联代码，Footnote：脚注节点
                     markdownSpanComponent(
                         spanListMarkdownConfiguration,
@@ -290,31 +286,28 @@ class MarkdownParagraphComponent {
                     )
                 } else if (spanListNodeView.nodeType == "SoftLineBreak") {
                     // 软换行
-                    Span(spanSoftLineBreak(spanListMarkdownConfiguration
-                        .markdownTheme
-                        .isLineBreak))
+                    Span(spanSoftLineBreak(spanListMarkdownConfiguration.markdownTheme.isLineBreak))
                 } else if (spanListNodeView.nodeType == "HardLineBreak") {
                     // 硬换行
                     Span("\n")
                 } else if (spanListNodeView.nodeType == "Link" || spanListNodeView.nodeType == "HeadLink") {
                     // 链接, TOC列表链接
-                    if((spanListNodeView.isBulletList||spanListNodeView.isOrderedList||spanListNodeView.isQuote||spanListNodeView.isDescList) &&
-                        isOneLink && spanListMarkdownConfiguration.markdownTheme.isListLinkStyle){
+                    if ((spanListNodeView.isBulletList || spanListNodeView.isOrderedList || spanListNodeView.isQuote || spanListNodeView.isDescList) && isOneLink && spanListMarkdownConfiguration.markdownTheme.isListLinkStyle) {
                         markdownSpanComponent(
                             spanListMarkdownConfiguration,
                             spanListNodeView,
                             spanListTocListOnClick,
                             spanListFootnoteCallback
                         )
-                    }else {
+                    } else {
                         if (spanListNodeView.linkUrl().startsWith("http://") || spanListNodeView.linkUrl().startsWith("https://")) {
-                            if(spanListNodeView.nodeText.trimAscii().toRuneArray().size > 1){
+                            if (spanListNodeView.nodeText.trimAscii().toRuneArray().size > 1) {
                                 MarkdownLinkRectImageComponent(
                                     markdownConfiguration: spanListMarkdownConfiguration,
                                     strText: spanListNodeView.nodeText.trimAscii(),
                                     strUrl: spanListNodeView.linkUrl()
                                 )
-                            }else if(spanListNodeView.nodeText.trimAscii().toRuneArray().size == 1){
+                            } else if (spanListNodeView.nodeText.trimAscii().toRuneArray().size == 1) {
                                 MarkdownLinkCircleImageComponent(
                                     markdownConfiguration: spanListMarkdownConfiguration,
                                     strText: spanListNodeView.nodeText.trimAscii(),
@@ -322,7 +315,7 @@ class MarkdownParagraphComponent {
                                 )
                             }
                         } else {
-                            if(spanListNodeView.nodeText.trimAscii().toRuneArray().size >= 1){
+                            if (spanListNodeView.nodeText.trimAscii().toRuneArray().size >= 1) {
                                 MarkdownLinkRectToolImageComponent(
                                     markdownConfiguration: spanListMarkdownConfiguration,
                                     strText: spanListNodeView.nodeText.trimAscii(),
@@ -334,13 +327,9 @@ class MarkdownParagraphComponent {
                     }
                 } else if (spanListNodeView.nodeType == "Image" || spanListNodeView.nodeType == "StyleImage" || spanListNodeView.nodeType == "ImageHtmlNode") {
                     // Image：图片节点， StyleImage：图片Style节点，ImageHtmlNode：HTML图片
-                    if (spanListMarkdownConfiguration
-                        .imageCallbackCallback
-                        .isNone()) {
+                    if (spanListMarkdownConfiguration.imageCallbackCallback.isNone()) {
                         // 没有图片替换回调接口
-                        if (spanListNodeView
-                            .imageUrl()
-                            .startsWith("./")) {
+                        if (spanListNodeView.imageUrl().startsWith("./")) {
                             // 本地图片
                             MarkdownSpanImageRawFileComponent(
                                 rawFileMarkdownTheme: spanListMarkdownConfiguration.markdownTheme,
@@ -390,9 +379,7 @@ class MarkdownParagraphComponent {
                         }
                     } else {
                         // 有图片替换回调接口
-                        if (spanListNodeView
-                            .imageUrl()
-                            .startsWith("./")) {
+                        if (spanListNodeView.imageUrl().startsWith("./")) {
                             // 本地图片
                             MarkdownSpanImageCallbackRawFileComponent(
                                 rawFileCallbackMarkdownTheme: spanListMarkdownConfiguration.markdownTheme,
@@ -415,8 +402,7 @@ class MarkdownParagraphComponent {
                                     url15CallbackMarkdownTheme: spanListMarkdownConfiguration.markdownTheme,
                                     url15CallbackDestination: spanListNodeView.imageUrl(),
                                     url15CallbackComponentWidth: spanListComponentWidth,
-                                    url15CallbackImageCallbackCallback: spanListMarkdownConfiguration
-                                        .imageCallbackCallback(),
+                                    url15CallbackImageCallbackCallback: spanListMarkdownConfiguration.imageCallbackCallback(),
                                     url15CallbackImageCallback: spanListImageCallback,
                                     url15CallbackLinkCallback: spanListMarkdownConfiguration.linkCallback,
                                     url15CallbackLink: spanListNodeView.isLink,
@@ -432,8 +418,7 @@ class MarkdownParagraphComponent {
                                     url14CallbackMarkdownTheme: spanListMarkdownConfiguration.markdownTheme,
                                     url14CallbackDestination: spanListNodeView.imageUrl(),
                                     url14CallbackComponentWidth: spanListComponentWidth,
-                                    url14CallbackImageCallbackCallback: spanListMarkdownConfiguration
-                                        .imageCallbackCallback(),
+                                    url14CallbackImageCallbackCallback: spanListMarkdownConfiguration.imageCallbackCallback(),
                                     url14CallbackImageCallback: spanListImageCallback,
                                     url14CallbackLinkCallback: spanListMarkdownConfiguration.linkCallback,
                                     url14CallbackLink: spanListNodeView.isLink,
@@ -456,8 +441,6 @@ class MarkdownParagraphComponent {
             }
         )
     }
-
-
 
     /**
      * 段落控件数据刷新

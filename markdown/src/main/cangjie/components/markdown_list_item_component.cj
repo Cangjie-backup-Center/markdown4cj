@@ -50,7 +50,7 @@ class MarkdownListItemComponent {
      * 视频布局
      */
     @BuilderParam
-    var listItemVideoBuilder:(NodeView, MarkdownTheme, (String) -> Unit, (String, (String, Float64, Int64) -> Unit) -> Unit, ?(String) -> Unit, ?(String) -> Unit) -> Unit
+    var listItemVideoBuilder: (NodeView, MarkdownTheme, (String) -> Unit, (String, (String, Float64, Int64) -> Unit) -> Unit, ?(String) -> Unit, ?(String) -> Unit) -> Unit
 
     /**
      * 音频布局
@@ -118,10 +118,8 @@ class MarkdownListItemComponent {
     var listItemNodeViewDataSource: NodeViewDataSource = NodeViewDataSource(ArrayList<NodeView>())
 
     protected override func aboutToAppear(): Unit {
-        // 初始化刷新数据
-        refreshListItemData(listItemNodeView)
-        // 缓存当前控件
-        listItemMarkdownCacheConfiguration.listItemComponents.add(listItemNodeView.nodeHash, this)
+        refreshListItemData(listItemNodeView) // 初始化刷新数据
+        listItemMarkdownCacheConfiguration.listItemComponents.add(listItemNodeView.nodeHash, this) // 缓存当前控件
     }
 
     protected override func aboutToDisappear(): Unit {

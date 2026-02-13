@@ -24,7 +24,7 @@ public class MarkdownDescDefComponent {
     var descDefNodeView: NodeView
 
     /**
-     * 控件宽度 - 单位px
+     * 控件宽度 - 单位vp
      */
     @Prop
     var descDefComponentWidth: Float64

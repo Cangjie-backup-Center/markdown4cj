@@ -124,10 +124,8 @@ public class MarkdownListComponent {
     var listNodeViewDataSource: NodeViewDataSource = NodeViewDataSource(ArrayList<NodeView>())
 
     protected override func aboutToAppear(): Unit {
-        // 初始化刷新数据
-        refreshListData(listNodeView)
-        // 缓存当前控件
-        listMarkdownCacheConfiguration.listComponents.add(listNodeView.nodeHash, this)
+        refreshListData(listNodeView) // 初始化刷新数据
+        listMarkdownCacheConfiguration.listComponents.add(listNodeView.nodeHash, this) // 缓存当前控件
     }
 
     protected override func aboutToDisappear(): Unit {
