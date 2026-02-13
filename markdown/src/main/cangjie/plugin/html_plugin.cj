@@ -90,6 +90,7 @@ public class HtmlPlugin <: AbstractMarkdownPlugin {
             builder.addDefaultTagHandler(SubHandler())
             builder.addDefaultTagHandler(SupHandler())
             builder.addDefaultTagHandler(UnderlineHandler())
+            builder.addDefaultTagHandler(CardHandler())
         }
         htmlParser = MarkdownHtmlParserImpl.create(_emptyTagReplacement)
         htmlRenderer = builder.build()
@@ -150,7 +151,13 @@ public class HtmlPlugin <: AbstractMarkdownPlugin {
             {
                 visitor, node => visitor.visitChildren(node)
             }
-        )
+        ).on(
+             "CardNode",
+             {
+                 visitor, node =>
+                 visitor.visitChildren(node)
+             }
+         )
     }
 
     public func visitHtml(visitor: MarkdownVisitor, node: Node, html: String): Unit {

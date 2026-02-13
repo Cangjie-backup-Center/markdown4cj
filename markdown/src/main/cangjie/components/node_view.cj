@@ -113,6 +113,10 @@ public class NodeView {
     var codeInfo: Option<String> = Option<String>.None
     // 代码块列表标题
     var codeListTab: Option<ArrayList<String>> = Option<ArrayList<String>>.None
+    // 卡片名称
+    var cardName: Option<String> = Option<String>.None
+    // 卡片内容
+    var cardData: Option<String> = Option<String>.None
 }
 
 public func nodeToNodeView(
@@ -177,6 +181,8 @@ public func nodeToNodeView(
                     childrenNodeView.imageAlign = childrenNewNodeView.imageAlign
                     childrenNodeView.codeInfo = childrenNewNodeView.codeInfo
                     childrenNodeView.codeListTab = childrenNewNodeView.codeListTab
+                    childrenNodeView.cardName = childrenNewNodeView.cardName
+                    childrenNodeView.cardData = childrenNewNodeView.cardData
 
                     if (nodeType == "Text") {
                         // 普通文本
@@ -488,6 +494,12 @@ public func nodeToNodeView(
                     } else if (nodeType == "ImgVideo") {
                         // TODO 力扣视频
                         // 无需处理
+                    } else if (nodeType == "CardNode") {
+                        // 卡片
+                        let cardNode = (commonmarkChildrenNode as CardNode)()
+                        childrenNodeView.cardName = cardNode.getName()
+                        childrenNodeView.cardData = cardNode.getData()
+                        parentNewNodeView.children.add(childrenNodeView)
                     } else if (nodeType == "BlockVideo") {
                         // 视频
                         commonmarkChildrenNode.iterateChildren().forEach({

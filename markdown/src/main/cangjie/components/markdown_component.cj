@@ -442,6 +442,17 @@ public class MarkdownComponent {
                                 )
                             }
                             .margin(top: marginNodeTop(idx, item, markdownConfiguration.markdownTheme), bottom: marginNodeBottom(idx, lastViewIndex, item, markdownConfiguration.markdownTheme))
+                         } else if (item.nodeType == "CardNode") {
+                             // 卡片
+                             ListItem() {
+                                 MarkdownCardComponent(
+                                     markdownConfiguration: markdownConfiguration,
+                                     nodeView: item,
+                                     cardName: item.cardName(),
+                                     cardData: item.cardData()
+                                 )
+                             }
+                             .margin(top: marginNodeTop(idx, item, markdownConfiguration.markdownTheme), bottom: marginNodeBottom(idx, lastViewIndex, item, markdownConfiguration.markdownTheme))
                         } else {
                             // 其他
                             ListItem() {
