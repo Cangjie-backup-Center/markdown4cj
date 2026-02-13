@@ -8,6 +8,8 @@ import ohos.component.*
 import ohos.state_manage.*
 import ohos.state_macro_manage.*
 
+import ohos.hilog.Hilog
+
 /**
  * Markdown表格自定义控件
  */
@@ -180,10 +182,15 @@ class MarkdownTableBlockCellComponent {
             ForEach(
                 nodeViewList,
                 itemGeneratorFunc: {
-                    item18: NodeView, idx18: Int64 => tableBlockCellListComponent(item18, idx18)
+                    item18: NodeView, idx18: Int64 => tableBlockCellListComponent(spanText(item18), item18, idx18, item18.isEndData)
                 },
                 keyGeneratorFunc: {
-                    item18: NodeView, idx18: Int64 => return "${idx18}-${item18.nodeHash}-${item18.contentHash}"
+                    item18: NodeView, idx18: Int64 =>
+                        if (item18.isEndData) {
+                            return "${idx18}-${item18.nodeHash}-${item18.contentHash}-${item18.isEndData}"
+                        } else {
+                            return "${idx18}-${item18.nodeHash}-${item18.contentHash}"
+                        }
                 }
             )
         }
@@ -212,10 +219,15 @@ class MarkdownTableBlockCellComponent {
             ForEach(
                 nodeViewList,
                 itemGeneratorFunc: {
-                    item19: NodeView, idx19: Int64 => tableBlockCellListComponent(item19, idx19)
+                    item19: NodeView, idx19: Int64 => tableBlockCellListComponent(spanText(item19), item19, idx19, item19.isEndData)
                 },
                 keyGeneratorFunc: {
-                    item19: NodeView, idx19: Int64 => return "${idx19}-${item19.nodeHash}-${item19.contentHash}"
+                    item19: NodeView, idx19: Int64 =>
+                        if (item19.isEndData) {
+                            return "${idx19}-${item19.nodeHash}-${item19.contentHash}-${item19.isEndData}"
+                        } else {
+                            return "${idx19}-${item19.nodeHash}-${item19.contentHash}"
+                        }
                 }
             )
         }
@@ -236,24 +248,24 @@ class MarkdownTableBlockCellComponent {
     }
 
     @Builder
-    func tableBlockCellListComponent(item: NodeView, index: Int64) {
+    func tableBlockCellListComponent(nodeText: String, item: NodeView, index: Int64, isEnd: Bool) {
         if (item.node is CommonmarkText) {
             // 文本
             if (DeviceInfo.sdkApiVersion >= 19) {
-                tableComponentText19(item, isHeader || (idxItem == 0 && markdownConfiguration.markdownTheme.tableFirstColumnBold), markdownConfiguration)
+                tableComponentText19(nodeText, item, isHeader || (idxItem == 0 && markdownConfiguration.markdownTheme.tableFirstColumnBold), markdownConfiguration, isEnd)
             } else {
-                tableComponentText18(item, isHeader || (idxItem == 0 && markdownConfiguration.markdownTheme.tableFirstColumnBold), markdownConfiguration)
+                tableComponentText18(nodeText, item, isHeader || (idxItem == 0 && markdownConfiguration.markdownTheme.tableFirstColumnBold), markdownConfiguration, isEnd)
             }
         } else if (item.node is Footnote) {
             // 脚注
             if (DeviceInfo.sdkApiVersion >= 19) {
-                tableComponentFootnote19(item, isHeader || (idxItem == 0 && markdownConfiguration.markdownTheme.tableFirstColumnBold), markdownConfiguration, fontCallback)
+                tableComponentFootnote19(nodeText, item, isHeader || (idxItem == 0 && markdownConfiguration.markdownTheme.tableFirstColumnBold), markdownConfiguration, isEnd, fontCallback)
             } else {
-                tableComponentFootnote18(item, isHeader || (idxItem == 0 && markdownConfiguration.markdownTheme.tableFirstColumnBold), markdownConfiguration, fontCallback)
+                tableComponentFootnote18(nodeText, item, isHeader || (idxItem == 0 && markdownConfiguration.markdownTheme.tableFirstColumnBold), markdownConfiguration, isEnd, fontCallback)
             }
         } else if (item.node is Code) {
             // 内联代码
-            inLineCodeSpanComponent(item, markdownConfiguration, isHeader || (idxItem == 0 && markdownConfiguration.markdownTheme.tableFirstColumnBold) || item.strongEmphasis, isHeader || (idxItem == 0 && markdownConfiguration.markdownTheme.tableFirstColumnBold), false, 2, 0)
+            inLineCodeSpanComponent(nodeText, item, markdownConfiguration, isHeader || (idxItem == 0 && markdownConfiguration.markdownTheme.tableFirstColumnBold) || item.strongEmphasis, isHeader || (idxItem == 0 && markdownConfiguration.markdownTheme.tableFirstColumnBold), false, 2, 0, isEnd)
         } else if (item.node is HardLineBreak) {
             // 硬换行
             Span("\n")

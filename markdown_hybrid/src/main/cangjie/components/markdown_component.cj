@@ -7,6 +7,7 @@ import ohos.base.*
 import ohos.component.*
 import ohos.state_manage.*
 import ohos.state_macro_manage.*
+import ohos.hilog.Hilog
 
 protected let prism: Prism = Prism(GrammarLocatorGrammarUtils())
 
@@ -167,6 +168,26 @@ public class MarkdownComponent {
      */
     @State
     var lastViewIndex: Int64 = 0
+
+    /**
+     * 是否使用打字机
+     */
+    var isEndData: Bool = false
+
+    /**
+     * 定时刷新Timer标记，防止每次刷新重复创建timer
+     */
+    var isFirstUpdata: Bool = true
+
+    /**
+     * 定时刷新Timer标记，让最后一条数据可以重复刷新
+     */
+    var isEndUpdata: Bool = false
+
+    var typewriteTimer: ?Timer = Option<Timer>.None
+
+    @State
+    var delayTime: Int64 = 500
 
     protected override func aboutToAppear(): Unit {
         // 加载插件
@@ -552,6 +573,14 @@ public class MarkdownComponent {
      * 刷新数据
      */
     func refreshData(): Unit {
+        Hilog.error(123, "cccc", " ===================> refreshData ===============> isFirstUpdata:${isFirstUpdata}, isEndUpdata:${isEndUpdata}")
+        // 判断一下markdownConfiguration中的打字机开关，赋值给当前
+        isEndData = true
+        if (!isFirstUpdata && typewriteTimer.isNone()) {
+            isEndUpdata = false
+            isFirstUpdata = true
+        }
+
         if (markdownConfiguration.markdownTheme.isMarkdownParserSync) {
             stringToNodesSync()
         } else {
@@ -635,32 +664,52 @@ public class MarkdownComponent {
             let dataSourceSize: Int64 = nodeViewDataSource.totalCount() // 页面缓存的数据长度
             imageAndVideoList.clear()
             imageAndVideoList.add(all: getProp<ArrayList<String>>(doc, "links", ArrayList<String>()))
-
+            Hilog.error(123, "cccc", " ===================> stringToNodes 1")
             let syncCounter: SyncCounter = SyncCounter(1)
             launch {
-                if (refreshNodeViewSize == 0) {
+                if (refreshNodeViewSize == 0 && !isEndUpdata) {
+                    Hilog.error(123, "cccc", " ===================> stringToNodes 2")
                     syncCounter.dec()
                     return
                 }
                 if (refreshNodeViewSize > dataSourceSize) {
+                    Hilog.error(123, "cccc", " ===================> stringToNodes 3")
                     // 新数据大于页面数据
                     // 循环判断历史数据有没有做过修改
                     for (i in 0..dataSourceSize) {
+                        refreshNodeViews[i].typewriterState = -1
                         updateNodeViewData(i, refreshNodeViews[i], refreshNodeViewSize > dataSourceSize)
                     }
                     // 循环添加新数据
                     for (i in dataSourceSize..refreshNodeViewSize) {
+                        refreshNodeViews[i].typewriterState = 1
                         nodeViewDataSource.addData(refreshNodeViews[i])
                     }
                 } else if (refreshNodeViewSize == dataSourceSize) {
+                    Hilog.error(123, "cccc", " ===================> stringToNodes 4 dataSourceSize: ${dataSourceSize}")
                     // 新数据等于页面数据
                     for (i in 0..dataSourceSize) {
+                        if (i == dataSourceSize - 1) {
+                            refreshNodeViews[i].typewriterState = 1
+                        } else if (i == dataSourceSize - 2) {
+                            refreshNodeViews[i].typewriterState = 0
+                        } else {
+                            refreshNodeViews[i].typewriterState = -1
+                        }
+                        if (isEndUpdata) {
+                            refreshNodeViews[i].typewriterState = -1
+                        }
                         updateNodeViewData(i, refreshNodeViews[i], refreshNodeViewSize == dataSourceSize)
                     }
+                    if (dataSourceSize == 0) {
+                        Hilog.error(123, "cccc", " ===================> dataSourceSize: ${dataSourceSize}")
+                    }
                 } else {
+                    Hilog.error(123, "cccc", " ===================> stringToNodes 5")
                     // 新数据小于页面数据
                     // 循环判断历史数据有没有做过修改
                     for (i in 0..refreshNodeViewSize) {
+                        refreshNodeViews[i].typewriterState = -1
                         updateNodeViewData(i, refreshNodeViews[i], refreshNodeViewSize < dataSourceSize)
                     }
                     // 循环删除多余的旧数据
@@ -674,6 +723,7 @@ public class MarkdownComponent {
             syncCounter.waitUntilZero()
         } catch (e: Exception) {
         }
+        delayTime = 500
     }
 
     /**
@@ -683,72 +733,104 @@ public class MarkdownComponent {
      * @param isLessThan 是否是新数据小于页面数据的场景（用于扩展DescList判断）
      */
     private func updateNodeViewData(index: Int64, newNodeView: NodeView, isLessThan: Bool): Unit {
+        if (isFirstUpdata) {
+            isFirstUpdata = false
+            typewriteTimer = Timer.repeat(500 * Duration.millisecond, 500 * Duration.millisecond, { =>
+                if (delayTime == 0 && typewriteTimer.isSome()) {
+                    Hilog.error(123, "cccc", " ===================> End Timer 2")
+                    typewriteTimer?.cancel()
+                    typewriteTimer = Option<Timer>.None
+
+                    isEndUpdata = true
+                    stringToNodes()
+                } else {
+                    delayTime = 0
+                }
+            })
+        }
+
         let newBlockHash = newNodeView.nodeHash
         let oldBlockHash = nodeViewDataSource.getData(index).nodeHash
         let newContentHash = newNodeView.contentHash
         let oldContentHash = nodeViewDataSource.getData(index).contentHash
+
+        Hilog.error(123, "cccc", " ===================> updateNodeViewData ===============> ${newBlockHash == oldBlockHash}, ${newContentHash == oldContentHash}")
+
         // 唯一ID是否相同
         if (newBlockHash != oldBlockHash && newContentHash != oldContentHash) {
+            Hilog.error(123, "cccc", " ===================> updateNodeViewData a ===============> 0.0")
             nodeViewDataSource.replaceData(index, newNodeView)
         } else if (newBlockHash != oldBlockHash && newContentHash == oldContentHash) {
+            Hilog.error(123, "cccc", " ===================> updateNodeViewData a ===============> 0.1")
             nodeViewDataSource.replaceData(index, newNodeView)
         } else if (newBlockHash == oldBlockHash && newContentHash != oldContentHash) {
+            Hilog.error(123, "cccc", " ===================> updateNodeViewData ===============> 0.2")
             if (!markdownConfiguration.markdownTheme.isSeparateCodeBlock) {
                 if (newNodeView.node is BulletList || newNodeView.node is OrderedList) {
                     // 有序列表和无序列表
                     let cache = markdownCacheConfiguration.listComponents.get(newBlockHash)
                     if (let Some(v) <- cache) {
+                        Hilog.error(123, "cccc", " ===================> updateNodeViewData a ===============> 1")
                         v.refreshData(newNodeView)
                     }
                 } else if (newNodeView.node is IndentedCodeBlock) {
                     // 缩进代码
                     let cache = markdownCacheConfiguration.indentedCodeComponents.get(newBlockHash)
                     if (let Some(v) <- cache) {
+                        Hilog.error(123, "cccc", " ===================> updateNodeViewData a ===============> 2")
                         v.refreshData(newNodeView)
                     }
                 } else if (newNodeView.node is FencedCodeBlock) {
                     // 围栏代码
                     let cache = markdownCacheConfiguration.fencedCodeComponents.get(newBlockHash)
                     if (let Some(v) <- cache) {
-                        v.refreshData(getCodeInfo(newNodeView)[0], getCodeInfo(newNodeView)[1](), newNodeView.nodeHash)
+                        Hilog.error(123, "cccc", " ===================> updateNodeViewData a ===============> 3")
+                        v.refreshData(getCodeInfo(newNodeView)[0], getCodeInfo(newNodeView)[1](), newNodeView.nodeHash, newNodeView.isEndData)
                     }
                 } else if (newNodeView.node is Heading) {
                     // 标题
                     let cache = markdownCacheConfiguration.headingComponents.get(newBlockHash)
                     if (let Some(v) <- cache) {
+                        Hilog.error(123, "cccc", " ===================> updateNodeViewData a ===============> 4")
                         v.refreshData(newNodeView)
                     }
                 } else if (newNodeView.node is Paragraph) {
                     // 段落
                     let cache = markdownCacheConfiguration.paragraphComponents.get(newBlockHash)
                     if (let Some(v) <- cache) {
+                        Hilog.error(123, "cccc", " ===================> updateNodeViewData a ===============> 5")
                         v.refreshData(newNodeView)
                     }
                 } else if (newNodeView.node is TableBlock) {
                     // 表格
                     let cache = markdownCacheConfiguration.tableComponents.get(newBlockHash)
                     if (let Some(v) <- cache) {
+                        Hilog.error(123, "cccc", " ===================> updateNodeViewData a ===============> 6")
                         v.refreshData(newNodeView)
                     }
                 } else if (newNodeView.node is BlockQuote) {
                     // 块引用
                     let cache = markdownCacheConfiguration.quoteComponents.get(newBlockHash)
                     if (let Some(v) <- cache) {
+                        Hilog.error(123, "cccc", " ===================> updateNodeViewData a ===============> 7")
                         v.refreshData(newNodeView)
                     }
                 } else if (newNodeView.node is FootnoteBlock) {
                     // 脚注
                     let cache = markdownCacheConfiguration.footnoteComponent.get(newBlockHash)
                     if (let Some(v) <- cache) {
+                        Hilog.error(123, "cccc", " ===================> updateNodeViewData a ===============> 8")
                         v.refreshData(newNodeView)
                     }
                 } else if (isLessThan && newNodeView.node is DescList) {
                     // 定义列表（仅新数据小于页面数据时判断）
                     let cache = markdownCacheConfiguration.descListComponent.get(newBlockHash)
                     if (let Some(v) <- cache) {
+                        Hilog.error(123, "cccc", " ===================> updateNodeViewData a ===============> 9")
                         v.refreshData(newNodeView)
                     }
                 } else {
+                    Hilog.error(123, "cccc", " ===================> updateNodeViewData a ===============> 10")
                     nodeViewDataSource.replaceData(index, newNodeView)
                 }
             } else {
@@ -756,21 +838,127 @@ public class MarkdownComponent {
                     // 缩进代码
                     let cache = markdownCacheConfiguration.codeComponents.get(newBlockHash)
                     if (let Some(v) <- cache) {
+                        Hilog.error(123, "cccc", " ===================> updateNodeViewData a ===============> 10")
                         v.refreshData(newNodeView)
                     }
                 } else if (newNodeView.node is FencedCodeBlock) {
                     // 围栏代码
                     let cache = markdownCacheConfiguration.codeComponents.get(newBlockHash)
                     if (let Some(v) <- cache) {
+                        Hilog.error(123, "cccc", " ===================> updateNodeViewData a ===============> 11")
                         v.refreshData(newNodeView)
                     }
                 } else {
+                    Hilog.error(123, "cccc", " ===================> updateNodeViewData a ===============> 12")
                     // 其他节点
                     nodeViewDataSource.replaceData(index, newNodeView)
                 }
             }
-        } else if (newBlockHash == oldBlockHash && newContentHash == oldContentHash) {
+        } else if (newBlockHash == oldBlockHash && newContentHash == oldContentHash && isEndUpdata) {
+            isEndUpdata = false
+            Hilog.error(123, "cccc", " ===================> updateNodeViewData ===============> 0.3")
+            if (!markdownConfiguration.markdownTheme.isSeparateCodeBlock) {
+                if (newNodeView.node is BulletList || newNodeView.node is OrderedList) {
+                    // 有序列表和无序列表
+                    let cache = markdownCacheConfiguration.listComponents.get(newBlockHash)
+                    if (let Some(v) <- cache) {
+                        Hilog.error(123, "cccc", " ===================> updateNodeViewData b ===============> 1")
+                        v.refreshData(newNodeView)
+                    }
+                } else if (newNodeView.node is IndentedCodeBlock) {
+                    // 缩进代码
+                    let cache = markdownCacheConfiguration.indentedCodeComponents.get(newBlockHash)
+                    if (let Some(v) <- cache) {
+                        Hilog.error(123, "cccc", " ===================> updateNodeViewData b ===============> 2")
+                        v.refreshData(newNodeView)
+                    }
+                } else if (newNodeView.node is FencedCodeBlock) {
+                    // 围栏代码
+                    let cache = markdownCacheConfiguration.fencedCodeComponents.get(newBlockHash)
+                    if (let Some(v) <- cache) {
+                        Hilog.error(123, "cccc", " ===================> updateNodeViewData b ===============> 3")
+                        v.refreshData(getCodeInfo(newNodeView)[0], getCodeInfo(newNodeView)[1](), newNodeView.nodeHash, newNodeView.isEndData)
+                    }
+                } else if (newNodeView.node is Heading) {
+                    // 标题
+                    let cache = markdownCacheConfiguration.headingComponents.get(newBlockHash)
+                    if (let Some(v) <- cache) {
+                        Hilog.error(123, "cccc", " ===================> updateNodeViewData b ===============> 4 ${newNodeView.isEndData}")
+                        v.refreshData(newNodeView)
+                    }
+                } else if (newNodeView.node is Paragraph) {
+                    // 段落
+                    let cache = markdownCacheConfiguration.paragraphComponents.get(newBlockHash)
+                    if (let Some(v) <- cache) {
+                        Hilog.error(123, "cccc", " ===================> updateNodeViewData b ===============> 5")
+                        v.refreshData(newNodeView)
+                    }
+                } else if (newNodeView.node is TableBlock) {
+                    // 表格
+                    let cache = markdownCacheConfiguration.tableComponents.get(newBlockHash)
+                    if (let Some(v) <- cache) {
+                        Hilog.error(123, "cccc", " ===================> updateNodeViewData b ===============> 6")
+                        v.refreshData(newNodeView)
+                    }
+                } else if (newNodeView.node is BlockQuote) {
+                    // 块引用
+                    let cache = markdownCacheConfiguration.quoteComponents.get(newBlockHash)
+                    if (let Some(v) <- cache) {
+                        Hilog.error(123, "cccc", " ===================> updateNodeViewData b ===============> 7")
+                        v.refreshData(newNodeView)
+                    }
+                } else if (newNodeView.node is FootnoteBlock) {
+                    // 脚注
+                    let cache = markdownCacheConfiguration.footnoteComponent.get(newBlockHash)
+                    if (let Some(v) <- cache) {
+                        Hilog.error(123, "cccc", " ===================> updateNodeViewData b ===============> 8")
+                        v.refreshData(newNodeView)
+                    }
+                } else if (isLessThan && newNodeView.node is DescList) {
+                    // 定义列表（仅新数据小于页面数据时判断）
+                    let cache = markdownCacheConfiguration.descListComponent.get(newBlockHash)
+                    if (let Some(v) <- cache) {
+                        Hilog.error(123, "cccc", " ===================> updateNodeViewData b ===============> 9")
+                        v.refreshData(newNodeView)
+                    }
+                } else {
+                    Hilog.error(123, "cccc", " ===================> updateNodeViewData b ===============> ???")
+                    nodeViewDataSource.replaceData(index, newNodeView)
+                }
+            } else {
+                Hilog.error(123, "cccc", " ===================> updateNodeViewData c ===============>")
+                if (newNodeView.node is IndentedCodeBlock) {
+                    // 缩进代码
+                    let cache = markdownCacheConfiguration.codeComponents.get(newBlockHash)
+                    if (let Some(v) <- cache) {
+                        Hilog.error(123, "cccc", " ===================> updateNodeViewData c ===============> 10")
+                        v.refreshData(newNodeView)
+                    }
+                } else if (newNodeView.node is FencedCodeBlock) {
+                    // 围栏代码
+                    let cache = markdownCacheConfiguration.codeComponents.get(newBlockHash)
+                    if (let Some(v) <- cache) {
+                        Hilog.error(123, "cccc", " ===================> updateNodeViewData c ===============> 11")
+                        v.refreshData(newNodeView)
+                    }
+                } else {
+                    Hilog.error(123, "cccc", " ===================> updateNodeViewData c ===============> 12")
+                    // 其他节点
+                    nodeViewDataSource.replaceData(index, newNodeView)
+                }
+            }
         }
+//        else if (newBlockHash == oldBlockHash && newContentHash == oldContentHash) {
+//            if (!markdownConfiguration.markdownTheme.isSeparateCodeBlock) {
+//                if (newNodeView.node is Heading) {
+//                    // 标题
+//                    let cache = markdownCacheConfiguration.headingComponents.get(newBlockHash)
+//                    if (let Some(v) <- cache) {
+//                        v.refreshData(newNodeView)
+//                    }
+//                }
+//            }
+//        }
     }
 
     /**

@@ -7,7 +7,7 @@ import ohos.base.*
 import ohos.component.*
 import ohos.state_manage.*
 import ohos.state_macro_manage.*
-
+import ohos.hilog.Hilog
 /**
  * Markdown表格自定义控件
  */
@@ -125,7 +125,12 @@ class MarkdownTableBlockComponent {
                         }
                     },
                     keyGeneratorFunc: {
-                        item: NodeView, idx: Int64 => return "${idx}-${item.nodeHash}-${item.contentHash}"
+                        item: NodeView, idx: Int64 =>
+                            if (item.isEndData) {
+                                return "${idx}-${item.nodeHash}-${item.contentHash}-${item.isEndData}"
+                            } else {
+                                return "${idx}-${item.nodeHash}-${item.contentHash}"
+                            }
                     }
                 )
             }
@@ -146,6 +151,7 @@ class MarkdownTableBlockComponent {
      * 数据刷新
      */
     public func refreshData(nodeView: NodeView): Unit {
+        Hilog.error(123, "cccc", " ********************************>>>>>> table")
         this.nodeView = nodeView
         let refreshNodeViews: ArrayList<NodeView> = tableList(nodeView.children)
         let refreshNodeViewSize: Int64 = refreshNodeViews.size // 刷新进来的数据长度

@@ -8,6 +8,7 @@ import ohos.component.*
 import ohos.state_manage.*
 import ohos.state_macro_manage.*
 
+import ohos.hilog.Hilog
 /**
  * Markdown围栏代码块自定义控件
  */
@@ -64,10 +65,15 @@ class MarkdownFencedCodeBlockComponent {
      */
     var psh: ?PrismSyntaxHighlight = Option<PrismSyntaxHighlight>.None
 
+    @State
+    var isEnd: Bool = false
+
+    var codeTextSize: Int64 = 0
+
     protected override func aboutToAppear(): Unit {
         psh = PrismSyntaxHighlight.create(prism, markdownConfiguration.markdownTheme.prismTheme)
         // 初始化刷新数据
-        refreshData(codeText, info, nodeHash)
+        refreshData(codeText, info, nodeHash, isEnd)
         // 缓存当前控件
         fencedCodeComponents.add(nodeHash, this)
     }
@@ -130,12 +136,27 @@ class MarkdownFencedCodeBlockComponent {
                                 arrayList,
                                 itemGeneratorFunc: {
                                     item: PrismNodesParseResUI, idx: Int64 =>
-                                    // 设置文本内容
-                                    Span(item.getText())
-                                        // 设置文本颜色
-                                        .fontColor(codeTextColor(item, markdownConfiguration.markdownTheme, markdownConfiguration.markdownTheme.prismTheme))
-                                        // 设置文本字符间距
-                                        .letterSpacing(markdownConfiguration.markdownTheme.paragraphTextWordSpace)
+
+                                        Span(spanOldText(item.getText(), isEnd))
+                                            // 设置文本颜色
+                                            .fontColor(codeTextColor(item, markdownConfiguration.markdownTheme, markdownConfiguration.markdownTheme.prismTheme))
+                                            // 设置文本字符间距
+                                            .letterSpacing(markdownConfiguration.markdownTheme.paragraphTextWordSpace)
+                                        if (isEnd) {
+                                            // 设置文本内容
+                                            Span(spanNewText(item.getText()))
+                                                // 设置文本颜色
+                                                .fontColor(Color.RED)
+                                                // 设置文本字符间距
+                                                .letterSpacing(markdownConfiguration.markdownTheme.paragraphTextWordSpace)
+                                         }
+
+//                                    // 设置文本内容
+//                                    Span(item.getText())
+//                                        // 设置文本颜色
+//                                        .fontColor(codeTextColor(item, markdownConfiguration.markdownTheme, markdownConfiguration.markdownTheme.prismTheme))
+//                                        // 设置文本字符间距
+//                                        .letterSpacing(markdownConfiguration.markdownTheme.paragraphTextWordSpace)
                                 },
                                 keyGeneratorFunc: {
                                     item: PrismNodesParseResUI, idx: Int64 => return "${idx}-${item.getText()}"
@@ -277,15 +298,24 @@ class MarkdownFencedCodeBlockComponent {
     /**
      * 数据刷新
      */
-    public func refreshData(codeText: String, info: String, nodeHash: Int64): Unit {
+    public func refreshData(codeText: String, info: String, nodeHash: Int64, isEndData: Bool): Unit {
         this.codeText = codeText
         this.isCodeNone = this.codeText.trimAscii().size > 0
         this.info = info
         this.nodeHash = nodeHash
-        if (markdownConfiguration.markdownTheme.isCodeBlockParserSync) {
-            stringCodeToResListSync(this.codeText)
+        var newSize = codeText.size
+
+        Hilog.error(123, "cccc", " ===================> MarkdownFencedCodeBlockComponent newSize: ${newSize}")
+        if (codeTextSize == newSize) {
+            isEnd = false
         } else {
-            stringCodeToResList(this.codeText)
+            codeTextSize = newSize
+            isEnd = isEndData
+            if (markdownConfiguration.markdownTheme.isCodeBlockParserSync) {
+                stringCodeToResListSync(this.codeText)
+            } else {
+                stringCodeToResList(this.codeText)
+            }
         }
     }
 

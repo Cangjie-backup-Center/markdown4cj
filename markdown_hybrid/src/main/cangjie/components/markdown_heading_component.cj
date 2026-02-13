@@ -7,6 +7,7 @@ import ohos.base.*
 import ohos.component.*
 import ohos.state_manage.*
 import ohos.state_macro_manage.*
+import ohos.hilog.Hilog
 
 /**
  * Markdown标题自定义控件
@@ -265,10 +266,15 @@ class MarkdownHeadingComponent {
             ForEach(
                 nodeViewList,
                 itemGeneratorFunc: {
-                    item18: NodeView, idx18: Int64 => headingTitleListComponent(item18, idx18)
+                    item18: NodeView, idx18: Int64 => headingTitleListComponent(spanText(item18), item18, idx18, item18.isEndData)
                 },
                 keyGeneratorFunc: {
-                    item18: NodeView, idx18: Int64 => return "${idx18}-${item18.nodeHash}-${item18.contentHash}"
+                    item18: NodeView, idx18: Int64 =>
+                        if (item18.isEndData) {
+                            return "${idx18}-${item18.nodeHash}-${item18.contentHash}-${item18.isEndData}"
+                        } else {
+                            return "${idx18}-${item18.nodeHash}-${item18.contentHash}"
+                        }
                 }
             )
         }
@@ -301,10 +307,16 @@ class MarkdownHeadingComponent {
             ForEach(
                 nodeViewList,
                 itemGeneratorFunc: {
-                    item19: NodeView, idx19: Int64 => headingTitleListComponent(item19, idx19)
+                    item19: NodeView, idx19: Int64 => headingTitleListComponent(spanText(item19), item19, idx19, item19.isEndData)
                 },
                 keyGeneratorFunc: {
-                    item19: NodeView, idx19: Int64 => return "${idx19}-${item19.nodeHash}-${item19.contentHash}"
+                    item19: NodeView, idx19: Int64 =>
+                        if (item19.isEndData) {
+                            return "${idx19}-${item19.nodeHash}-${item19.contentHash}-${item19.isEndData}"
+                        } else {
+                            return "${idx19}-${item19.nodeHash}-${item19.contentHash}"
+                        }
+
                 }
             )
         }
@@ -329,24 +341,24 @@ class MarkdownHeadingComponent {
     }
 
     @Builder
-    func headingTitleListComponent(item: NodeView, index: Int64) {
+    func headingTitleListComponent(nodeText: String, item: NodeView, index: Int64, isEnd: Bool) {
         if (item.node is CommonmarkText) {
             // 文本
             if (DeviceInfo.sdkApiVersion >= 19) {
-                headingTextComponent19(item, markdownConfiguration, level)
+                headingTextComponent19(nodeText, item, markdownConfiguration, level, isEnd)
             } else {
-                headingTextComponent18(item, markdownConfiguration, level)
+                headingTextComponent18(nodeText, item, markdownConfiguration, level, isEnd)
             }
         } else if (item.node is Footnote) {
             // 脚注
             if (DeviceInfo.sdkApiVersion >= 19) {
-                headingFootnoteComponent19(item, markdownConfiguration, level, fontCallback)
+                headingFootnoteComponent19(nodeText, item, markdownConfiguration, level, isEnd, fontCallback)
             } else {
-                headingFootnoteComponent18(item, markdownConfiguration, level, fontCallback)
+                headingFootnoteComponent18(nodeText, item, markdownConfiguration, level, isEnd, fontCallback)
             }
         } else if (item.node is Code) {
             // 内联代码
-            inLineCodeSpanComponent(item, markdownConfiguration, true, true, false, 0, level)
+            inLineCodeSpanComponent(nodeText, item, markdownConfiguration, true, true, false, 0, level, isEnd)
         } else if (item.node is CommonmarkLink) {
             // 链接
             linkSpanComponent(isOneLink, isListTo, level, item, markdownConfiguration, componentWidth, imageCallback, true, false, 0, markdownConfiguration.markdownTheme.isListLinkStyle)

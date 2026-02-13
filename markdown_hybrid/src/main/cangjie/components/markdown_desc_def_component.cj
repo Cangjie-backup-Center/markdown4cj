@@ -7,7 +7,7 @@ import ohos.base.*
 import ohos.component.*
 import ohos.state_manage.*
 import ohos.state_macro_manage.*
-
+import ohos.hilog.Hilog
 /**
  * 定义列表解释
  */
@@ -113,6 +113,7 @@ public class MarkdownDescDefComponent {
      * 数据刷新
      */
     public func refreshData(nodeView: NodeView): Unit {
+        Hilog.error(123, "cccc", " ===================> 定义列表解释isEndData：${nodeView.isEndData}")
         this.nodeView = nodeView
         let refreshNodeViews = nodeView.children
         let refreshNodeViewSize: Int64 = refreshNodeViews.size // 刷新进来的数据长度

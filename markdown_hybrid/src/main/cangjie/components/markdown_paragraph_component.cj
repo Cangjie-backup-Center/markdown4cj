@@ -273,10 +273,15 @@ class MarkdownParagraphComponent {
             ForEach(
                 nodeViewList,
                 itemGeneratorFunc: {
-                    item18: NodeView, idx18: Int64 => paragraphListComponent(item18, idx18)
+                    item18: NodeView, idx18: Int64 => paragraphListComponent(spanText(item18), item18, idx18, item18.isEndData)
                 },
                 keyGeneratorFunc: {
-                    item18: NodeView, idx18: Int64 => return "${idx18}-${item18.nodeHash}-${item18.contentHash}"
+                    item18: NodeView, idx18: Int64 =>
+                        if (item18.isEndData) {
+                            return "${idx18}-${item18.nodeHash}-${item18.contentHash}-${item18.isEndData}"
+                        } else {
+                            return "${idx18}-${item18.nodeHash}-${item18.contentHash}"
+                        }
                 }
             )
         }
@@ -316,10 +321,15 @@ class MarkdownParagraphComponent {
             ForEach(
                 nodeViewList,
                 itemGeneratorFunc: {
-                    item19: NodeView, idx19: Int64 => paragraphListComponent(item19, idx19)
+                    item19: NodeView, idx19: Int64 => paragraphListComponent(spanText(item19), item19, idx19, item19.isEndData)
                 },
                 keyGeneratorFunc: {
-                    item19: NodeView, idx19: Int64 => return "${idx19}-${item19.nodeHash}-${item19.contentHash}"
+                    item19: NodeView, idx19: Int64 =>
+                        if (item19.isEndData) {
+                            return "${idx19}-${item19.nodeHash}-${item19.contentHash}-${item19.isEndData}"
+                        } else {
+                            return "${idx19}-${item19.nodeHash}-${item19.contentHash}"
+                        }
                 }
             )
         }
@@ -342,31 +352,31 @@ class MarkdownParagraphComponent {
     }
 
     @Builder
-    func paragraphListComponent(item: NodeView, index: Int64) {
+    func paragraphListComponent(nodeText: String, item: NodeView, index: Int64, isEnd: Bool) {
         if (item.node is CommonmarkText) {
             // 文本
             if (DeviceInfo.sdkApiVersion >= 19) {
-                paragraphTextComponent19(item, isDescList, markdownConfiguration)
+                paragraphTextComponent19(nodeText, item, isDescList, markdownConfiguration, isEnd)
             } else {
-                paragraphTextComponent18(item, isDescList, markdownConfiguration)
+                paragraphTextComponent18(nodeText, item, isDescList, markdownConfiguration, isEnd)
             }
         } else if (item.node is HeadLink) {
             // TOC列表
             if (DeviceInfo.sdkApiVersion >= 19) {
-                paragraphTocComponent19(item, isDescList, markdownConfiguration, tocListOnClick)
+                paragraphTocComponent19(nodeText, item, isDescList, markdownConfiguration, isEnd, tocListOnClick)
             } else {
-                paragraphTocComponent18(item, isDescList, markdownConfiguration, tocListOnClick)
+                paragraphTocComponent18(nodeText, item, isDescList, markdownConfiguration, isEnd, tocListOnClick)
             }
         } else if (item.node is Footnote) {
             // 脚注
             if (DeviceInfo.sdkApiVersion >= 19) {
-               paragraphFootnoteComponent19(item, isDescList, markdownConfiguration, fontCallback)
+               paragraphFootnoteComponent19(nodeText, item, isDescList, markdownConfiguration, isEnd, fontCallback)
             } else {
-                paragraphFootnoteComponent18(item, isDescList, markdownConfiguration, fontCallback)
+                paragraphFootnoteComponent18(nodeText, item, isDescList, markdownConfiguration, isEnd, fontCallback)
             }
         } else if (item.node is Code) {
             // 内联代码
-            inLineCodeSpanComponent(item, markdownConfiguration, item.strongEmphasis, false, isDescList, 1, 0)
+            inLineCodeSpanComponent(nodeText, item, markdownConfiguration, item.strongEmphasis, false, isDescList, 1, 0, isEnd)
         } else if (item.node is CommonmarkLink) {
             // 链接
             linkSpanComponent(isOneLink, isListTo, 0, item, markdownConfiguration, componentWidth, imageCallback, false, isDescList, 1, markdownConfiguration.markdownTheme.isListLinkStyle)

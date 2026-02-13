@@ -8,6 +8,8 @@ import ohos.component.*
 import ohos.state_manage.*
 import ohos.state_macro_manage.*
 
+import ohos.hilog.Hilog
+
 /**
  * Markdown表格自定义控件
  */
@@ -121,7 +123,12 @@ class MarkdownTableBlockRowComponent {
                     }
                 },
                 keyGeneratorFunc: {
-                    item: NodeView, idx: Int64 => return "${idx}-${item.nodeHash}-${item.contentHash}"
+                    item: NodeView, idx: Int64 =>
+                        if (item.isEndData) {
+                            return "${idx}-${item.nodeHash}-${item.contentHash}-${item.isEndData}"
+                        } else {
+                            return "${idx}-${item.nodeHash}-${item.contentHash}"
+                        }
                 }
             )
         }
@@ -138,6 +145,6 @@ class MarkdownTableBlockRowComponent {
         if (refreshNodeViewSize == 0) {
             return
         }
-        refreshnodeViewList(this.nodeView, nodeViewList, tableCellComponents)
+        refreshnodeViewTableRow(this.nodeView, nodeViewList, tableCellComponents)
     }
 }

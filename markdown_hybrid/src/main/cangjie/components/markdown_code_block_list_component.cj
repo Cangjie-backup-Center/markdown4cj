@@ -62,7 +62,13 @@ class MarkdownCodeBlockListComponent {
     @State
     var lineArray: ObservedArrayList<Int64> = ObservedArrayList<Int64>()
 
+    @State
+    var isEnd: Bool = false
+
+    var codeTextSize: Int64 = 0
+
     protected override func aboutToAppear(): Unit {
+        isEnd = nodeView.isEndData
         stringCodeToResLists()
     }
 
@@ -132,12 +138,25 @@ class MarkdownCodeBlockListComponent {
                 items,
                 itemGeneratorFunc: {
                     item: PrismNodesParseResUI, idx1: Int64 =>
-                    // 设置文本内容
-                    Span(item.getText())
-                        // 设置文本颜色
-                        .fontColor(codeTextColor(item, markdownConfiguration.markdownTheme, markdownConfiguration.markdownTheme.prismTheme))
-                        // 设置文本字符间距
-                        .letterSpacing(markdownConfiguration.markdownTheme.paragraphTextWordSpace)
+                        Span(spanOldText(item.getText(), isEnd))
+                            // 设置文本颜色
+                            .fontColor(codeTextColor(item, markdownConfiguration.markdownTheme, markdownConfiguration.markdownTheme.prismTheme))
+                            // 设置文本字符间距
+                            .letterSpacing(markdownConfiguration.markdownTheme.paragraphTextWordSpace)
+                        if (isEnd) {
+                            // 设置文本内容
+                            Span(spanNewText(item.getText()))
+                                // 设置文本颜色
+                                .fontColor(Color.RED)
+                                // 设置文本字符间距
+                                .letterSpacing(markdownConfiguration.markdownTheme.paragraphTextWordSpace)
+                         }
+//                    // 设置文本内容
+//                    Span(item.getText())
+//                        // 设置文本颜色
+//                        .fontColor(codeTextColor(item, markdownConfiguration.markdownTheme, markdownConfiguration.markdownTheme.prismTheme))
+//                        // 设置文本字符间距
+//                        .letterSpacing(markdownConfiguration.markdownTheme.paragraphTextWordSpace)
                 }
             )
         }

@@ -8,6 +8,7 @@ import ohos.component.*
 import ohos.state_manage.*
 import ohos.state_macro_manage.*
 
+import ohos.hilog.Hilog
 /**
  * Markdown无序列表(任务列表)、有序列表(TOC列表)自定义控件
  */
@@ -205,7 +206,12 @@ class MarkdownListItemComponent {
                     .margin(top: marginNodeTopAndBottom(0, item, markdownConfiguration), bottom: marginNodeTopAndBottom(0, item, markdownConfiguration))
                 },
                 keyGeneratorFunc: {
-                    item: NodeView, idx: Int64 => return "${idx}-${item.nodeHash}-${item.contentHash}"
+                    item: NodeView, idx: Int64 =>
+                        if (item.isEndData) {
+                            return "${idx}-${item.nodeHash}-${item.contentHash}-${item.isEndData}"
+                        } else {
+                            return "${idx}-${item.nodeHash}-${item.contentHash}"
+                        }
                 }
             )
         }
@@ -221,6 +227,7 @@ class MarkdownListItemComponent {
      * 数据刷新
      */
     public func refreshData(nodeView: NodeView): Unit {
+        Hilog.error(222, "refreshData", "refreshData----------------------> listitem")
         this.nodeView = nodeView
         let refreshNodeViews = nodeView.children
         let refreshNodeViewSize: Int64 = refreshNodeViews.size // 刷新进来的数据长度

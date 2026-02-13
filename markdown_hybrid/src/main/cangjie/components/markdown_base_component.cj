@@ -7,12 +7,13 @@ import ohos.base.*
 import ohos.component.*
 import ohos.state_manage.*
 import ohos.state_macro_manage.*
+import ohos.hilog.Hilog
 
 /**
  * 标题文本
  */
 @Builder
-func headingTextComponent18(nodeView: NodeView, markdownConfiguration: MarkdownConfiguration, level: Int64) {
+func headingTextComponent18(nodeText: String, nodeView: NodeView, markdownConfiguration: MarkdownConfiguration, level: Int64, isEnd: Bool) {
     // 设置文本内容
     if (nodeView.props.isSome() && nodeView.props().get("SubNode").isSome() || nodeView.props.isSome() && nodeView.props().get("SupNode").isSome()) {
         Span(spanText(nodeView))
@@ -37,7 +38,7 @@ func headingTextComponent18(nodeView: NodeView, markdownConfiguration: MarkdownC
             // 点击动作触发该方法调用
             .onClick {evt => linkOnClick(nodeView, markdownConfiguration.linkCallback)}
     } else {
-        Span(spanText(nodeView))
+        Span(spanOldText(nodeText, isEnd))
             // 设置文本的字体列表
             .fontFamily(spanFontFamily(false, markdownConfiguration.markdownTheme, true))
             // 设置文本尺寸
@@ -58,6 +59,30 @@ func headingTextComponent18(nodeView: NodeView, markdownConfiguration: MarkdownC
             .interopLineHeight(headLineHeight(level, markdownConfiguration))
             // 点击动作触发该方法调用
             .onClick {evt => linkOnClick(nodeView, markdownConfiguration.linkCallback)}
+        if (isEnd) {
+            // 设置文本内容
+            Span(spanNewText(nodeText))
+                // 设置文本的字体列表
+                .fontFamily(spanFontFamily(false, markdownConfiguration.markdownTheme, true))
+                // 设置文本尺寸
+                .fontSize(spanFontSize(nodeView, false, markdownConfiguration.markdownTheme, true, level))
+                // 设置文本的字体粗细
+                .fontWeight(spanFontWeight(nodeView, false, true))
+                // 设置文本的字体样式
+                .fontStyle(spanFontStyle(nodeView, false))
+                // 设置文本颜色
+                .fontColor(Color.RED)
+                // 设置背景样式
+                .interopStyle(nodeView.link.isSome(), markdownConfiguration.markdownTheme.linkBackGroupColor)
+                // 设置文本字符间距
+                .letterSpacing(markdownConfiguration.markdownTheme.headingTextWordSpace)
+                // 设置文本装饰线样式及其颜色
+                .decoration(decorationType: spanDecoration(nodeView, markdownConfiguration.markdownTheme)[0], color: spanDecoration(nodeView, markdownConfiguration.markdownTheme)[1])
+                // 设置行高
+                .interopLineHeight(headLineHeight(level, markdownConfiguration))
+                // 点击动作触发该方法调用
+                .onClick {evt => linkOnClick(nodeView, markdownConfiguration.linkCallback)}
+        }
     }
 }
 
@@ -65,7 +90,7 @@ func headingTextComponent18(nodeView: NodeView, markdownConfiguration: MarkdownC
  * 标题文本
  */
 @Builder
-func headingTextComponent19(nodeView: NodeView, markdownConfiguration: MarkdownConfiguration, level: Int64) {
+func headingTextComponent19(nodeText: String, nodeView: NodeView, markdownConfiguration: MarkdownConfiguration, level: Int64, isEnd: Bool) {
     if (nodeView.props.isSome() && nodeView.props().get("SubNode").isSome() || nodeView.props.isSome() && nodeView.props().get("SupNode").isSome()) {
         // 设置文本内容
         Span(spanText(nodeView))
@@ -91,7 +116,7 @@ func headingTextComponent19(nodeView: NodeView, markdownConfiguration: MarkdownC
             .onClick {evt => linkOnClick(nodeView, markdownConfiguration.linkCallback)}
     } else {
         // 设置文本内容
-        Span(spanText(nodeView))
+        Span(spanOldText(nodeText, isEnd))
             // 设置文本的字体列表
             .fontFamily(spanFontFamily(false, markdownConfiguration.markdownTheme, true))
             // 设置文本尺寸
@@ -114,6 +139,29 @@ func headingTextComponent19(nodeView: NodeView, markdownConfiguration: MarkdownC
             .lineHeight(headLineHeight(level, markdownConfiguration))
             // 点击动作触发该方法调用
             .onClick {evt => linkOnClick(nodeView, markdownConfiguration.linkCallback)}
+
+        if (isEnd) {
+            // 设置文本内容
+            Span(spanNewText(nodeText))
+                // 设置文本的字体列表
+                .fontFamily(spanFontFamily(false, markdownConfiguration.markdownTheme, true))
+                // 设置文本尺寸
+                .fontSize(spanFontSize(nodeView, false, markdownConfiguration.markdownTheme, true, level))
+                // 设置文本的字体粗细
+                .fontWeight(spanFontWeight(nodeView, false, true))
+                // 设置文本的字体样式
+                .fontStyle(spanFontStyle(nodeView, false))
+                // 设置文本颜色
+                .fontColor(Color.RED)
+                // 设置背景样式
+                .textBackgroundStyle(TextBackgroundStyle(color: spanBackgroundColor(false, nodeView.link.isSome(), markdownConfiguration.markdownTheme)))
+                // 设置文本字符间距
+                .letterSpacing(markdownConfiguration.markdownTheme.headingTextWordSpace)
+                // 设置文本装饰线样式及其颜色
+                .decoration(decorationType: spanDecoration(nodeView, markdownConfiguration.markdownTheme)[0], color: spanDecoration(nodeView, markdownConfiguration.markdownTheme)[1])
+                // 设置Span基线的偏移量
+                .baselineOffset(spanBaselineOffset(nodeView, markdownConfiguration.markdownTheme).vp)
+        }
     }
 }
 
@@ -229,7 +277,7 @@ func headingLinkComponent19(nodeView: NodeView, link: String, markdownConfigurat
  * 标题内联代码
  */
 @Builder
-func headingCodeComponent18(nodeView: NodeView, markdownConfiguration: MarkdownConfiguration, level: Int64) {
+func headingCodeComponent18(nodeText: String, nodeView: NodeView, markdownConfiguration: MarkdownConfiguration, level: Int64, isEnd: Bool) {
     if (nodeView.props.isSome() && nodeView.props().get("SubNode").isSome() || nodeView.props.isSome() && nodeView.props().get("SupNode").isSome()) {
         // 设置文本内容
         Span(spanText(nodeView))
@@ -255,7 +303,7 @@ func headingCodeComponent18(nodeView: NodeView, markdownConfiguration: MarkdownC
             .onClick {evt => linkOnClick(nodeView, markdownConfiguration.linkCallback)}
     } else {
         // 设置文本内容
-        Span(spanText(nodeView))
+        Span(spanOldText(nodeText, isEnd))
             // 设置文本的字体列表
             .fontFamily(spanFontFamily(true, markdownConfiguration.markdownTheme, true))
             // 设置文本尺寸
@@ -276,6 +324,31 @@ func headingCodeComponent18(nodeView: NodeView, markdownConfiguration: MarkdownC
             .interopLineHeight(headLineHeight(level, markdownConfiguration))
             // 点击动作触发该方法调用
             .onClick {evt => linkOnClick(nodeView, markdownConfiguration.linkCallback)}
+
+        if (isEnd) {
+            // 设置文本内容
+            Span(spanNewText(nodeText))
+                // 设置文本的字体列表
+                .fontFamily(spanFontFamily(true, markdownConfiguration.markdownTheme, true))
+                // 设置文本尺寸
+                .fontSize(spanFontSize(nodeView, true, markdownConfiguration.markdownTheme, true, 0))
+                // 设置文本的字体粗细
+                .fontWeight(spanFontWeight(nodeView, false, true))
+                // 设置文本的字体样式
+                .fontStyle(spanFontStyle(nodeView, false))
+                // 设置文本颜色
+                .fontColor(Color.RED)
+                // 自定义背景色
+                .interopStyle(true, markdownConfiguration.markdownTheme.codeBackgroundColor)
+                // 设置文本字符间距
+                .letterSpacing(markdownConfiguration.markdownTheme.headingTextWordSpace)
+                // 设置文本装饰线样式及其颜色
+                .decoration(decorationType: spanDecoration(nodeView, markdownConfiguration.markdownTheme)[0], color: spanDecoration(nodeView, markdownConfiguration.markdownTheme)[1])
+                // 设置行高
+                .interopLineHeight(headLineHeight(level, markdownConfiguration))
+                // 点击动作触发该方法调用
+                .onClick {evt => linkOnClick(nodeView, markdownConfiguration.linkCallback)}
+        }
     }
 }
 
@@ -283,7 +356,7 @@ func headingCodeComponent18(nodeView: NodeView, markdownConfiguration: MarkdownC
  * 标题内联代码
  */
 @Builder
-func headingCodeComponent19(nodeView: NodeView, markdownConfiguration: MarkdownConfiguration, level: Int64) {
+func headingCodeComponent19(nodeText: String, nodeView: NodeView, markdownConfiguration: MarkdownConfiguration, level: Int64, isEnd: Bool) {
     if (nodeView.props.isSome() && nodeView.props().get("SubNode").isSome() || nodeView.props.isSome() && nodeView.props().get("SupNode").isSome()) {
         // 设置文本内容
         Span(spanText(nodeView))
@@ -309,7 +382,7 @@ func headingCodeComponent19(nodeView: NodeView, markdownConfiguration: MarkdownC
             .onClick {evt => linkOnClick(nodeView, markdownConfiguration.linkCallback)}
     } else {
         // 设置文本内容
-        Span(spanText(nodeView))
+        Span(spanOldText(nodeText, isEnd))
             // 设置文本的字体列表
             .fontFamily(spanFontFamily(true, markdownConfiguration.markdownTheme, true))
             // 设置文本尺寸
@@ -330,6 +403,31 @@ func headingCodeComponent19(nodeView: NodeView, markdownConfiguration: MarkdownC
             .lineHeight(headLineHeight(level, markdownConfiguration))
             // 点击动作触发该方法调用
             .onClick {evt => linkOnClick(nodeView, markdownConfiguration.linkCallback)}
+
+        if (isEnd) {
+            // 设置文本内容
+            Span(spanNewText(nodeText))
+                // 设置文本的字体列表
+                .fontFamily(spanFontFamily(true, markdownConfiguration.markdownTheme, true))
+                // 设置文本尺寸
+                .fontSize(spanFontSize(nodeView, true, markdownConfiguration.markdownTheme, true, 0))
+                // 设置文本的字体粗细
+                .fontWeight(spanFontWeight(nodeView, false, true))
+                // 设置文本的字体样式
+                .fontColor(Color.RED)
+                // 设置文本颜色
+                .fontColor(spanFontColor(nodeView, true, markdownConfiguration.markdownTheme, true))
+                // 设置背景样式
+                .textBackgroundStyle(TextBackgroundStyle(color: spanBackgroundColor(true, false, markdownConfiguration.markdownTheme)))
+                // 设置文本字符间距
+                .letterSpacing(markdownConfiguration.markdownTheme.headingTextWordSpace)
+                // 设置文本装饰线样式及其颜色
+                .decoration(decorationType: spanDecoration(nodeView, markdownConfiguration.markdownTheme)[0], color: spanDecoration(nodeView, markdownConfiguration.markdownTheme)[1])
+                // 设置行高
+                .lineHeight(headLineHeight(level, markdownConfiguration))
+                // 点击动作触发该方法调用
+                .onClick {evt => linkOnClick(nodeView, markdownConfiguration.linkCallback)}
+        }
     }
 }
 
@@ -337,7 +435,7 @@ func headingCodeComponent19(nodeView: NodeView, markdownConfiguration: MarkdownC
  * 标题脚注文本
  */
 @Builder
-func headingFootnoteComponent18(nodeView: NodeView, markdownConfiguration: MarkdownConfiguration, level: Int64, fontCallback: (String) -> Unit) {
+func headingFootnoteComponent18(nodeText: String, nodeView: NodeView, markdownConfiguration: MarkdownConfiguration, level: Int64, isEnd: Bool, fontCallback: (String) -> Unit) {
     if (nodeView.props.isSome() && nodeView.props().get("SubNode").isSome() || nodeView.props.isSome() && nodeView.props().get("SupNode").isSome()) {
         // 设置文本内容
         Span(spanText(nodeView))
@@ -367,7 +465,7 @@ func headingFootnoteComponent18(nodeView: NodeView, markdownConfiguration: Markd
             }
     } else {
         // 设置文本内容
-        Span(spanText(nodeView))
+        Span(spanOldText(nodeText, isEnd))
             // 设置文本的字体列表
             .fontFamily(spanFontFamily(false, markdownConfiguration.markdownTheme, true))
             // 设置文本尺寸
@@ -392,6 +490,35 @@ func headingFootnoteComponent18(nodeView: NodeView, markdownConfiguration: Markd
                     fontCallback((nodeView.node as Footnote)().noteid)
                 }
             }
+
+        if (isEnd) {
+            // 设置文本内容
+            Span(spanNewText(nodeText))
+                // 设置文本的字体列表
+                .fontFamily(spanFontFamily(false, markdownConfiguration.markdownTheme, true))
+                // 设置文本尺寸
+                .fontSize(spanFontSize(nodeView, false, markdownConfiguration.markdownTheme, true, level))
+                // 设置文本的字体粗细
+                .fontWeight(spanFontWeight(nodeView, false, true))
+                // 设置文本的字体样式
+                .fontStyle(spanFontStyle(nodeView, false))
+                // 设置文本颜色
+                .fontColor(Color.RED)
+                // 自定义背景色
+                .interopStyle(nodeView.link.isSome(), markdownConfiguration.markdownTheme.linkBackGroupColor)
+                // 设置文本字符间距
+                .letterSpacing(markdownConfiguration.markdownTheme.headingTextWordSpace)
+                // 设置文本装饰线样式及其颜色
+                .decoration(decorationType: spanDecoration(nodeView, markdownConfiguration.markdownTheme)[0], color: spanDecoration(nodeView, markdownConfiguration.markdownTheme)[1])
+                // 设置行高
+                .interopLineHeight(headLineHeight(level, markdownConfiguration))
+                // 点击动作触发该方法调用
+                .onClick {
+                    evt => if (nodeView.node is Footnote) {
+                        fontCallback((nodeView.node as Footnote)().noteid)
+                    }
+                }
+        }
     }
 }
 
@@ -399,7 +526,7 @@ func headingFootnoteComponent18(nodeView: NodeView, markdownConfiguration: Markd
  * 标题脚注文本
  */
 @Builder
-func headingFootnoteComponent19(nodeView: NodeView, markdownConfiguration: MarkdownConfiguration, level: Int64, fontCallback: (String) -> Unit) {
+func headingFootnoteComponent19(nodeText: String, nodeView: NodeView, markdownConfiguration: MarkdownConfiguration, level: Int64, isEnd: Bool, fontCallback: (String) -> Unit) {
     if (nodeView.props.isSome() && nodeView.props().get("SubNode").isSome() || nodeView.props.isSome() && nodeView.props().get("SupNode").isSome()) {
         // 设置文本内容
         Span(spanText(nodeView))
@@ -429,7 +556,7 @@ func headingFootnoteComponent19(nodeView: NodeView, markdownConfiguration: Markd
             }
     } else {
         // 设置文本内容
-        Span(spanText(nodeView))
+        Span(spanOldText(nodeText, isEnd))
             // 设置文本的字体列表
             .fontFamily(spanFontFamily(false, markdownConfiguration.markdownTheme, true))
             // 设置文本尺寸
@@ -454,6 +581,35 @@ func headingFootnoteComponent19(nodeView: NodeView, markdownConfiguration: Markd
                     fontCallback((nodeView.node as Footnote)().noteid)
                 }
             }
+
+        if (isEnd) {
+            // 设置文本内容
+            Span(spanNewText(nodeText))
+                // 设置文本的字体列表
+                .fontFamily(spanFontFamily(false, markdownConfiguration.markdownTheme, true))
+                // 设置文本尺寸
+                .fontSize(spanFontSize(nodeView, false, markdownConfiguration.markdownTheme, true, level))
+                // 设置文本的字体粗细
+                .fontWeight(spanFontWeight(nodeView, false, true))
+                // 设置文本的字体样式
+                .fontStyle(spanFontStyle(nodeView, false))
+                // 设置文本颜色
+                .fontColor(Color.RED)
+                // 设置背景样式
+                .textBackgroundStyle(TextBackgroundStyle(color: spanBackgroundColor(false, nodeView.link.isSome(), markdownConfiguration.markdownTheme)))
+                // 设置文本字符间距
+                .letterSpacing(markdownConfiguration.markdownTheme.headingTextWordSpace)
+                // 设置文本装饰线样式及其颜色
+                .decoration(decorationType: spanDecoration(nodeView, markdownConfiguration.markdownTheme)[0], color: spanDecoration(nodeView, markdownConfiguration.markdownTheme)[1])
+                // 设置行高
+                .lineHeight(headLineHeight(level, markdownConfiguration))
+                // 点击动作触发该方法调用
+                .onClick {
+                    evt => if (nodeView.node is Footnote) {
+                        fontCallback((nodeView.node as Footnote)().noteid)
+                    }
+                }
+        }
     }
 }
 
@@ -461,7 +617,7 @@ func headingFootnoteComponent19(nodeView: NodeView, markdownConfiguration: Markd
  * 段落文本
  */
 @Builder
-func paragraphTextComponent18(nodeView: NodeView, isDescList: Bool, markdownConfiguration: MarkdownConfiguration) {
+func paragraphTextComponent18(nodeText: String, nodeView: NodeView, isDescList: Bool, markdownConfiguration: MarkdownConfiguration, isEnd: Bool) {
     if (nodeView.props.isSome() && nodeView.props().get("SubNode").isSome() || nodeView.props.isSome() && nodeView.props().get("SupNode").isSome()) {
         // 设置文本内容
         Span(spanText(nodeView))
@@ -487,7 +643,7 @@ func paragraphTextComponent18(nodeView: NodeView, isDescList: Bool, markdownConf
             .onClick {evt => linkOnClick(nodeView, markdownConfiguration.linkCallback)}
     } else {
         // 设置文本内容
-        Span(spanText(nodeView))
+        Span(spanOldText(nodeText, isEnd))
             // 设置文本的字体列表
             .fontFamily(spanFontFamily(false, markdownConfiguration.markdownTheme, false))
             // 设置文本尺寸
@@ -508,6 +664,31 @@ func paragraphTextComponent18(nodeView: NodeView, isDescList: Bool, markdownConf
             .interopLineHeight(markdownConfiguration.markdownTheme.paragraphTextLineHeight)
             // 点击动作触发该方法调用
             .onClick {evt => linkOnClick(nodeView, markdownConfiguration.linkCallback)}
+
+        if (isEnd) {
+            // 设置文本内容
+            Span(spanNewText(nodeText))
+                // 设置文本的字体列表
+                .fontFamily(spanFontFamily(false, markdownConfiguration.markdownTheme, false))
+                // 设置文本尺寸
+                .fontSize(spanFontSize(nodeView, false, markdownConfiguration.markdownTheme, false, 0))
+                // 设置文本的字体粗细
+                .fontWeight(spanFontWeight(nodeView, isDescList, false))
+                // 设置文本的字体样式
+                .fontStyle(spanFontStyle(nodeView, isDescList))
+                // 设置文本颜色
+                .fontColor(Color.RED)
+                // 自定义背景色
+                .interopStyle(nodeView.link.isSome(), markdownConfiguration.markdownTheme.linkBackGroupColor)
+                // 设置文本字符间距
+                .letterSpacing(markdownConfiguration.markdownTheme.paragraphTextWordSpace)
+                // 设置文本装饰线样式及其颜色
+                .decoration(decorationType: spanDecoration(nodeView, markdownConfiguration.markdownTheme)[0], color: spanDecoration(nodeView, markdownConfiguration.markdownTheme)[1])
+                // 设置行高
+                .interopLineHeight(markdownConfiguration.markdownTheme.paragraphTextLineHeight)
+                // 点击动作触发该方法调用
+                .onClick {evt => linkOnClick(nodeView, markdownConfiguration.linkCallback)}
+        }
     }
 }
 
@@ -515,7 +696,7 @@ func paragraphTextComponent18(nodeView: NodeView, isDescList: Bool, markdownConf
  * 段落文本
  */
 @Builder
-func paragraphTextComponent19(nodeView: NodeView, isDescList: Bool, markdownConfiguration: MarkdownConfiguration) {
+func paragraphTextComponent19(nodeText: String, nodeView: NodeView, isDescList: Bool, markdownConfiguration: MarkdownConfiguration, isEnd: Bool) {
     if (nodeView.props.isSome() && nodeView.props().get("SubNode").isSome() || nodeView.props.isSome() && nodeView.props().get("SupNode").isSome()) {
         // 设置文本内容
         Span(spanText(nodeView))
@@ -541,7 +722,7 @@ func paragraphTextComponent19(nodeView: NodeView, isDescList: Bool, markdownConf
             .onClick {evt => linkOnClick(nodeView, markdownConfiguration.linkCallback)}
     } else {
         // 设置文本内容
-        Span(spanText(nodeView))
+        Span(spanOldText(nodeText, isEnd))
             // 设置文本的字体列表
             .fontFamily(spanFontFamily(false, markdownConfiguration.markdownTheme, false))
             // 设置文本尺寸
@@ -562,6 +743,31 @@ func paragraphTextComponent19(nodeView: NodeView, isDescList: Bool, markdownConf
             .lineHeight(markdownConfiguration.markdownTheme.paragraphTextLineHeight)
             // 点击动作触发该方法调用
             .onClick {evt => linkOnClick(nodeView, markdownConfiguration.linkCallback)}
+
+        if (isEnd) {
+            // 设置文本内容
+            Span(spanNewText(nodeText))
+                // 设置文本的字体列表
+                .fontFamily(spanFontFamily(false, markdownConfiguration.markdownTheme, false))
+                // 设置文本尺寸
+                .fontSize(spanFontSize(nodeView, false, markdownConfiguration.markdownTheme, false, 0))
+                // 设置文本的字体粗细
+                .fontWeight(spanFontWeight(nodeView, isDescList, false))
+                // 设置文本的字体样式
+                .fontStyle(spanFontStyle(nodeView, isDescList))
+                // 设置文本颜色
+                .fontColor(Color.RED)
+                // 设置背景样式
+                .textBackgroundStyle(TextBackgroundStyle(color: spanBackgroundColor(false, nodeView.link.isSome(), markdownConfiguration.markdownTheme)))
+                // 设置文本字符间距
+                .letterSpacing(markdownConfiguration.markdownTheme.paragraphTextWordSpace)
+                // 设置文本装饰线样式及其颜色
+                .decoration(decorationType: spanDecoration(nodeView, markdownConfiguration.markdownTheme)[0], color: spanDecoration(nodeView, markdownConfiguration.markdownTheme)[1])
+                // 设置行高
+                .lineHeight(markdownConfiguration.markdownTheme.paragraphTextLineHeight)
+                // 点击动作触发该方法调用
+                .onClick {evt => linkOnClick(nodeView, markdownConfiguration.linkCallback)}
+        }
     }
 }
 
@@ -569,7 +775,7 @@ func paragraphTextComponent19(nodeView: NodeView, isDescList: Bool, markdownConf
  * 段落Toc文本
  */
 @Builder
-func paragraphTocComponent18(nodeView: NodeView, isDescList: Bool, markdownConfiguration: MarkdownConfiguration, tocListOnClick: (Int64) -> Unit) {
+func paragraphTocComponent18(nodeText: String, nodeView: NodeView, isDescList: Bool, markdownConfiguration: MarkdownConfiguration, isEnd: Bool, tocListOnClick: (Int64) -> Unit) {
     if (nodeView.props.isSome() && nodeView.props().get("SubNode").isSome() || nodeView.props.isSome() && nodeView.props().get("SupNode").isSome()) {
         // 设置文本内容
         Span(spanText(nodeView))
@@ -595,7 +801,7 @@ func paragraphTocComponent18(nodeView: NodeView, isDescList: Bool, markdownConfi
             .onClick {evt => tocListOnClick((nodeView.node as HeadLink)().headIndex)}
     } else {
         // 设置文本内容
-        Span(spanText(nodeView))
+        Span(spanOldText(nodeText, isEnd))
             // 设置文本的字体列表
             .fontFamily(spanFontFamily(false, markdownConfiguration.markdownTheme, false))
             // 设置文本尺寸
@@ -616,6 +822,31 @@ func paragraphTocComponent18(nodeView: NodeView, isDescList: Bool, markdownConfi
             .interopLineHeight(markdownConfiguration.markdownTheme.paragraphTextLineHeight)
             // 点击动作触发该方法调用
             .onClick {evt => tocListOnClick((nodeView.node as HeadLink)().headIndex)}
+
+        if (isEnd) {
+            // 设置文本内容
+            Span(spanNewText(nodeText))
+                // 设置文本的字体列表
+                .fontFamily(spanFontFamily(false, markdownConfiguration.markdownTheme, false))
+                // 设置文本尺寸
+                .fontSize(spanFontSize(nodeView, false, markdownConfiguration.markdownTheme, false, 0))
+                // 设置文本的字体粗细
+                .fontWeight(spanFontWeight(nodeView, isDescList, false))
+                // 设置文本的字体样式
+                .fontStyle(spanFontStyle(nodeView, isDescList))
+                // 设置文本颜色
+                .fontColor(Color.RED)
+                // 自定义背景色
+                .interopStyle(nodeView.link.isSome(), markdownConfiguration.markdownTheme.linkBackGroupColor)
+                // 设置文本字符间距
+                .letterSpacing(markdownConfiguration.markdownTheme.paragraphTextWordSpace)
+                // 设置文本装饰线样式及其颜色
+                .decoration(decorationType: spanDecoration(nodeView, markdownConfiguration.markdownTheme)[0], color: spanDecoration(nodeView, markdownConfiguration.markdownTheme)[1])
+                // 设置行高
+                .interopLineHeight(markdownConfiguration.markdownTheme.paragraphTextLineHeight)
+                // 点击动作触发该方法调用
+                .onClick {evt => tocListOnClick((nodeView.node as HeadLink)().headIndex)}
+        }
     }
 }
 
@@ -623,7 +854,7 @@ func paragraphTocComponent18(nodeView: NodeView, isDescList: Bool, markdownConfi
  * 段落Toc文本
  */
 @Builder
-func paragraphTocComponent19(nodeView: NodeView, isDescList: Bool, markdownConfiguration: MarkdownConfiguration, tocListOnClick: (Int64) -> Unit) {
+func paragraphTocComponent19(nodeText: String, nodeView: NodeView, isDescList: Bool, markdownConfiguration: MarkdownConfiguration, isEnd: Bool, tocListOnClick: (Int64) -> Unit) {
     if (nodeView.props.isSome() && nodeView.props().get("SubNode").isSome() || nodeView.props.isSome() && nodeView.props().get("SupNode").isSome()) {
         // 设置文本内容
         Span(spanText(nodeView))
@@ -649,7 +880,7 @@ func paragraphTocComponent19(nodeView: NodeView, isDescList: Bool, markdownConfi
             .onClick {evt => tocListOnClick((nodeView.node as HeadLink)().headIndex)}
     } else {
         // 设置文本内容
-        Span(spanText(nodeView))
+        Span(spanOldText(nodeText, isEnd))
             // 设置文本的字体列表
             .fontFamily(spanFontFamily(false, markdownConfiguration.markdownTheme, false))
             // 设置文本尺寸
@@ -670,6 +901,31 @@ func paragraphTocComponent19(nodeView: NodeView, isDescList: Bool, markdownConfi
             .lineHeight(markdownConfiguration.markdownTheme.paragraphTextLineHeight)
             // 点击动作触发该方法调用
             .onClick {evt => tocListOnClick((nodeView.node as HeadLink)().headIndex)}
+
+        if (isEnd) {
+            // 设置文本内容
+            Span(spanNewText(nodeText))
+                // 设置文本的字体列表
+                .fontFamily(spanFontFamily(false, markdownConfiguration.markdownTheme, false))
+                // 设置文本尺寸
+                .fontSize(spanFontSize(nodeView, false, markdownConfiguration.markdownTheme, false, 0))
+                // 设置文本的字体粗细
+                .fontWeight(spanFontWeight(nodeView, isDescList, false))
+                // 设置文本的字体样式
+                .fontStyle(spanFontStyle(nodeView, isDescList))
+                // 设置文本颜色
+                .fontColor(Color.RED)
+                // 设置背景样式
+                .textBackgroundStyle(TextBackgroundStyle(color: spanBackgroundColor(false, nodeView.link.isSome(), markdownConfiguration.markdownTheme)))
+                // 设置文本字符间距
+                .letterSpacing(markdownConfiguration.markdownTheme.paragraphTextWordSpace)
+                // 设置文本装饰线样式及其颜色
+                .decoration(decorationType: spanDecoration(nodeView, markdownConfiguration.markdownTheme)[0], color: spanDecoration(nodeView, markdownConfiguration.markdownTheme)[1])
+                // 设置行高
+                .lineHeight(markdownConfiguration.markdownTheme.paragraphTextLineHeight)
+                // 点击动作触发该方法调用
+                .onClick {evt => tocListOnClick((nodeView.node as HeadLink)().headIndex)}
+        }
     }
 }
 
@@ -785,7 +1041,7 @@ func paragraphLinkComponent19(nodeView: NodeView, isDescList: Bool, link: String
  * 段落内联代码
  */
 @Builder
-func paragraphCodeComponent18(nodeView: NodeView, isDescList: Bool, markdownConfiguration: MarkdownConfiguration) {
+func paragraphCodeComponent18(nodeText: String, nodeView: NodeView, isDescList: Bool, markdownConfiguration: MarkdownConfiguration, isEnd: Bool) {
     if (nodeView.props.isSome() && nodeView.props().get("SubNode").isSome() || nodeView.props.isSome() && nodeView.props().get("SupNode").isSome()) {
         // 设置文本内容
         Span(spanText(nodeView))
@@ -811,7 +1067,7 @@ func paragraphCodeComponent18(nodeView: NodeView, isDescList: Bool, markdownConf
             .onClick {evt => linkOnClick(nodeView, markdownConfiguration.linkCallback)}
     } else {
         // 设置文本内容
-        Span(spanText(nodeView))
+        Span(spanOldText(nodeText, isEnd))
             // 设置文本的字体列表
             .fontFamily(spanFontFamily(true, markdownConfiguration.markdownTheme, false))
             // 设置文本尺寸
@@ -832,6 +1088,31 @@ func paragraphCodeComponent18(nodeView: NodeView, isDescList: Bool, markdownConf
             .decoration(decorationType: spanDecoration(nodeView, markdownConfiguration.markdownTheme)[0], color: spanDecoration(nodeView, markdownConfiguration.markdownTheme)[1])
             // 点击动作触发该方法调用
             .onClick {evt => linkOnClick(nodeView, markdownConfiguration.linkCallback)}
+
+        if (isEnd) {
+            // 设置文本内容
+            Span(spanNewText(nodeText))
+                // 设置文本的字体列表
+                .fontFamily(spanFontFamily(true, markdownConfiguration.markdownTheme, false))
+                // 设置文本尺寸
+                .fontSize(spanFontSize(nodeView, true, markdownConfiguration.markdownTheme, false, 0))
+                // 设置文本的字体粗细
+                .fontWeight(spanFontWeight(nodeView, isDescList, false))
+                // 设置文本的字体样式
+                .fontStyle(spanFontStyle(nodeView, isDescList))
+                // 设置文本颜色
+                .fontColor(Color.RED)
+                // 自定义背景色
+                .interopStyle(true, markdownConfiguration.markdownTheme.codeBackgroundColor)
+                // 设置文本字符间距
+                .letterSpacing(markdownConfiguration.markdownTheme.paragraphTextWordSpace)
+                // 设置行高
+                .interopLineHeight(markdownConfiguration.markdownTheme.paragraphTextLineHeight)
+                // 设置文本装饰线样式及其颜色
+                .decoration(decorationType: spanDecoration(nodeView, markdownConfiguration.markdownTheme)[0], color: spanDecoration(nodeView, markdownConfiguration.markdownTheme)[1])
+                // 点击动作触发该方法调用
+                .onClick {evt => linkOnClick(nodeView, markdownConfiguration.linkCallback)}
+        }
     }
 }
 
@@ -839,7 +1120,7 @@ func paragraphCodeComponent18(nodeView: NodeView, isDescList: Bool, markdownConf
  * 段落内联代码
  */
 @Builder
-func paragraphCodeComponent19(nodeView: NodeView, isDescList: Bool, markdownConfiguration: MarkdownConfiguration) {
+func paragraphCodeComponent19(nodeText: String, nodeView: NodeView, isDescList: Bool, markdownConfiguration: MarkdownConfiguration, isEnd: Bool) {
     if (nodeView.props.isSome() && nodeView.props().get("SubNode").isSome() || nodeView.props.isSome() && nodeView.props().get("SupNode").isSome()) {
         // 设置文本内容
         Span(spanText(nodeView))
@@ -865,7 +1146,7 @@ func paragraphCodeComponent19(nodeView: NodeView, isDescList: Bool, markdownConf
             .onClick {evt => linkOnClick(nodeView, markdownConfiguration.linkCallback)}
     } else {
         // 设置文本内容
-        Span(spanText(nodeView))
+        Span(spanOldText(nodeText, isEnd))
             // 设置文本的字体列表
             .fontFamily(spanFontFamily(true, markdownConfiguration.markdownTheme, false))
             // 设置文本尺寸
@@ -886,6 +1167,31 @@ func paragraphCodeComponent19(nodeView: NodeView, isDescList: Bool, markdownConf
             .decoration(decorationType: spanDecoration(nodeView, markdownConfiguration.markdownTheme)[0], color: spanDecoration(nodeView, markdownConfiguration.markdownTheme)[1])
             // 点击动作触发该方法调用
             .onClick {evt => linkOnClick(nodeView, markdownConfiguration.linkCallback)}
+
+        if (isEnd) {
+            // 设置文本内容
+            Span(spanNewText(nodeText))
+                // 设置文本的字体列表
+                .fontFamily(spanFontFamily(true, markdownConfiguration.markdownTheme, false))
+                // 设置文本尺寸
+                .fontSize(spanFontSize(nodeView, true, markdownConfiguration.markdownTheme, false, 0))
+                // 设置文本的字体粗细
+                .fontWeight(spanFontWeight(nodeView, isDescList, false))
+                // 设置文本的字体样式
+                .fontStyle(spanFontStyle(nodeView, isDescList))
+                // 设置文本颜色
+                .fontColor(Color.RED)
+                // 设置背景样式
+                .textBackgroundStyle(TextBackgroundStyle(color: spanBackgroundColor(true, false, markdownConfiguration.markdownTheme)))
+                // 设置文本字符间距
+                .letterSpacing(markdownConfiguration.markdownTheme.paragraphTextWordSpace)
+                // 设置行高
+                .lineHeight(markdownConfiguration.markdownTheme.paragraphTextLineHeight)
+                // 设置文本装饰线样式及其颜色
+                .decoration(decorationType: spanDecoration(nodeView, markdownConfiguration.markdownTheme)[0], color: spanDecoration(nodeView, markdownConfiguration.markdownTheme)[1])
+                // 点击动作触发该方法调用
+                .onClick {evt => linkOnClick(nodeView, markdownConfiguration.linkCallback)}
+        }
     }
 }
 
@@ -893,7 +1199,7 @@ func paragraphCodeComponent19(nodeView: NodeView, isDescList: Bool, markdownConf
  * 段落脚注文本
  */
 @Builder
-func paragraphFootnoteComponent18(nodeView: NodeView, isDescList: Bool, markdownConfiguration: MarkdownConfiguration, fontCallback: (String) -> Unit) {
+func paragraphFootnoteComponent18(nodeText: String, nodeView: NodeView, isDescList: Bool, markdownConfiguration: MarkdownConfiguration, isEnd: Bool, fontCallback: (String) -> Unit) {
     if (nodeView.props.isSome() && nodeView.props().get("SubNode").isSome() || nodeView.props.isSome() && nodeView.props().get("SupNode").isSome()) {
         // 设置文本内容
         Span(spanText(nodeView))
@@ -923,7 +1229,7 @@ func paragraphFootnoteComponent18(nodeView: NodeView, isDescList: Bool, markdown
             }
     } else {
         // 设置文本内容
-        Span(spanText(nodeView))
+        Span(spanOldText(nodeText, isEnd))
             // 设置文本的字体列表
             .fontFamily(spanFontFamily(false, markdownConfiguration.markdownTheme, false))
             // 设置文本尺寸
@@ -948,6 +1254,35 @@ func paragraphFootnoteComponent18(nodeView: NodeView, isDescList: Bool, markdown
                     fontCallback((nodeView.node as Footnote)().noteid)
                 }
             }
+
+        if (isEnd) {
+            // 设置文本内容
+            Span(spanNewText(nodeText))
+                // 设置文本的字体列表
+                .fontFamily(spanFontFamily(false, markdownConfiguration.markdownTheme, false))
+                // 设置文本尺寸
+                .fontSize(spanFontSize(nodeView, false, markdownConfiguration.markdownTheme, false, 0))
+                // 设置文本的字体粗细
+                .fontWeight(spanFontWeight(nodeView, isDescList, false))
+                // 设置文本的字体样式
+                .fontStyle(spanFontStyle(nodeView, isDescList))
+                // 设置文本颜色
+                .fontColor(Color.RED)
+                // 自定义背景色
+                .interopStyle(nodeView.link.isSome(), markdownConfiguration.markdownTheme.linkBackGroupColor)
+                // 设置文本字符间距
+                .letterSpacing(markdownConfiguration.markdownTheme.paragraphTextWordSpace)
+                // 设置文本装饰线样式及其颜色
+                .decoration(decorationType: spanDecoration(nodeView, markdownConfiguration.markdownTheme)[0], color: spanDecoration(nodeView, markdownConfiguration.markdownTheme)[1])
+                // 设置行高
+                .interopLineHeight(markdownConfiguration.markdownTheme.paragraphTextLineHeight)
+                // 点击动作触发该方法调用
+                .onClick {
+                    evt => if (nodeView.node is Footnote) {
+                        fontCallback((nodeView.node as Footnote)().noteid)
+                    }
+                }
+        }
     }
 }
 
@@ -955,7 +1290,7 @@ func paragraphFootnoteComponent18(nodeView: NodeView, isDescList: Bool, markdown
  * 段落脚注文本
  */
 @Builder
-func paragraphFootnoteComponent19(nodeView: NodeView, isDescList: Bool, markdownConfiguration: MarkdownConfiguration, fontCallback: (String) -> Unit) {
+func paragraphFootnoteComponent19(nodeText: String, nodeView: NodeView, isDescList: Bool, markdownConfiguration: MarkdownConfiguration, isEnd: Bool, fontCallback: (String) -> Unit) {
     if (nodeView.props.isSome() && nodeView.props().get("SubNode").isSome() || nodeView.props.isSome() && nodeView.props().get("SupNode").isSome()) {
         // 设置文本内容
         Span(spanText(nodeView))
@@ -985,7 +1320,7 @@ func paragraphFootnoteComponent19(nodeView: NodeView, isDescList: Bool, markdown
             }
     } else {
         // 设置文本内容
-        Span(spanText(nodeView))
+        Span(spanOldText(nodeText, isEnd))
             // 设置文本的字体列表
             .fontFamily(spanFontFamily(false, markdownConfiguration.markdownTheme, false))
             // 设置文本尺寸
@@ -1010,6 +1345,35 @@ func paragraphFootnoteComponent19(nodeView: NodeView, isDescList: Bool, markdown
                     fontCallback((nodeView.node as Footnote)().noteid)
                 }
             }
+
+        if (isEnd) {
+            // 设置文本内容
+            Span(spanNewText(nodeText))
+                // 设置文本的字体列表
+                .fontFamily(spanFontFamily(false, markdownConfiguration.markdownTheme, false))
+                // 设置文本尺寸
+                .fontSize(spanFontSize(nodeView, false, markdownConfiguration.markdownTheme, false, 0))
+                // 设置文本的字体粗细
+                .fontWeight(spanFontWeight(nodeView, isDescList, false))
+                // 设置文本的字体样式
+                .fontStyle(spanFontStyle(nodeView, isDescList))
+                // 设置文本颜色
+                .fontColor(Color.RED)
+                // 设置背景样式
+                .textBackgroundStyle(TextBackgroundStyle(color: spanBackgroundColor(false, nodeView.link.isSome(), markdownConfiguration.markdownTheme)))
+                // 设置文本字符间距
+                .letterSpacing(markdownConfiguration.markdownTheme.paragraphTextWordSpace)
+                // 设置文本装饰线样式及其颜色
+                .decoration(decorationType: spanDecoration(nodeView, markdownConfiguration.markdownTheme)[0], color: spanDecoration(nodeView, markdownConfiguration.markdownTheme)[1])
+                // 设置行高
+                .lineHeight(markdownConfiguration.markdownTheme.paragraphTextLineHeight)
+                // 点击动作触发该方法调用
+                .onClick {
+                    evt => if (nodeView.node is Footnote) {
+                        fontCallback((nodeView.node as Footnote)().noteid)
+                    }
+                }
+        }
     }
 }
 
@@ -1017,7 +1381,7 @@ func paragraphFootnoteComponent19(nodeView: NodeView, isDescList: Bool, markdown
  * 表格文本
  */
 @Builder
-func tableComponentText18(nodeView: NodeView, isHeader: Bool, markdownConfiguration: MarkdownConfiguration) {
+func tableComponentText18(nodeText: String, nodeView: NodeView, isHeader: Bool, markdownConfiguration: MarkdownConfiguration, isEnd: Bool) {
     if (nodeView.props.isSome() && nodeView.props().get("SubNode").isSome() || nodeView.props.isSome() && nodeView.props().get("SupNode").isSome()) {
         // 设置文本内容
         Span(spanText(nodeView))
@@ -1043,7 +1407,7 @@ func tableComponentText18(nodeView: NodeView, isHeader: Bool, markdownConfigurat
             .onClick {evt => linkOnClick(nodeView, markdownConfiguration.linkCallback)}
     } else {
         // 设置文本内容
-        Span(spanText(nodeView))
+        Span(spanOldText(nodeText, isEnd))
             // 设置文本的字体列表
             .fontFamily(spanFontFamily(false, markdownConfiguration.markdownTheme, false))
             // 设置文本尺寸
@@ -1064,6 +1428,31 @@ func tableComponentText18(nodeView: NodeView, isHeader: Bool, markdownConfigurat
             .interopLineHeight(markdownConfiguration.markdownTheme.tableTextLineHeight)
             // 点击动作触发该方法调用
             .onClick {evt => linkOnClick(nodeView, markdownConfiguration.linkCallback)}
+
+        if (isEnd) {
+            // 设置文本内容
+            Span(spanNewText(nodeText))
+                // 设置文本的字体列表
+                .fontFamily(spanFontFamily(false, markdownConfiguration.markdownTheme, false))
+                // 设置文本尺寸
+                .fontSize(spanFontSize(nodeView, false, markdownConfiguration.markdownTheme, false, 0))
+                // 设置文本的字体粗细
+                .fontWeight(spanFontWeight(nodeView, false, isHeader))
+                // 设置文本的字体样式
+                .fontStyle(spanFontStyle(nodeView, false))
+                // 设置文本颜色
+                .fontColor(Color.RED)
+                // 自定义背景色
+                .interopStyle(nodeView.link.isSome(), markdownConfiguration.markdownTheme.linkBackGroupColor)
+                // 设置文本字符间距
+                .letterSpacing(markdownConfiguration.markdownTheme.paragraphTextWordSpace)
+                // 设置文本装饰线样式及其颜色
+                .decoration(decorationType: spanDecoration(nodeView, markdownConfiguration.markdownTheme)[0], color: spanDecoration(nodeView, markdownConfiguration.markdownTheme)[1])
+                // 设置行高
+                .interopLineHeight(markdownConfiguration.markdownTheme.tableTextLineHeight)
+                // 点击动作触发该方法调用
+                .onClick {evt => linkOnClick(nodeView, markdownConfiguration.linkCallback)}
+        }
     }
 }
 
@@ -1071,7 +1460,7 @@ func tableComponentText18(nodeView: NodeView, isHeader: Bool, markdownConfigurat
  * 表格文本
  */
 @Builder
-func tableComponentText19(nodeView: NodeView, isHeader: Bool, markdownConfiguration: MarkdownConfiguration) {
+func tableComponentText19(nodeText: String, nodeView: NodeView, isHeader: Bool, markdownConfiguration: MarkdownConfiguration, isEnd: Bool) {
     if (nodeView.props.isSome() && nodeView.props().get("SubNode").isSome() || nodeView.props.isSome() && nodeView.props().get("SupNode").isSome()) {
         // 设置文本内容
         Span(spanText(nodeView))
@@ -1097,7 +1486,7 @@ func tableComponentText19(nodeView: NodeView, isHeader: Bool, markdownConfigurat
             .onClick {evt => linkOnClick(nodeView, markdownConfiguration.linkCallback)}
     } else {
         // 设置文本内容
-        Span(spanText(nodeView))
+        Span(spanOldText(nodeText, isEnd))
             // 设置文本的字体列表
             .fontFamily(spanFontFamily(false, markdownConfiguration.markdownTheme, false))
             // 设置文本尺寸
@@ -1118,6 +1507,31 @@ func tableComponentText19(nodeView: NodeView, isHeader: Bool, markdownConfigurat
             .lineHeight(markdownConfiguration.markdownTheme.tableTextLineHeight)
             // 点击动作触发该方法调用
             .onClick {evt => linkOnClick(nodeView, markdownConfiguration.linkCallback)}
+
+        if (isEnd) {
+            // 设置文本内容
+            Span(spanNewText(nodeText))
+                // 设置文本的字体列表
+                .fontFamily(spanFontFamily(false, markdownConfiguration.markdownTheme, false))
+                // 设置文本尺寸
+                .fontSize(spanFontSize(nodeView, false, markdownConfiguration.markdownTheme, false, 0))
+                // 设置文本的字体粗细
+                .fontWeight(spanFontWeight(nodeView, false, isHeader))
+                // 设置文本的字体样式
+                .fontStyle(spanFontStyle(nodeView, false))
+                // 设置文本颜色
+                .fontColor(Color.RED)
+                // 设置背景样式
+                .textBackgroundStyle(TextBackgroundStyle(color: spanBackgroundColor(false, nodeView.link.isSome(), markdownConfiguration.markdownTheme)))
+                // 设置文本字符间距
+                .letterSpacing(markdownConfiguration.markdownTheme.paragraphTextWordSpace)
+                // 设置文本装饰线样式及其颜色
+                .decoration(decorationType: spanDecoration(nodeView, markdownConfiguration.markdownTheme)[0], color: spanDecoration(nodeView, markdownConfiguration.markdownTheme)[1])
+                // 设置行高
+                .lineHeight(markdownConfiguration.markdownTheme.tableTextLineHeight)
+                // 点击动作触发该方法调用
+                .onClick {evt => linkOnClick(nodeView, markdownConfiguration.linkCallback)}
+        }
     }
 }
 
@@ -1125,7 +1539,7 @@ func tableComponentText19(nodeView: NodeView, isHeader: Bool, markdownConfigurat
  * 表格内联代码
  */
 @Builder
-func tableComponentCode18(nodeView: NodeView, isHeader: Bool, markdownConfiguration: MarkdownConfiguration) {
+func tableComponentCode18(nodeText: String, nodeView: NodeView, isHeader: Bool, markdownConfiguration: MarkdownConfiguration, isEnd: Bool) {
     if (nodeView.props.isSome() && nodeView.props().get("SubNode").isSome() || nodeView.props.isSome() && nodeView.props().get("SupNode").isSome()) {
         // 设置文本内容
         Span(spanText(nodeView))
@@ -1151,7 +1565,7 @@ func tableComponentCode18(nodeView: NodeView, isHeader: Bool, markdownConfigurat
             .onClick {evt => linkOnClick(nodeView, markdownConfiguration.linkCallback)}
     } else {
         // 设置文本内容
-        Span(spanText(nodeView))
+        Span(spanOldText(nodeText, isEnd))
             // 设置文本的字体列表
             .fontFamily(spanFontFamily(true, markdownConfiguration.markdownTheme, false))
             // 设置文本尺寸
@@ -1172,6 +1586,31 @@ func tableComponentCode18(nodeView: NodeView, isHeader: Bool, markdownConfigurat
             .decoration(decorationType: spanDecoration(nodeView, markdownConfiguration.markdownTheme)[0], color: spanDecoration(nodeView, markdownConfiguration.markdownTheme)[1])
             // 点击动作触发该方法调用
             .onClick {evt => linkOnClick(nodeView, markdownConfiguration.linkCallback)}
+
+        if (isEnd) {
+            // 设置文本内容
+            Span(spanNewText(nodeText))
+                // 设置文本的字体列表
+                .fontFamily(spanFontFamily(true, markdownConfiguration.markdownTheme, false))
+                // 设置文本尺寸
+                .fontSize(spanFontSize(nodeView, true, markdownConfiguration.markdownTheme, false, 0))
+                // 设置文本的字体粗细
+                .fontWeight(spanFontWeight(nodeView, false, isHeader))
+                // 设置文本的字体样式
+                .fontStyle(spanFontStyle(nodeView, false))
+                // 设置文本颜色
+                .fontColor(Color.RED)
+                // 自定义背景色
+                .interopStyle(true, markdownConfiguration.markdownTheme.codeBackgroundColor)
+                // 设置文本字符间距
+                .letterSpacing(markdownConfiguration.markdownTheme.paragraphTextWordSpace)
+                // 设置行高
+                .interopLineHeight(markdownConfiguration.markdownTheme.tableTextLineHeight)
+                // 设置文本装饰线样式及其颜色
+                .decoration(decorationType: spanDecoration(nodeView, markdownConfiguration.markdownTheme)[0], color: spanDecoration(nodeView, markdownConfiguration.markdownTheme)[1])
+                // 点击动作触发该方法调用
+                .onClick {evt => linkOnClick(nodeView, markdownConfiguration.linkCallback)}
+        }
     }
 }
 
@@ -1179,7 +1618,7 @@ func tableComponentCode18(nodeView: NodeView, isHeader: Bool, markdownConfigurat
  * 表格内联代码
  */
 @Builder
-func tableComponentCode19(nodeView: NodeView, isHeader: Bool, markdownConfiguration: MarkdownConfiguration) {
+func tableComponentCode19(nodeText: String, nodeView: NodeView, isHeader: Bool, markdownConfiguration: MarkdownConfiguration, isEnd: Bool) {
     if (nodeView.props.isSome() && nodeView.props().get("SubNode").isSome() || nodeView.props.isSome() && nodeView.props().get("SupNode").isSome()) {
         // 设置文本内容
         Span(spanText(nodeView))
@@ -1205,7 +1644,7 @@ func tableComponentCode19(nodeView: NodeView, isHeader: Bool, markdownConfigurat
             .onClick {evt => linkOnClick(nodeView, markdownConfiguration.linkCallback)}
     } else {
         // 设置文本内容
-        Span(spanText(nodeView))
+        Span(spanOldText(nodeText, isEnd))
             // 设置文本的字体列表
             .fontFamily(spanFontFamily(true, markdownConfiguration.markdownTheme, false))
             // 设置文本尺寸
@@ -1226,6 +1665,31 @@ func tableComponentCode19(nodeView: NodeView, isHeader: Bool, markdownConfigurat
             .decoration(decorationType: spanDecoration(nodeView, markdownConfiguration.markdownTheme)[0], color: spanDecoration(nodeView, markdownConfiguration.markdownTheme)[1])
             // 点击动作触发该方法调用
             .onClick {evt => linkOnClick(nodeView, markdownConfiguration.linkCallback)}
+
+        if (isEnd) {
+            // 设置文本内容
+            Span(spanNewText(nodeText))
+                // 设置文本的字体列表
+                .fontFamily(spanFontFamily(true, markdownConfiguration.markdownTheme, false))
+                // 设置文本尺寸
+                .fontSize(spanFontSize(nodeView, true, markdownConfiguration.markdownTheme, false, 0))
+                // 设置文本的字体粗细
+                .fontWeight(spanFontWeight(nodeView, false, isHeader))
+                // 设置文本的字体样式
+                .fontStyle(spanFontStyle(nodeView, false))
+                // 设置文本颜色
+                .fontColor(Color.RED)
+                // 设置背景样式
+                .textBackgroundStyle(TextBackgroundStyle(color: spanBackgroundColor(true, false, markdownConfiguration.markdownTheme)))
+                // 设置文本字符间距
+                .letterSpacing(markdownConfiguration.markdownTheme.paragraphTextWordSpace)
+                // 设置行高
+                .lineHeight(markdownConfiguration.markdownTheme.tableTextLineHeight)
+                // 设置文本装饰线样式及其颜色
+                .decoration(decorationType: spanDecoration(nodeView, markdownConfiguration.markdownTheme)[0], color: spanDecoration(nodeView, markdownConfiguration.markdownTheme)[1])
+                // 点击动作触发该方法调用
+                .onClick {evt => linkOnClick(nodeView, markdownConfiguration.linkCallback)}
+        }
     }
 }
 
@@ -1341,7 +1805,7 @@ func tableLinkComponent19(nodeView: NodeView, isHeader: Bool, link: String, mark
  * 表格脚注文本
  */
 @Builder
-func tableComponentFootnote18(nodeView: NodeView, isHeader: Bool, markdownConfiguration: MarkdownConfiguration, fontCallback: (String) -> Unit) {
+func tableComponentFootnote18(nodeText: String, nodeView: NodeView, isHeader: Bool, markdownConfiguration: MarkdownConfiguration, isEnd: Bool, fontCallback: (String) -> Unit) {
     if (nodeView.props.isSome() && nodeView.props().get("SubNode").isSome() || nodeView.props.isSome() && nodeView.props().get("SupNode").isSome()) {
         // 设置文本内容
         Span(spanText(nodeView))
@@ -1371,7 +1835,7 @@ func tableComponentFootnote18(nodeView: NodeView, isHeader: Bool, markdownConfig
             }
     } else {
         // 设置文本内容
-        Span(spanText(nodeView))
+        Span(spanOldText(nodeText, isEnd))
             // 设置文本的字体列表
             .fontFamily(spanFontFamily(false, markdownConfiguration.markdownTheme, false))
             // 设置文本尺寸
@@ -1396,6 +1860,35 @@ func tableComponentFootnote18(nodeView: NodeView, isHeader: Bool, markdownConfig
                     fontCallback((nodeView.node as Footnote)().noteid)
                 }
             }
+
+        if (isEnd) {
+            // 设置文本内容
+            Span(spanNewText(nodeText))
+                // 设置文本的字体列表
+                .fontFamily(spanFontFamily(false, markdownConfiguration.markdownTheme, false))
+                // 设置文本尺寸
+                .fontSize(spanFontSize(nodeView, false, markdownConfiguration.markdownTheme, false, 0))
+                // 设置文本的字体粗细
+                .fontWeight(spanFontWeight(nodeView, false, isHeader))
+                // 设置文本的字体样式
+                .fontStyle(spanFontStyle(nodeView, false))
+                // 设置文本颜色
+                .fontColor(Color.RED)
+                // 自定义背景色
+                .interopStyle(nodeView.link.isSome(), markdownConfiguration.markdownTheme.linkBackGroupColor)
+                // 设置文本字符间距
+                .letterSpacing(markdownConfiguration.markdownTheme.paragraphTextWordSpace)
+                // 设置文本装饰线样式及其颜色
+                .decoration(decorationType: spanDecoration(nodeView, markdownConfiguration.markdownTheme)[0], color: spanDecoration(nodeView, markdownConfiguration.markdownTheme)[1])
+                // 设置行高
+                .interopLineHeight(markdownConfiguration.markdownTheme.tableTextLineHeight)
+                // 点击动作触发该方法调用
+                .onClick {
+                    evt => if (nodeView.node is Footnote) {
+                        fontCallback((nodeView.node as Footnote)().noteid)
+                    }
+                }
+        }
     }
 }
 
@@ -1403,7 +1896,7 @@ func tableComponentFootnote18(nodeView: NodeView, isHeader: Bool, markdownConfig
  * 表格脚注文本
  */
 @Builder
-func tableComponentFootnote19(nodeView: NodeView, isHeader: Bool, markdownConfiguration: MarkdownConfiguration, fontCallback: (String) -> Unit) {
+func tableComponentFootnote19(nodeText: String, nodeView: NodeView, isHeader: Bool, markdownConfiguration: MarkdownConfiguration, isEnd: Bool, fontCallback: (String) -> Unit) {
     if (nodeView.props.isSome() && nodeView.props().get("SubNode").isSome() || nodeView.props.isSome() && nodeView.props().get("SupNode").isSome()) {
         // 设置文本内容
         Span(spanText(nodeView))
@@ -1433,7 +1926,7 @@ func tableComponentFootnote19(nodeView: NodeView, isHeader: Bool, markdownConfig
             }
     } else {
         // 设置文本内容
-        Span(spanText(nodeView))
+        Span(spanOldText(nodeText, isEnd))
             // 设置文本的字体列表
             .fontFamily(spanFontFamily(false, markdownConfiguration.markdownTheme, false))
             // 设置文本尺寸
@@ -1458,6 +1951,35 @@ func tableComponentFootnote19(nodeView: NodeView, isHeader: Bool, markdownConfig
                     fontCallback((nodeView.node as Footnote)().noteid)
                 }
             }
+
+        if (isEnd) {
+            // 设置文本内容
+            Span(spanNewText(nodeText))
+                // 设置文本的字体列表
+                .fontFamily(spanFontFamily(false, markdownConfiguration.markdownTheme, false))
+                // 设置文本尺寸
+                .fontSize(spanFontSize(nodeView, false, markdownConfiguration.markdownTheme, false, 0))
+                // 设置文本的字体粗细
+                .fontWeight(spanFontWeight(nodeView, false, isHeader))
+                // 设置文本的字体样式
+                .fontStyle(spanFontStyle(nodeView, false))
+                // 设置文本颜色
+                .fontColor(Color.RED)
+                // 设置背景样式
+                .textBackgroundStyle(TextBackgroundStyle(color: spanBackgroundColor(false, nodeView.link.isSome(), markdownConfiguration.markdownTheme)))
+                // 设置文本字符间距
+                .letterSpacing(markdownConfiguration.markdownTheme.paragraphTextWordSpace)
+                // 设置文本装饰线样式及其颜色
+                .decoration(decorationType: spanDecoration(nodeView, markdownConfiguration.markdownTheme)[0], color: spanDecoration(nodeView, markdownConfiguration.markdownTheme)[1])
+                // 设置行高
+                .lineHeight(markdownConfiguration.markdownTheme.tableTextLineHeight)
+                // 点击动作触发该方法调用
+                .onClick {
+                    evt => if (nodeView.node is Footnote) {
+                        fontCallback((nodeView.node as Footnote)().noteid)
+                    }
+                }
+        }
     }
 }
 
@@ -1465,11 +1987,15 @@ func tableComponentFootnote19(nodeView: NodeView, isHeader: Bool, markdownConfig
  * 无序列表和有序列表的前缀文本
  */
 @Builder
-func listPrefixTextINCComponent18(item: NodeView, isBullet: Bool, markdownConfiguration: MarkdownConfiguration) {
+func listPrefixTextINCComponent18( item: NodeView, isBullet: Bool, markdownConfiguration: MarkdownConfiguration, isEnd: Bool) {
     // 设置文本内容
     Text(listPrefixStr(item, isBullet, markdownConfiguration))
         // 设置文本颜色
-        .fontColor(listPrefixColor(markdownConfiguration.markdownTheme, isBullet))
+        .fontColor(if (isEnd) {
+            Color.RED
+        } else {
+            listPrefixColor(markdownConfiguration.markdownTheme, isBullet)
+        })
         // 设置文本尺寸
         .fontSize(listPrefixSize(markdownConfiguration.markdownTheme, isBullet))
         // 设置内边距属性
@@ -1490,11 +2016,15 @@ func listPrefixTextINCComponent18(item: NodeView, isBullet: Bool, markdownConfig
  * 无序列表和有序列表的前缀文本
  */
 @Builder
-func listPrefixTextINCComponent19(item: NodeView, isBullet: Bool, markdownConfiguration: MarkdownConfiguration) {
+func listPrefixTextINCComponent19(item: NodeView, isBullet: Bool, markdownConfiguration: MarkdownConfiguration, isEnd: Bool) {
     // 设置文本内容
     Text(listPrefixStr(item, isBullet, markdownConfiguration))
         // 设置文本颜色
-        .fontColor(listPrefixColor(markdownConfiguration.markdownTheme, isBullet))
+        .fontColor(if (isEnd) {
+            Color.RED
+        } else {
+            listPrefixColor(markdownConfiguration.markdownTheme, isBullet)
+        })
         // 设置文本尺寸
         .fontSize(listPrefixSize(markdownConfiguration.markdownTheme, isBullet))
         // 设置内边距属性
@@ -1515,11 +2045,11 @@ func listPrefixTextINCComponent19(item: NodeView, isBullet: Bool, markdownConfig
  * 无序列表和有序列表的前缀文本
  */
 @Builder
-func listPrefixTextINCComponent(item: NodeView, isBullet: Bool, markdownConfiguration: MarkdownConfiguration) {
+func listPrefixTextINCComponent(item: NodeView, isBullet: Bool, markdownConfiguration: MarkdownConfiguration, isEnd: Bool) {
     if (DeviceInfo.sdkApiVersion >= 19) {
-        listPrefixTextINCComponent19(item, isBullet, markdownConfiguration)
+        listPrefixTextINCComponent19(item, isBullet, markdownConfiguration, isEnd)
     } else {
-        listPrefixTextINCComponent18(item, isBullet, markdownConfiguration)
+        listPrefixTextINCComponent18(item, isBullet, markdownConfiguration, isEnd)
     }
 }
 
@@ -1944,7 +2474,7 @@ func linkSpanComponent(isOneLink: Bool, isListTo: Bool, level: Int64, item: Node
  * 内联代码
  */
 @Builder
-func inLineCodeSpanComponent(item: NodeView, markdownConfiguration: MarkdownConfiguration, isFakeBoldText: Bool, isHeader: Bool, isDescList: Bool, nodeType: Int64, level: Int64) {
+func inLineCodeSpanComponent(nodeText: String, item: NodeView, markdownConfiguration: MarkdownConfiguration, isFakeBoldText: Bool, isHeader: Bool, isDescList: Bool, nodeType: Int64, level: Int64, isEnd: Bool) {
     if (markdownConfiguration.markdownTheme.isCodeStyle) {
         MarkdownCodeLineImageSpanComponent(
             markdownConfiguration: markdownConfiguration,
@@ -1955,21 +2485,21 @@ func inLineCodeSpanComponent(item: NodeView, markdownConfiguration: MarkdownConf
     } else {
         if (nodeType == 0) {
             if (DeviceInfo.sdkApiVersion >= 19) {
-                headingCodeComponent19(item, markdownConfiguration, level)
+                headingCodeComponent19(nodeText, item, markdownConfiguration, level, isEnd)
             } else {
-                headingCodeComponent18(item, markdownConfiguration, level)
+                headingCodeComponent18(nodeText, item, markdownConfiguration, level, isEnd)
             }
         } else if (nodeType == 1) {
             if (DeviceInfo.sdkApiVersion >= 19) {
-                paragraphCodeComponent19(item, isDescList, markdownConfiguration)
+                paragraphCodeComponent19(nodeText, item, isDescList, markdownConfiguration, isEnd)
             } else {
-                paragraphCodeComponent18(item, isDescList, markdownConfiguration)
+                paragraphCodeComponent18(nodeText, item, isDescList, markdownConfiguration, isEnd)
             }
         } else if (nodeType == 2) {
             if (DeviceInfo.sdkApiVersion >= 19) {
-                tableComponentCode19(item, isHeader, markdownConfiguration)
+                tableComponentCode19(nodeText, item, isHeader, markdownConfiguration, isEnd)
             } else {
-                tableComponentCode18(item, isHeader, markdownConfiguration)
+                tableComponentCode18(nodeText, item, isHeader, markdownConfiguration, isEnd)
             }
         }
     }

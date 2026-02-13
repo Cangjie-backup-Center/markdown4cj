@@ -8,6 +8,7 @@ import ohos.component.*
 import ohos.state_manage.*
 import ohos.state_macro_manage.*
 
+import ohos.hilog.Hilog
 /**
  * Markdown缩进代码块自定义控件
  */
@@ -52,6 +53,11 @@ class MarkdownIndentedCodeBlockComponent {
      */
     @State
     var lineArray: ObservedArrayList<Int64> = ObservedArrayList<Int64>()
+
+    @State
+    var isEnd: Bool = false
+
+    var codeTextSize: Int64 = 0
 
     protected override func aboutToAppear(): Unit {
         // 初始化刷新数据
@@ -128,20 +134,49 @@ class MarkdownIndentedCodeBlockComponent {
     @Builder
     func codeBlockComponent() {
         Scroll() {
-            // 代码文本内容
-            Text(codeText)
-                // 设置文本颜色
-                .fontColor(indentedCodeTextColor(markdownConfiguration.markdownTheme, markdownConfiguration.markdownTheme.prismTheme))
-                // 设置文本尺寸
-                .fontSize(markdownConfiguration.markdownTheme.codeBlockTextSize)
-                // 设置文本的字体列表
-                .fontFamily(markdownConfiguration.markdownTheme.codeBlockTypeface)
-                // 设置多行文本的文本对齐方式
-                .textAlign(TextAlign.Start)
-                // 设置内边距属性
-                .padding(left: markdownConfiguration.markdownTheme.codeMultilineMargin, right: markdownConfiguration.markdownTheme.codeMultilineRightMargin)
-                // 设置行高
-                .lineHeight(markdownConfiguration.markdownTheme.codeBlockLineHeight)
+            Text {
+                Span(spanOldText(codeText, isEnd))
+                    // 设置文本颜色
+                    .fontColor(indentedCodeTextColor(markdownConfiguration.markdownTheme, markdownConfiguration.markdownTheme.prismTheme))
+                    // 设置文本尺寸
+                    .fontSize(markdownConfiguration.markdownTheme.codeBlockTextSize)
+                    // 设置文本的字体列表
+                    .fontFamily(markdownConfiguration.markdownTheme.codeBlockTypeface)
+                    // 设置行高
+                    .lineHeight(markdownConfiguration.markdownTheme.codeBlockLineHeight)
+                if (isEnd) {
+                    // 设置文本内容
+                    Span(spanNewText(codeText))
+                        // 设置文本尺寸
+                        .fontSize(markdownConfiguration.markdownTheme.codeBlockTextSize)
+                        // 设置文本的字体列表
+                        .fontFamily(markdownConfiguration.markdownTheme.codeBlockTypeface)
+                        // 设置文本颜色
+                        .fontColor(Color.RED)
+                        // 设置行高
+                        .lineHeight(markdownConfiguration.markdownTheme.codeBlockLineHeight)
+                 }
+            }
+            // 设置多行文本的文本对齐方式
+            .textAlign(TextAlign.Start)
+            // 设置内边距属性
+            .padding(left: markdownConfiguration.markdownTheme.codeMultilineMargin, right: markdownConfiguration.markdownTheme.codeMultilineRightMargin)
+
+
+//            // 代码文本内容
+//            Text(codeText)
+//                // 设置文本颜色
+//                .fontColor(indentedCodeTextColor(markdownConfiguration.markdownTheme, markdownConfiguration.markdownTheme.prismTheme))
+//                // 设置文本尺寸
+//                .fontSize(markdownConfiguration.markdownTheme.codeBlockTextSize)
+//                // 设置文本的字体列表
+//                .fontFamily(markdownConfiguration.markdownTheme.codeBlockTypeface)
+//                // 设置多行文本的文本对齐方式
+//                .textAlign(TextAlign.Start)
+//                // 设置内边距属性
+//                .padding(left: markdownConfiguration.markdownTheme.codeMultilineMargin, right: markdownConfiguration.markdownTheme.codeMultilineRightMargin)
+//                // 设置行高
+//                .lineHeight(markdownConfiguration.markdownTheme.codeBlockLineHeight)
         }
         // 设置滚动方法
         .scrollable(ScrollDirection.Horizontal)
@@ -276,7 +311,16 @@ class MarkdownIndentedCodeBlockComponent {
         let data = getCodeInfo(nodeView)
         this.info = data[1]
         this.codeText = data[0].trimEnd("\n")
-        lines = codeText.lines().count()
-        lineArray.set(Array<Int64>(lines, repeat: 0))
+
+        var newSize = codeText.size
+
+        if (codeTextSize == newSize) {
+            isEnd = false
+        } else {
+            codeTextSize = newSize
+            isEnd = nodeView.isEndData
+            lines = codeText.lines().count()
+            lineArray.set(Array<Int64>(lines, repeat: 0))
+        }
     }
 }

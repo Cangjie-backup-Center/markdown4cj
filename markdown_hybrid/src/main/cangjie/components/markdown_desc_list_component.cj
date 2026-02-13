@@ -7,7 +7,7 @@ import ohos.base.*
 import ohos.component.*
 import ohos.state_manage.*
 import ohos.state_macro_manage.*
-
+import ohos.hilog.Hilog
 /**
  * 定义列表
  */
@@ -60,6 +60,10 @@ public class MarkdownDescListComponent {
     @BuilderParam
     var customParagraphLineBuilder: (NodeView, Int64) -> Unit
 
+    var isDescTerm: Bool = true
+
+    var isDescDef: Bool = false
+
     protected override func aboutToAppear(): Unit {
         // 初始化刷新数据
         refreshData(nodeView)
@@ -84,7 +88,7 @@ public class MarkdownDescListComponent {
             LazyForEach(
                 nodeViewDataSource,
                 itemGeneratorFunc: {
-                    item: NodeView, idx: Int64 => if (item.node is DescTerm) {
+                    item: NodeView, idx: Int64 => if ((item.node is DescTerm) && loagDescTerm()) {
                         // 术语
                         ListItem() {
                             MarkdownDescTermComponent(
@@ -98,7 +102,7 @@ public class MarkdownDescListComponent {
                                 customParagraphLineBuilder: customParagraphLineBuilder
                             )
                         }
-                    } else if (item.node is DescDef) {
+                    } else if ((item.node is DescDef) && loagDescDef()) {
                         // 定义
                         ListItem() {
                             MarkdownDescDefComponent(
@@ -132,17 +136,38 @@ public class MarkdownDescListComponent {
         .width(100.percent)
     }
 
+    func loagDescTerm(): Bool {
+        isDescTerm = true
+        isDescDef = false
+        return true
+    }
+
+    func loagDescDef(): Bool {
+        isDescDef = true
+        return true
+    }
+
     /**
      * 数据刷新
      */
     public func refreshData(nodeView: NodeView): Unit {
+        Hilog.error(123, "cccc", " ===================> 定义列表isEndData：${nodeView.isEndData}, isDescTerm: ${isDescTerm}, isDescDef: ${isDescDef}")
         this.nodeView = nodeView
         let refreshNodeViews = nodeView.children
         let refreshNodeViewSize: Int64 = refreshNodeViews.size // 刷新进来的数据长度
         let dataSourceSize: Int64 = nodeViewDataSource.totalCount() // 页面缓存的数据长度
+        Hilog.error(123, "cccc", " ===================> 定义列表dataSourceSize：${dataSourceSize}")
         if (refreshNodeViewSize == 0) {
             return
         }
+//        if (isDescTerm && dataSourceSize > 0) { // 上一条是术语，当前一条是定义，需要刷新上一条术语的数据，去掉打字机效果
+//            Hilog.error(123, "cccc", " ===================> 去掉打字机效果")
+//            var lastNode = nodeViewDataSource.getData(dataSourceSize -1)
+//            nodeView.typewriterState = -1
+//            isDescTerm = false
+//            refreshNodeViewDataSource(nodeView, lastNode.children, dataSourceSize, dataSourceSize, nodeViewDataSource, "desclist", markdownCacheConfiguration, Option<HashMap<Int64, MarkdownTableBlockRowComponent>>.None)
+//        }
+//        let newNodeType = nodeView.
         refreshNodeViewDataSource(nodeView, refreshNodeViews, refreshNodeViewSize, dataSourceSize, nodeViewDataSource, "desclist", markdownCacheConfiguration, Option<HashMap<Int64, MarkdownTableBlockRowComponent>>.None)
     }
 }

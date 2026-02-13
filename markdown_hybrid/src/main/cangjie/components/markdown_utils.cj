@@ -6,6 +6,7 @@ package markdown.components
 import ohos.base.*
 import ohos.component.*
 import ohos.state_manage.*
+import ohos.hilog.Hilog
 
 let COLOR_191919: Color = Color(0x191919)
 let COLOR_0000FF: Color = Color(0x0000FF)
@@ -102,6 +103,7 @@ func spanBaselineOffset(nodeView: NodeView, markdownTheme: MarkdownTheme): Float
  * @return 返回需要显示的文本内容
  */
 func spanText(nodeView: NodeView): String {
+    Hilog.error(123, "spanText", " [spanText] ===================>")
     if (nodeView.node is CommonmarkText) {
         // 普通文本
         return (nodeView.node as CommonmarkText)().getLiteral()
@@ -121,6 +123,36 @@ func spanText(nodeView: NodeView): String {
     } else {
         return ""
     }
+}
+
+func spanOldText(text: String, isEnd: Bool): String {
+    let runes: Array<Rune> = text.toRuneArray()
+    let len = runes.size
+    Hilog.error(123, "spanOldText", " [spanOldText] 0===================> ${text},${len}")
+    if (len < 2) {
+        Hilog.error(123, "spanOldText", " [spanOldText] 1===================> 空")
+        return text
+    }
+    if (isEnd) {
+        var a = runes[0..(len-1)]
+        Hilog.error(123, "spanOldText", " [spanOldText] 2===================> ${String(a)}")
+        return String(a)
+    } else {
+        Hilog.error(123, "spanOldText", " [spanOldText] 3===================> ${text}")
+        return text
+    }
+}
+
+func spanNewText(text: String): String {
+    let runes: Array<Rune> = text.toRuneArray()
+    let len = runes.size
+    if (len < 2) {
+        Hilog.error(123, "spanNewText", " [spanNewText] 1===================> 空")
+        return ""
+    }
+    var a = runes[(len-1)..len]
+    Hilog.error(123, "spanNewText", " [spanNewText] 2===================> ${String(a)}")
+    return String(a)
 }
 
 /**
@@ -1660,6 +1692,10 @@ func refreshnodeViewList(nodeView: NodeView, nodeViewList: ObservedArrayList<Nod
     let refreshNodeViews = nodeView.children
     let refreshNodeViewSize: Int64 = refreshNodeViews.size // 刷新进来的数据长度
     let nodeViewListSize: Int64 = nodeViewList.size // 页面缓存的数据长度
+    let typewriterState: Int64 = nodeView.typewriterState
+
+    Hilog.error(123, "cccc", " ===================> refreshnodeViewList ===============> aaaa")
+    Hilog.error(123, "cccc", " ===================> typewriterState: ${typewriterState}")
     if (refreshNodeViewSize == 0) {
         return
     }
@@ -1667,21 +1703,46 @@ func refreshnodeViewList(nodeView: NodeView, nodeViewList: ObservedArrayList<Nod
         // 新数据大于页面数据
         // 循环判断历史数据有没有做过修改
         for (i in 0..nodeViewListSize) {
+            Hilog.error(123, "cccc", " ===================> for 1")
+            refreshNodeViews[i].typewriterState = -1
             refreshnodeView(nodeView, nodeViewList, refreshNodeViews, i, tableCellComponents)
         }
         // 循环添加新数据
         for (i in nodeViewListSize..refreshNodeViewSize) {
+            Hilog.error(123, "cccc", " ===================> for 2 ====> i: ${i}, nodeViewListSize: ${nodeViewListSize}, refreshNodeViewSize:${refreshNodeViewSize}")
+            refreshNodeViews[i].typewriterState = typewriterState
             nodeViewList.append(refreshNodeViews[i])
         }
     } else if (refreshNodeViewSize == nodeViewListSize) {
         // 新数据等于页面数据
         for (i in 0..nodeViewListSize) {
+            Hilog.error(123, "cccc", " ===================> for 3 ====> i: ${i}, nodeViewListSize: ${nodeViewListSize}, typewriterState:${typewriterState}")
+            if (typewriterState == 1) { // 本层数据3个状态都有可能
+                if (i == nodeViewListSize - 1) {
+                    refreshNodeViews[i].typewriterState = 1
+                } else if (i == nodeViewListSize - 2) {
+                    refreshNodeViews[i].typewriterState = 0
+                } else {
+                    refreshNodeViews[i].typewriterState = -1
+                }
+            } else if (typewriterState == 0) { // 本层数据可能是 0 或者 -1
+                if (i == nodeViewListSize - 2) {
+                    refreshNodeViews[i].typewriterState = 0
+                } else {
+                    refreshNodeViews[i].typewriterState = -1
+                }
+            } else { // 本层数据只会是 -1
+                refreshNodeViews[i].typewriterState = -1
+            }
+//            refreshNodeViews[i].typewriterState = typewriterState
             refreshnodeView(nodeView, nodeViewList, refreshNodeViews, i, tableCellComponents)
         }
     } else {
         // 新数据小于页面数据
         // 循环判断历史数据有没有做过修改
         for (i in 0..refreshNodeViewSize) {
+            Hilog.error(123, "cccc", " ===================> for 4")
+            refreshNodeViews[i].typewriterState = typewriterState
             refreshnodeView(nodeView, nodeViewList, refreshNodeViews, i, tableCellComponents)
         }
         // 循环删除多余的旧数据
@@ -1696,6 +1757,14 @@ func refreshnodeView(nodeView: NodeView, nodeViewList: ObservedArrayList<NodeVie
     let oldBlockHash = nodeViewList[i].nodeHash
     let newContentHash = refreshNodeViews[i].contentHash
     let oldContentHash = nodeViewList[i].contentHash
+
+    let oldBlockState = nodeViewList[i].typewriterState
+    let newBlockState = refreshNodeViews[i].typewriterState
+    Hilog.error(123, "cccc", " ---------------> refreshnodeView -----------------> bbbbb")
+    Hilog.error(123, "cccc", " ---------------> nodeView.typewriterState： ${nodeView.typewriterState}")
+    Hilog.error(123, "cccc", " ---------------> oldBlockState： ${oldBlockState}")
+    Hilog.error(123, "cccc", " ---------------> newBlockState： ${newBlockState}")
+
     // 唯一ID是否相同
     if (let Some(w) <- tableCellComponents) {
         if (newBlockHash != oldBlockHash && newContentHash != oldContentHash) {
@@ -1710,11 +1779,96 @@ func refreshnodeView(nodeView: NodeView, nodeViewList: ObservedArrayList<NodeVie
     } else {
         if (newBlockHash != oldBlockHash || newContentHash != oldContentHash) {
             nodeViewList[i] = refreshNodeViews[i]
+        } else {
+            if (nodeViewList[i].typewriterState != refreshNodeViews[i].typewriterState) {
+                nodeViewList[i] = refreshNodeViews[i]
+            }
         }
     }
 }
 
+
+func refreshnodeViewTableRow(nodeView: NodeView, nodeViewList: ObservedArrayList<NodeView>, tableCellComponents: ?HashMap<Int64, MarkdownTableBlockCellComponent>): Unit {
+
+    let refreshNodeViews = nodeView.children
+    let refreshNodeViewSize: Int64 = refreshNodeViews.size // 刷新进来的数据长度
+    let nodeViewListSize: Int64 = nodeViewList.size // 页面缓存的数据长度
+    let typewriterState: Int64 = nodeView.typewriterState
+
+    if (refreshNodeViewSize == 0) {
+        return
+    }
+    if (refreshNodeViewSize > nodeViewListSize) {
+        // 新数据大于页面数据
+        // 循环判断历史数据有没有做过修改
+        for (i in 0..nodeViewListSize) {
+            refreshNodeViews[i].typewriterState = -1
+            refreshnodeView(nodeView, nodeViewList, refreshNodeViews, i, tableCellComponents)
+        }
+        // 循环添加新数据
+        for (i in nodeViewListSize..refreshNodeViewSize) {
+            refreshNodeViews[i].typewriterState = typewriterState
+            nodeViewList.append(refreshNodeViews[i])
+        }
+    } else if (refreshNodeViewSize == nodeViewListSize) {
+        // 新数据等于页面数据
+        for (i in 0..nodeViewListSize) {
+            let newBlockHash = refreshNodeViews[i].nodeHash
+            let oldBlockHash = nodeViewList[i].nodeHash
+            let newContentHash = refreshNodeViews[i].contentHash
+            let oldContentHash = nodeViewList[i].contentHash
+
+            if (typewriterState == 1 && (newBlockHash != oldBlockHash || newContentHash != oldContentHash)) {
+                // 每个循环都是按照cell数量进行row的循环，1行3列row也会循环3次
+                // row每次循环只有当前正在有新数据的对应列才能进入这个if分支
+                // 要区分是哪一行的row
+//                    currentRow = i
+                if (i > 0) { // 设置前一个row
+                    refreshNodeViews[i - 1].typewriterState = 0
+                    refreshnodeView(nodeView, nodeViewList, refreshNodeViews, i - 1, tableCellComponents)
+                }
+                refreshNodeViews[i].typewriterState = 1
+            } else {
+                refreshNodeViews[i].typewriterState = -1
+            }
+            refreshnodeView(nodeView, nodeViewList, refreshNodeViews, i, tableCellComponents)
+        }
+    } else {
+        // 新数据小于页面数据
+        // 循环判断历史数据有没有做过修改
+        for (i in 0..refreshNodeViewSize) {
+            Hilog.error(123, "cccc", " ===================> for 4")
+            if (typewriterState == 1) { // 本层数据3个状态都有可能
+                if (i == nodeViewListSize - 1) {
+                    refreshNodeViews[i].typewriterState = 1
+                } else if (i == nodeViewListSize - 2) {
+                    refreshNodeViews[i].typewriterState = 0
+                } else {
+                    refreshNodeViews[i].typewriterState = -1
+                }
+            } else if (typewriterState == 0) { // 本层数据可能是 0 或者 -1
+                if (i == nodeViewListSize - 2) {
+                    refreshNodeViews[i].typewriterState = 0
+                } else {
+                    refreshNodeViews[i].typewriterState = -1
+                }
+            } else { // 本层数据只会是 -1
+                refreshNodeViews[i].typewriterState = -1
+            }
+//            refreshNodeViews[i].typewriterState = typewriterState
+            refreshnodeView(nodeView, nodeViewList, refreshNodeViews, i, tableCellComponents)
+        }
+        // 循环删除多余的旧数据
+        for (i in nodeViewListSize - 1..=refreshNodeViewSize : -1) {
+            nodeViewList.remove(i)
+        }
+    }
+}
+
+
 func refreshNodeViewDataSource(nodeView: NodeView, refreshNodeViews: ArrayList<NodeView>, refreshNodeViewSize: Int64, dataSourceSize: Int64, nodeViewDataSource: NodeViewDataSource, compontentType: String, markdownCacheConfiguration: ?MarkdownCacheConfiguration, tableRowComponents: ?HashMap<Int64, MarkdownTableBlockRowComponent>): Unit {
+    Hilog.error(123, "cccc", " ===================> refreshNodeViewDataSource")
+    let typewriterState = nodeView.typewriterState
     if (refreshNodeViewSize > dataSourceSize) {
         // 新数据大于页面数据
         // 循环判断历史数据有没有做过修改
@@ -1723,6 +1877,25 @@ func refreshNodeViewDataSource(nodeView: NodeView, refreshNodeViews: ArrayList<N
             let oldBlockHash = nodeViewDataSource.getData(i).nodeHash
             let newContentHash = refreshNodeViews[i].contentHash
             let oldContentHash = nodeViewDataSource.getData(i).contentHash
+
+            if (typewriterState == 1) { // 本层数据3个状态都有可能
+                if (i == dataSourceSize - 1) {
+                    refreshNodeViews[i].typewriterState = 1
+                } else if (i == dataSourceSize - 2) {
+                    refreshNodeViews[i].typewriterState = 0
+                } else {
+                    refreshNodeViews[i].typewriterState = -1
+                }
+            } else if (typewriterState == 0) { // 本层数据可能是 0 或者 -1
+                if (i == dataSourceSize - 2) {
+                    refreshNodeViews[i].typewriterState = 0
+                } else {
+                    refreshNodeViews[i].typewriterState = -1
+                }
+            } else { // 本层数据只会是 -1
+                refreshNodeViews[i].typewriterState = -1
+            }
+
             // 唯一ID是否相同
             if (newBlockHash != oldBlockHash && newContentHash != oldContentHash) {
                 nodeViewDataSource.replaceData(i, refreshNodeViews[i])
@@ -1734,19 +1907,43 @@ func refreshNodeViewDataSource(nodeView: NodeView, refreshNodeViews: ArrayList<N
                     nodeViewDataSource.replaceData(i, refreshNodeViews[i])
                 }
             } else if (newBlockHash == oldBlockHash && newContentHash == oldContentHash) {
+                let oldBlockState = nodeViewDataSource.getData(i).typewriterState
+                if (oldBlockState != refreshNodeViews[i].typewriterState) {
+                    nodeViewDataSource.replaceData(i, refreshNodeViews[i])
+                }
             }
         }
         // 循环添加新数据
         for (i in dataSourceSize..refreshNodeViewSize) {
+            refreshNodeViews[i].typewriterState = typewriterState
             nodeViewDataSource.addData(refreshNodeViews[i])
         }
     } else if (refreshNodeViewSize == dataSourceSize) {
         // 新数据等于页面数据
         for (i in 0..dataSourceSize) {
+
             let newBlockHash = refreshNodeViews[i].nodeHash
             let oldBlockHash = nodeViewDataSource.getData(i).nodeHash
             let newContentHash = refreshNodeViews[i].contentHash
             let oldContentHash = nodeViewDataSource.getData(i).contentHash
+
+            if (typewriterState == 1) { // 本层数据3个状态都有可能
+                if (i == dataSourceSize - 1) {
+                    refreshNodeViews[i].typewriterState = 1
+                } else if (i == dataSourceSize - 2) {
+                    refreshNodeViews[i].typewriterState = 0
+                } else {
+                    refreshNodeViews[i].typewriterState = -1
+                }
+            } else if (typewriterState == 0) { // 本层数据可能是 0 或者 -1
+                if (i == dataSourceSize - 2) {
+                    refreshNodeViews[i].typewriterState = 0
+                } else {
+                    refreshNodeViews[i].typewriterState = -1
+                }
+            } else { // 本层数据只会是 -1
+                refreshNodeViews[i].typewriterState = -1
+            }
             // 唯一ID是否相同
             if (newBlockHash != oldBlockHash && newContentHash != oldContentHash) {
                 nodeViewDataSource.replaceData(i, refreshNodeViews[i])
@@ -1758,6 +1955,10 @@ func refreshNodeViewDataSource(nodeView: NodeView, refreshNodeViews: ArrayList<N
                     nodeViewDataSource.replaceData(i, refreshNodeViews[i])
                 }
             } else if (newBlockHash == oldBlockHash && newContentHash == oldContentHash) {
+                let oldBlockState = nodeViewDataSource.getData(i).typewriterState
+                if (oldBlockState != refreshNodeViews[i].typewriterState) {
+                    nodeViewDataSource.replaceData(i, refreshNodeViews[i])
+                }
             }
         }
     } else {
@@ -1768,6 +1969,25 @@ func refreshNodeViewDataSource(nodeView: NodeView, refreshNodeViews: ArrayList<N
             let oldBlockHash = nodeViewDataSource.getData(i).nodeHash
             let newContentHash = refreshNodeViews[i].contentHash
             let oldContentHash = nodeViewDataSource.getData(i).contentHash
+
+            if (typewriterState == 1) { // 本层数据3个状态都有可能
+                if (i == dataSourceSize - 1) {
+                    refreshNodeViews[i].typewriterState = 1
+                } else if (i == dataSourceSize - 2) {
+                    refreshNodeViews[i].typewriterState = 0
+                } else {
+                    refreshNodeViews[i].typewriterState = -1
+                }
+            } else if (typewriterState == 0) { // 本层数据可能是 0 或者 -1
+                if (i == dataSourceSize - 2) {
+                    refreshNodeViews[i].typewriterState = 0
+                } else {
+                    refreshNodeViews[i].typewriterState = -1
+                }
+            } else { // 本层数据只会是 -1
+                refreshNodeViews[i].typewriterState = -1
+            }
+
             // 唯一ID是否相同
             if (newBlockHash != oldBlockHash && newContentHash != oldContentHash) {
                 nodeViewDataSource.replaceData(i, refreshNodeViews[i])
@@ -1779,6 +1999,10 @@ func refreshNodeViewDataSource(nodeView: NodeView, refreshNodeViews: ArrayList<N
                     nodeViewDataSource.replaceData(i, refreshNodeViews[i])
                 }
             } else if (newBlockHash == oldBlockHash && newContentHash == oldContentHash) {
+                let oldBlockState = nodeViewDataSource.getData(i).typewriterState
+                if (oldBlockState != refreshNodeViews[i].typewriterState) {
+                    nodeViewDataSource.replaceData(i, refreshNodeViews[i])
+                }
             }
         }
         // 循环删除多余的旧数据
@@ -1818,7 +2042,7 @@ func refreshCacheData(nodeView: NodeView, newBlockHash: Int64, compontentType: S
                     // 围栏代码
                     let cache = w.fencedCodeComponents.get(newBlockHash)
                     if (let Some(v) <- cache) {
-                        v.refreshData(getCodeInfo(nodeView)[0], getCodeInfo(nodeView)[1](), nodeView.nodeHash)
+                        v.refreshData(getCodeInfo(nodeView)[0], getCodeInfo(nodeView)[1](), nodeView.nodeHash, nodeView.isEndData)
                     }
                 } else if (nodeView.node is Heading) {
                     // 标题

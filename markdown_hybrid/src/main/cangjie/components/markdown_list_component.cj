@@ -8,6 +8,8 @@ import ohos.component.*
 import ohos.state_manage.*
 import ohos.state_macro_manage.*
 
+import ohos.hilog.Hilog
+
 /**
  * Markdown无序列表(任务列表)、有序列表(TOC列表)自定义控件
  */
@@ -140,7 +142,7 @@ public class MarkdownListComponent {
                             if (isOrdered) {
                                 if (item.node is CommonmarkListItem) {
                                     // 普通有序列表
-                                    listPrefixTextINCComponent(item, true, markdownConfiguration)
+                                    listPrefixTextINCComponent(item, true, markdownConfiguration, item.isEndData)
                                 }
                             } else {
                                 if (item.node is TaskListItem) {
@@ -148,7 +150,7 @@ public class MarkdownListComponent {
                                     listPrefixCheckboxINCComponent(item, markdownConfiguration)
                                 } else if (item.node is CommonmarkListItem) {
                                     // 普通无序列表
-                                    listPrefixTextINCComponent(item, false, markdownConfiguration)
+                                    listPrefixTextINCComponent(item, false, markdownConfiguration, item.isEndData)
                                 }
                             }
                             MarkdownListItemComponent(
@@ -179,7 +181,12 @@ public class MarkdownListComponent {
                     .layoutWeight(1)
                 },
                 keyGeneratorFunc: {
-                    item: NodeView, idx: Int64 => return "${idx}-${item.nodeHash}-${item.contentHash}"
+                    item: NodeView, idx: Int64 =>
+                        if (item.isEndData) {
+                            return "${idx}-${item.nodeHash}-${item.contentHash}-${item.isEndData}"
+                        } else {
+                            return "${idx}-${item.nodeHash}-${item.contentHash}"
+                        }
                 }
             )
         }
@@ -195,6 +202,7 @@ public class MarkdownListComponent {
      * 数据刷新
      */
     public func refreshData(nodeView: NodeView): Unit {
+        Hilog.error(222, "refreshData", "refreshData----------------------> list")
         this.nodeView = nodeView
         let dataSourceSize: Int64 = nodeViewDataSource.totalCount() // 页面缓存的数据长度
         let refreshNodeViews = nodeView.children
