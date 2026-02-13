@@ -113,8 +113,6 @@ public class NodeView {
     var codeInfo: Option<String> = Option<String>.None
     // 代码块列表标题
     var codeListTab: Option<ArrayList<String>> = Option<ArrayList<String>>.None
-    // 是否是最后一条Node
-    var isLastNode: Bool = false
 }
 
 public func nodeToNodeView(
@@ -136,6 +134,7 @@ public func nodeToNodeView(
                     childrenNodeView.headingLevel = childrenNewNodeView.headingLevel
                     childrenNodeView.headingID = childrenNewNodeView.headingID
                     childrenNodeView.isTable = childrenNewNodeView.isTable
+                    childrenNodeView.tableAlignment = childrenNewNodeView.tableAlignment
                     childrenNodeView.isTableHead = childrenNewNodeView.isTableHead
                     childrenNodeView.isTableBody = childrenNewNodeView.isTableBody
                     childrenNodeView.isTableRow = childrenNewNodeView.isTableRow
@@ -178,7 +177,6 @@ public func nodeToNodeView(
                     childrenNodeView.imageAlign = childrenNewNodeView.imageAlign
                     childrenNodeView.codeInfo = childrenNewNodeView.codeInfo
                     childrenNodeView.codeListTab = childrenNewNodeView.codeListTab
-                    childrenNodeView.isLastNode = childrenNewNodeView.isLastNode
 
                     if (nodeType == "Text") {
                         // 普通文本

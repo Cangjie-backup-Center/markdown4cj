@@ -72,7 +72,7 @@ func marginNodeTop(idx: Int64, item: NodeView, markdownTheme: MarkdownTheme): Fl
 }
 
 /**
- * 上边距
+ * 下边距
  *
  * @param idx 第几条数据
  * @param nodeType 类型。0：标题，1：段落，2：分割线，3：其他
@@ -171,7 +171,7 @@ func spanFontSize(nodeView: NodeView, markdownTheme: MarkdownTheme): Float64 {
         }
     }
     if (nodeView.isInLineCode) {
-        return px2vp(markdownTheme.codeTextSize.px)().value // 内联代码
+        return markdownTheme.codeTextSize // 内联代码
     }
     if (nodeView.isLink && markdownTheme.isLinkSize) {
         return markdownTheme.linkSize // 链接
