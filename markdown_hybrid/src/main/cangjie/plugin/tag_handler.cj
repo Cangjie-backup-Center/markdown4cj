@@ -2,7 +2,6 @@
  * Copyright (c) Huawei Technologies Co., Ltd. 2025. All rights reserved.
  */
 package markdown.plugin
-import ohos.base.AppLog
 
 public abstract class TagHandler {
     public func handle(visitor: ?MarkdownVisitor, renderer: MarkdownHtmlRenderer, tag: HtmlTag): Node

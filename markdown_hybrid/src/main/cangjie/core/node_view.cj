@@ -54,6 +54,15 @@ public class NodeView <: ToString {
     public var list: ArrayList<NodeView> = EMPTY_LIST
     private static let EMPTY_LIST = ArrayList<NodeView>()
 
+    // 当前的nodeView是否为最后一条
+    public prop isEndData: Bool {
+        get() {
+            typewriterState == 1
+        }
+    }
+    // 打字机用标记 -1已经完成显示的数据 0刚显示打字机颜色的数据 1 正在显示打字机颜色的数据
+    public var typewriterState: Int64 = -1
+
     public init(currentNode: Node) {
         this.node = currentNode
         setView(currentNode)
