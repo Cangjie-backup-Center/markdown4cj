@@ -222,6 +222,12 @@ public interface MarkdownBuilder {
      */
     func fallbackToRawInputWhenEmpty(fallbackToRawInputWhenEmpty: Bool): MarkdownBuilder
 
+    /**
+     * 包含SourceSpan信息
+     * @param flag 0:不包含(默认) 1:仅Block节点 2:全部节点
+     */
+    func includeSourceSpans(flag: Int): MarkdownBuilder
+
     func build(): Markdown
 }
 
@@ -229,6 +235,7 @@ class MarkdownBuilderImpl <: MarkdownBuilder {
     private let plugins: ArrayList<MarkdownPlugin> = ArrayList<MarkdownPlugin>(3)
 
     private var _fallbackToRawInputWhenEmpty: Bool = true
+    private var _includeSourceSpans: Int = 0
 
     public override func usePlugin(plugin: MarkdownPlugin): MarkdownBuilder {
         this.plugins.add(plugin)
@@ -247,6 +254,11 @@ class MarkdownBuilderImpl <: MarkdownBuilder {
         return this
     }
 
+    public func includeSourceSpans(flag: Int): MarkdownBuilder {
+        this._includeSourceSpans = flag
+        return this
+    }
+
     public override func build(): Markdown {
         if (plugins.isEmpty()) {
             throw IllegalStateException("No plugins were added to this builder. Use #usePlugin method to add them")
@@ -262,6 +274,12 @@ class MarkdownBuilderImpl <: MarkdownBuilder {
         for (plugin in plugins) {
             plugin.configureParser(parserBuilder)
             plugin.configureVisitor(visitorBuilder)
+        }
+
+        match (_includeSourceSpans) {
+            case 1 => parserBuilder.includeSourceSpans(IncludeSourceSpans.BLOCKS)
+            case 2 => parserBuilder.includeSourceSpans(IncludeSourceSpans.BLOCKS_AND_INLINES)
+            case _ => parserBuilder.includeSourceSpans(IncludeSourceSpans.NONE)
         }
 
         // do not reuse render-props (each render call should have own render-props)

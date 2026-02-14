@@ -21,7 +21,7 @@ public class ImageCollectPlugin <: AbstractMarkdownPlugin {
 }
 
 class ImageCollectVisitor <: AbstractVisitor {
-    let links = ArrayList<String>()
+    let links = HashSet<String>()
     public func visit(n: Image): Unit {
         links.add(n.getDestination())
     }

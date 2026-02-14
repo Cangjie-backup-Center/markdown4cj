@@ -89,6 +89,7 @@ class ImageSlideVisitor <: AbstractVisitor {
         for (n in collector) {
             slide.appendChild(n)
         }
+        slide.setSourceSpans(p.getSourceSpans())
         p.insertBefore(slide)
         p.unlink()
     }

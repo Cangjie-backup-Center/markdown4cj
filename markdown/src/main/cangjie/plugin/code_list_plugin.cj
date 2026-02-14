@@ -64,6 +64,7 @@ class CodeListVisitor <: AbstractVisitor {
                         case Some(v) where v.name == listName => v
                         case _ =>
                             let v = FencedCodeBlockListBlock(listName)
+                            v.setSourceSpans(code.getSourceSpans())
                             code.insertBefore(v)
                             codeList = v
                             v

@@ -544,9 +544,7 @@ public class MarkdownComponent {
      */
     func mdparse(): ?NodeView {
         try {
-            incBase().input = output
-            incBase().parse()
-            let doc = incBase().doc
+            let doc = incBase().parseIncremental(output)
             if (let Some(v) <- markdownConfiguration.nodeString) {
                 v(NodeViewStringBuilder(doc))
             }
